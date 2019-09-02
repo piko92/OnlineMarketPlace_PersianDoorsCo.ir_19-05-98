@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model LoginViewModel
+<!--Login Register section start-->
+<div class="login-register-section section pt-90 pt-lg-70 pt-md-60 pt-sm-55 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
+    <div class="container">
+        <div class="row">
+            <!--Login Form Start-->
+            <div class="col-md-6 col-sm-6">
+                <div class="customer-login-register">
+                    <div class="form-login-title">
+                        <h2>ورود</h2>
+                    </div>
+                    <div class="login-form">
+                        <form action="LoginConfirm">
+                            <div class="form-fild">
+                                <p><label asp-for="UserName"> </label><span class="required">*</span></p>
+                                <input asp-for="UserName" value="" type="text">
+                            </div>
+                            <div class="form-fild">
+                                <p><label asp-for="Password"></label> <span class="required">*</span></p>
+                                <input asp-for="Password" value="" type="password">
+                            </div>
+                            <div class="login-submit">
+                                <button type="submit" class="btn">ورود</button>
+                                <label>
+                                    <input class="checkbox" asp-for="RememberMe" value="" type="checkbox">
+                                    <span>مرا به خاطر بسپار</span>
+                                </label>
+                            </div>
+                            <div class="lost-password">
+                                <a href="#">پسورد خود را فراموش کرده اید؟</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--Login Form End-->
+            <!--Register Form Start-->
+            <div class="col-md-6 col-sm-6">
+                <div class="customer-login-register register-pt-0">
+                    <div class="form-register-title">
+                        <h2>Register</h2>
+                    </div>
+                    <div class="register-form">
+                        <form action="#">
+                            <div class="form-fild">
+                                <p><label>Username or email address <span class="required">*</span></label></p>
+                                <input name="username" value="" type="text">
+                            </div>
+                            <div class="form-fild">
+                                <p><label>Password <span class="required">*</span></label></p>
+                                <input name="password" value="" type="password">
+                            </div>
+                            <div class="register-submit">
+                                <button type="submit" class="btn">Register</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--Register Form End-->
+        </div>
+    </div>
+</div>
+<!--Login Register section end-->

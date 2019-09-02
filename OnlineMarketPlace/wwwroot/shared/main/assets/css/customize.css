@@ -1,0 +1,37 @@
+﻿
+.main-menu{
+    direction:rtl !important;
+    text-align:right !important;
+}
+.sub-menu,
+.mega-menu {
+    direction: rtl !important;
+    text-align: right !important;
+    right: 0 !important;
+}
+.sub-menu li a{
+    text-align:right !important;
+}
+.main-menu ul li a{
+    text-align:right !important;
+    direction:rtl;
+}
+
+.rtl-class,
+.mega-menu li ul,
+.mega-menu ul {
+    direction: rtl !important;
+    text-align: right !important;
+}
+.hero-content-2,
+.hero-content-2 h2,
+.hero-content-2 a {
+    color: #eeece3 !important;
+}
+.farsi-num {
+    font-family: 'NumIRANSans';
+}
+.center-class{
+    direction:rtl;
+    text-align:center;
+}

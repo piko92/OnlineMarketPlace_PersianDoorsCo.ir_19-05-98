@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@model List<Material>
+<h1>Index</h1>
+
+@foreach (var item in Model)
+{
+    @item.Name <br />
+}

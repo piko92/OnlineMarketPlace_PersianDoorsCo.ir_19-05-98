@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "InsertPost";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row" style="font-family:FontShabnam">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title"> ساخت پست جدید</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <form role="form">
+                    <div class="form-group"><label>عنوان</label> <input type="" placeholder="عنوان پست" class="form-control"></div>
+                    <div class="form-group"><label>متن پست</label> <textarea type="" placeholder="پست" class="form-control"></textarea></div>
+                    <div>
+                        <button class="btn btn-lg btn-block btn-primary pull-right m-t-n-xs" type="submit"><strong>ذخیره</strong></button>
+                        @*<label> <input type="checkbox" class="i-checks"> Remember me </label>*@
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
