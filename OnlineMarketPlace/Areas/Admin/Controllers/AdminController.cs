@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace OnlineMarketPlace.Areas.Admin.Controllers
 {
     [Area("admin")]
+
     public class AdminController : Controller
     {
 
