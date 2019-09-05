@@ -25,6 +25,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbMaterial = _dbMaterial;
             dbCategory = _dbCategory;
         }
+
+
         public IActionResult Index()
         {
             return View(dbMaterial.GetAll());
