@@ -18,7 +18,7 @@ using OnlineMarketPlace.Models.ViewModels;
 
 namespace OnlineMarketPlace.Areas.Admin.Controllers
 {
-    [Area("admin")]
+    [Area("Admin")]
     [Authorize(Roles = "Admin,SuperVisor")]
     public class AccountController : Controller
     {
@@ -46,7 +46,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
 
         [AllowAnonymous]
-        [Route("[action]")]
+        //[Route("[action]")]
         public ViewResult Signin(string notification)
         {
             if (notification != null)
@@ -87,6 +87,48 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 return RedirectToAction("Signin", new { notification = nvm });
             }
         }//end SigninConfirm
+        //Initialize User--Start
+        [AllowAnonymous]
+        public async Task<IActionResult> InitializeUser()
+        {
+            string nvm;
+            //making identity roles
+            string[] RolesName = { "Admin", "SuperVisor", "Customer" };
+            foreach (var item in RolesName)
+            {
+                if (await _roleManager.RoleExistsAsync(item) == false)
+                {
+                    IdentityRole role = new IdentityRole(item);
+                    await _roleManager.CreateAsync(role);
+                }
+            }
+
+            //check if Admin account exist or not ?! if not, create
+            var AdminExist = await _userManager.FindByNameAsync("admin@admin.com");
+            if (AdminExist == null)
+            {
+                ApplicationUser admin = new ApplicationUser()
+                {
+                    UserName = "admin@admin.com",
+                    Email = "admin@admin.com",
+                    FirstName = "Saeed",
+                    LastName = "Panahi",
+                    Gendre = 1,
+                    DateOfBirth = new DateTime(1990, 1, 20),
+                    SpecialUser = true,
+                    Rank = 1000,
+                    NationalCode = "2283332211"
+                };
+                var status = await _userManager.CreateAsync(admin, "Qwerty@01234");
+                if (status.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(admin, "Admin");
+                }
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+            return RedirectToAction("Signup", new { notification = nvm });
+        }
+        //Initialize User--End
 
         public async Task<IActionResult> Signout()
         {
@@ -105,6 +147,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         public async Task<IActionResult> SignupConfirm(SignupViewModel model, List<IFormFile> img)
         {
+
             string nvm;
             try
             {
@@ -122,6 +165,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 {
                     if (model != null)
                     {
+
                         var chkUser = await _userManager.FindByNameAsync(model.Username);
                         ApplicationUser chkEmail;
                         if (model.Email != null)
@@ -134,45 +178,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         }
                         if (chkUser == null && chkEmail == null)
                         {
-                            //making identity roles
-                            if (await _roleManager.RoleExistsAsync("Admin") == false)
-                            {
-                                IdentityRole role = new IdentityRole("Admin");
-                                await _roleManager.CreateAsync(role);
-                            }
-                            if (await _roleManager.RoleExistsAsync("SuperVisor") == false)
-                            {
-                                IdentityRole role = new IdentityRole("SuperVisor");
-                                await _roleManager.CreateAsync(role);
-                            }
-                            if (await _roleManager.RoleExistsAsync("Customer") == false)
-                            {
-                                IdentityRole role = new IdentityRole("Customer");
-                                await _roleManager.CreateAsync(role);
-                            }
 
-                            //check if Admin account exist or not ?! if not, create
-                            var AdminExist = await _userManager.FindByNameAsync("admin@admin.com");
-                            if (AdminExist == null)
-                            {
-                                ApplicationUser admin = new ApplicationUser()
-                                {
-                                    UserName = "admin@admin.com",
-                                    Email = "admin@admin.com",
-                                    FirstName = "Saeed",
-                                    LastName = "Panahi",
-                                    Gendre = 1,
-                                    DateOfBirth = new DateTime(1990, 1, 20),
-                                    SpecialUser = true,
-                                    Rank = 1000,
-                                    NationalCode = "2283332211"
-                                };
-                                var status = await _userManager.CreateAsync(admin, "Qwerty@01234");
-                                if (status.Succeeded)
-                                {
-                                    await _userManager.AddToRoleAsync(admin, "Admin");
-                                }
-                            }
 
                             var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
                             var greDate = CustomizeCalendar.PersianToGregorian(model.Dateofbirth ?? DateTime.Now);

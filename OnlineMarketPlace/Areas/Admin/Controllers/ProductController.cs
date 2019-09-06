@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
@@ -11,6 +12,8 @@ using OnlineMarketPlace.Repository;
 namespace OnlineMarketPlace.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin,SuperVisor")]
+
     public class ProductController : Controller
     {
         //Inject DataBase--Start
@@ -37,7 +40,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         //Category--Start
         public IActionResult ShowCategory()
         {
-            return View(dbCategory.GetAll());
+            //var dbViewModel = dbCategory.GetAll();
+            var dbViewModel = dbCategory.Include(e => e.Field, "Field");
+            return View(dbViewModel);
         }
         public IActionResult InsertCategory()
         {
