@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.ClassLibraries;
@@ -278,46 +279,28 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         public ViewResult UserList(string notification)
         {
-            var users = _db.Users.ToList();
-            List<UserDetailViewModel> UDVM = new List<UserDetailViewModel>();
-
-            users.ForEach(x =>
+            var users = _db.Users.Include(x => x.UserImage).ToList();
+            if (notification != null)
             {
-                UserDetailViewModel userDetail = new UserDetailViewModel()
-                {
-                    UserId = x.Id,
-                    FirstName = x.FirstName,
-                    LastName = x.LastName,
-                    Email = x.Email,
-                    PhoneNumber = x.PhoneNumber,
-                    RegisteredDateTime = x.RegisteredDateTime,
-                    DateOfBirth = x.DateOfBirth,
-                    NationalCode = x.NationalCode,
-                    Rank = x.Rank,
-                    SpecialUser = x.SpecialUser,
-                    Status = x.Status,
-                    Gendre = x.Gendre,
-                    DefinedByUserId = x.DefinedByUserId
-                };
-                var thisUserImages = _db.UserImage.Where(i => i.UserId == x.Id).ToList();
-                if (thisUserImages.Count > 0)
-                {
-                    thisUserImages.ForEach(i =>
-                    {
-                        if (i.Image != null)
-                        {
-                            userDetail.Image = i.Image;
-                        }
-                        if (i.ImageThumbnail != null)
-                        {
-                            userDetail.ThumbnailImage = i.ImageThumbnail;
-                        }
-                    });
-                }
-                UDVM.Add(userDetail);
-            });
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+            }
+            return View(users);
+        }//end UserList
 
-            return View(UDVM);
+        public async Task<IActionResult> EditUser(string UserId, string notification)
+        {
+            var selectedUser = await _userManager.FindByIdAsync(UserId);
+            if (selectedUser != null)
+            {
+                if (notification != null)
+                {
+                    ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                }
+                ViewData["selectedUser"] = selectedUser;
+                return View();
+            }
+            var nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+            return RedirectToAction("Signin", new { notification = nvm });
         }
     }
 }
