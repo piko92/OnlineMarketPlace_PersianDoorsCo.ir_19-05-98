@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "افزودن محصول";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@model ProductAbstractViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> افزودن محصول </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <form role="form" asp-area="admin" asp-controller="Product" asp-action="InsertProductConfirm">
+                    <div class="form-group">
+                        <label asp-for="Name"></label>
+                        <input type="text" placeholder="" class="form-control" asp-for="Name">
+                    </div>
+                    
+                    <div>
+                        <button class="btn btn-lg btn-block btn-primary pull-right m-t-n-xs" type="submit"><strong>ذخیره</strong></button>
+                    </div>
+                </form>
+                <!-- End .Form -->
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
