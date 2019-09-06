@@ -13,22 +13,28 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
     [Area("Admin")]
     public class ProductController : Controller
     {
+        //Inject DataBase--Start
         //Call DataBase Function From Repository
-        DbRepository<OnlineMarketContext, Material, int> dbMaterial;
+        DbRepository<OnlineMarketContext, Brand, int> dbBrand;
         DbRepository<OnlineMarketContext, Category, int> dbCategory;
+        DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;
         public ProductController
             (
-                DbRepository<OnlineMarketContext, Material, int> _dbMaterial,
-                DbRepository<OnlineMarketContext, Category, int> _dbCategory
+                DbRepository<OnlineMarketContext, Brand, int> _dbBrand,
+                DbRepository<OnlineMarketContext, Category, int> _dbCategory,
+                DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract
             )
         {
-            dbMaterial = _dbMaterial;
+            dbBrand = _dbBrand;
             dbCategory = _dbCategory;
+            dbProductAbstract = _dbProductAbstract;
         }
+        //Inject DataBase--End
         public IActionResult Index()
         {
-            return View(dbMaterial.GetAll());
+            return View();
         }
+        //Category--Start
         public IActionResult ShowCategory()
         {
             return View(dbCategory.GetAll());
@@ -47,11 +53,64 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     Description = model.Description
                 };
                 dbCategory.Insert(category);
-                TempData["InsertConfirm"]= "دسته بندی با موفقیت ثبت شد";
+                TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
                 return RedirectToAction("ShowCategory");
             }
-                return RedirectToAction("InsertCategory");
-            
+            return RedirectToAction("InsertCategory");
+
         }
+        //Category--End
+        //Brand--Start
+        public IActionResult ShowBrand()
+        {
+            return View(dbBrand.GetAll());
+        }
+        public IActionResult InsertBrand()
+        {
+            return View();
+        }
+        public IActionResult InsertBrand(BrandViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Brand brand = new Brand()
+                {
+                    Name = model.Name,
+                    Description = model.Description
+                };
+                dbBrand.Insert(brand);
+                TempData["InsertConfirm"] = "برند با موفقیت ثبت شد";
+                return RedirectToAction("ShowBrand");
+            }
+            return RedirectToAction("InsertBrand");
+
+        }
+        //Brand--End
+        //Product--Start
+        public IActionResult ShowProduct()
+        {
+            return View(dbProductAbstract.GetAll());
+        }
+        public IActionResult InsertProduct()
+        {
+            return View();
+        }
+        public IActionResult InsertProductConfirm(BrandViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ProductAbstract productAbstract = new ProductAbstract()
+                {
+                    Name = model.Name,
+                    
+                };
+                dbProductAbstract.Insert(productAbstract);
+                TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
+                return RedirectToAction("ShowProduct");
+            }
+            return RedirectToAction("InsertProduct");
+
+        }
+        //Brand--End
     }
 }

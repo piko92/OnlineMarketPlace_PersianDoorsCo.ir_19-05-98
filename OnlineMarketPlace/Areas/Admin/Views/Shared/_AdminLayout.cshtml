@@ -208,12 +208,14 @@
                         </li>
                         <!--محصولات-شروع-->
                         <li>
-                            <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">محصولات</span><span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-edit"></i> <span class="nav-label"> محصولات </span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowCategory">دسته بندی ها</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertCategory">افزودن دسته بندی</a></li>
-                                <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertPost">افزودن محصول </a></li>
-                                <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertPost">لیست محصولات </a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowBrand">برند ها</a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertBrand">افزودن برند</a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowProduct">لیست محصولات </a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertProduct">افزودن محصول </a></li>
 
                             </ul>
                         </li>
@@ -231,7 +233,7 @@
                             <a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">وبلاگ</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">پست جدید</a></li>
-                                <li><a href="lockscreen.html">مدیریت پست ها </a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">مدیریت پست ها </a></li>
 
                             </ul>
                         </li>
