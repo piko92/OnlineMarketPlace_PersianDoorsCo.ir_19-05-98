@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var nvm = ViewData["nvm"] as NotificationViewModel;
+}
+@inject UserManager<ApplicationUser> _userManager
+
+<!DOCTYPE html>
 <html lang="en" dir="rtl">
 
 <head>
@@ -14,8 +19,19 @@
     <link rel="stylesheet" href="~/AdminLayout/css/nanoscroller.css">
     <link href="~/AdminLayout/css/morris-0.4.3.min.css" rel="stylesheet">
     <link href="~/AdminLayout/css/menu-light.css" type="text/css" rel="stylesheet">
-    <link href="~/AdminLayout/css/style.css" type="text/css" rel="stylesheet">
     <link href="~/AdminLayout/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="~/AdminLayout/css/style.css" type="text/css" rel="stylesheet">
+
+    <!-- toast CSS -->
+    <link href="~/AdminLayout/jquery-toast-plugin-master/src/jquery.toast.css" rel="stylesheet">
+
+    <link href="~/AdminLayout/customize.css" rel="stylesheet" />
+    <link href="~/AdminLayout/jquery-growl/stylesheets/jquery.growl.css" rel="stylesheet" />
+    <link href="~/AdminLayout/jquery-growl/stylesheets/sample.css" rel="stylesheet" />
+
+    <!-- Persian date picker -->
+    <link href="~/persian_datepicker/css/persianDatepicker-default.css" rel="stylesheet" />
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -46,6 +62,7 @@
                 <a class="navbar-brand" href="#">پنل مدیریت وب سایت</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
+
                 @*<ul class="nav navbar-nav">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
@@ -136,6 +153,20 @@
                     </li>
 
                 </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    if (user != null)
+                    {
+                        var fullname = $"{user.FirstName} {user.LastName}";
+                        <div class="username-holder">
+                            <span>@fullname</span>
+                            <span>
+                                <small>@user.UserName</small>
+                            </span>
+                        </div>
+                    }
+                }
             </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
     </nav>
@@ -165,7 +196,7 @@
                                     <li><a href="#"><i class="fa fa-barcode"></i>My Task</a></li>
                                     <li class="divider"></li>
                                     <li><a href="#"><i class="fa fa-lock"></i>Screen lock</a></li>
-                                    <li><a href="#"><i class="fa fa-key"></i>Logout</a></li>
+                                    <li><a asp-action="Signout" asp-controller="Account" asp-area="Admin"><i class="fa fa-key"></i>خروج</a></li>
                                 </ul>
                             </div>
                         </li>
@@ -187,6 +218,15 @@
                             </ul>
                         </li>
                         <!--محصولات-پایان-->
+                        <!-- تنظیمات کاربری -->
+                        <li>
+                            <a href="#"><i class="fa fa-users"></i> <span class="nav-label">کاربران</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
+                                <li><a asp-action="Signup" asp-controller="Account" asp-area="Admin">ثبت کاربر جدید</a></li>
+                                <li><a asp-action="UserList" asp-controller="Account" asp-area="Admin">لیست کاربران</a></li>
+                                <li><a asp-action="UserRoles" asp-controller="Account" asp-area="Admin">سطوح دسترسی</a></li>
+                            </ul>
+                        </li>
                         <li>
                             <a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">وبلاگ</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
@@ -304,6 +344,14 @@
     <script src="~/AdminLayout/js/flot/jquery.flot.pie.js"></script>
     <script src="~/AdminLayout/js/chartjs/Chart.min.js"></script>
     <script src="~/AdminLayout/js/pace.min.js"></script>
+
+    <!-- Table -->
+    <script src="~/AdminLayout/js/data-tables/jquery.dataTables.js"></script>
+    <script src="~/AdminLayout/js/data-tables/dataTables.tableTools.js"></script>
+    <script src="~/AdminLayout/js/data-tables/dataTables.bootstrap.js"></script>
+    <script src="~/AdminLayout/js/data-tables/dataTables.responsive.js"></script>
+    <script src="~/AdminLayout/js/data-tables/tables-data.js"></script>
+
     <script src="~/AdminLayout/js/waves.min.js"></script>
     <script src="~/AdminLayout/js/morris_chart/raphael-2.1.0.min.js"></script>
     <script src="~/AdminLayout/js/morris_chart/morris.js"></script>
@@ -313,6 +361,23 @@
     <script type="text/javascript" src="~/AdminLayout/js/custom.js"></script>
     <!-- ChartJS-->
     <script src="~/AdminLayout/js/chartjs/Chart.min.js"></script>
+
+    <!-- Notification -->
+    <script src="~/AdminLayout/jquery-growl/javascripts/jquery.growl.js"></script>
+    <script src="~/AdminLayout/jquery-growl/javascripts/rainbow.js"></script>
+
+    @if (nvm != null)
+    {
+        <script>
+            $.growl.notice({
+                title: '@nvm.Heading',
+                message: '@nvm.Text',
+                duration: @nvm.HideAfter,
+                style: '@nvm.Icon'
+            });
+        </script>
+    }
+
 
     <!--page js-->
     <script>
@@ -597,7 +662,7 @@
         $('#modalMessage').modal('show');
         setTimeout(function () {
             $("#modalMessage").modal('hide');
-        }, 1500);
+        }, 6000);
     </script>
 </body>
 

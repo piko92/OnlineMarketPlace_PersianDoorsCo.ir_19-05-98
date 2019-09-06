@@ -6,11 +6,11 @@ Reset / Basics
 
 ***********/
 
-body{
-    font-family: 'Open Sans', FontShabnam;
+body {
+    font-family: 'FontShabnam', Tahoma;
     font-size: 14px;
     line-height: 1.42857143;
-    color:#666;
+    color: #666;
     background-color: #f5f5f5;
     min-height: 100%;
     margin: 0px;
@@ -45,7 +45,7 @@ h6 {
     font-weight: 500;
     margin-top: 0px;
     color: #333;
-    font-family: 'Open Sans', FontShabnam!important;
+    font-family: 'FontShabnam', Tahoma !important;
 }
 h1 {
     font-size: 30px;
@@ -182,9 +182,9 @@ h6 {
 .alert-dismissable .close, .alert-dismissible .close{
     opacity: 0.6;
 }
-.panel-heading{
+.panel-heading {
     color: #fff;
-        font-family: 'Open Sans', FontShabnam;
+    font-family: 'FontShabnam', Tahoma;
     font-weight: 400;
 }
 .badge-danger{
@@ -406,13 +406,13 @@ strong,b,label{
     color:#3e81ec;
 }
 .panel-action-toggle:before {
-       content: "\f107";
-    font-family: "FontShabnam";
+    content: "\f107";
+    font-family: 'FontAwesome';
     font-size: 20px;
 }
 .panel-action-dismiss:before {
     content: "\f00d";
-    font-family: "FontShabnam";
+    font-family: 'FontAwesome';
 }
 .panel-collapsed .panel-action-toggle:before {
        content: "\f106";
@@ -475,8 +475,8 @@ strong,b,label{
     background: none repeat scroll 0 0 rgba(255,255,255,0.8);
     border: 2px solid rgba(230,230,230,0.8);
     border-radius: 10px;
-    color:  #666;
-    font-family: sans-serif;
+    color: #666;
+    font-family: 'FontShabnam', Tahoma;
     font-size: 12px;
     padding: 6px;
     text-align: center;
@@ -486,24 +486,24 @@ strong,b,label{
     display: block;
 }
 
-#flot-tooltip b {
-    font-weight: bold;
-    margin: 0.25em 0;
-    color: #666;
-    font-family: sans-serif;
-    font-size: 12px;
-    text-align: center;
-}
+    #flot-tooltip b {
+        font-weight: bold;
+        margin: 0.25em 0;
+        color: #666;
+        font-family: 'FontShabnam', Tahoma;
+        font-size: 12px;
+        text-align: center;
+    }
 
-#flot-tooltip i {
-    margin: 0.1em 0;
-    white-space: nowrap;
-    color: #666;
-    font-family: sans-serif;
-    font-size: 12px;
-    text-align: center;
-    font-style: normal;
-}
+    #flot-tooltip i {
+        margin: 0.1em 0;
+        white-space: nowrap;
+        color: #666;
+        font-family: 'FontShabnam', Tahoma;
+        font-size: 12px;
+        text-align: center;
+        font-style: normal;
+    }
 
 .legend .legendColorBox>div {
     margin-right: 3px;
@@ -526,7 +526,7 @@ strong,b,label{
     border-radius: 3px;
     background: #344154;
     color: #fff;
-    font-family: sans-serif, Verdana;
+    font-family: 'FontShabnam', Tahoma;
     font-size: smaller;
     padding: 3px 5px;
     z-index: 999;
@@ -709,7 +709,7 @@ table.table thead .sorting_desc_disabled {
 .sorting:before,
 .sorting_asc:before,
 .sorting_desc:before {
-    font-family: 'FontShabnam';
+    font-family: 'FontAwesome';
     font-weight: normal;
     font-style: normal;
 }
@@ -1438,14 +1438,14 @@ hr{
 .mail-side-bar ul li a:hover{
     color: #01a8fe;
 }
-.mail-side-bar ul li.lables{
-    text-transform: capitalize;
-    font-weight: 400;
-    padding-bottom: 10px;
-        font-family: 'Open Sans', sans-serif;
+    .mail-side-bar ul li.lables {
+        text-transform: capitalize;
+        font-weight: 400;
+        padding-bottom: 10px;
+        font-family: 'FontShabnam', Tahoma;
         font-size: 16px;
         color: #333;
-}
+    }
 .mail-side-bar ul.tags li:first-child{
     padding-bottom: 15px;
 }

@@ -1,0 +1,51 @@
+﻿
+.jq-toast-wrap
+{
+    z-index:9999 !important;
+}
+.red-color{
+    color:#dd1515;
+}
+.sp-padding-20{
+    padding:20px;
+}
+.gray-color{
+    color:#6b6b6b;
+}
+.sp-tb-padding-10{
+    padding-top:10px;
+    padding-bottom:10px;
+}
+.sp-rl-padding-10 {
+    padding-right: 10px;
+    padding-left: 10px;
+}
+.inline-element{
+    display:inline-block !important;
+}
+.field-validation-error{
+    color:#dd1515;
+    font-size:12px;
+}
+.input-validation-error{
+    border-color:#f82e00;
+    background-color:#fee7a7
+}
+.username-holder{
+    display:inline-block;
+    color:#fff !important;
+    width:300px;
+    float:left;
+    text-align:left;
+    margin-left:30px;
+}
+.username-holder span{
+    display:block;
+}
+    .username-holder span:first-child{
+        padding-top:5px;
+    }
+    .username-holder span:last-child {
+        line-height:1;
+        color: #000758;
+    }

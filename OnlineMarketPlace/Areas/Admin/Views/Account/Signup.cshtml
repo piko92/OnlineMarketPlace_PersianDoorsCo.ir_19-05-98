@@ -1,0 +1,145 @@
+﻿
+@{
+    ViewData["Title"] = "Signup";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model SignupViewModel
+
+<div class="col-md-12">
+    <div class="panel panel-card margin-b-30">
+        <!-- Start .panel -->
+        <div class="panel-heading">
+            <h4 class="panel-title"> ثبت کاربر جدید</h4>
+            <h6 class="panel-info sp-tb-padding-10 gray-color">تکمیل موارد ستاره دار الزامی میباشد.</h6>
+            <div class="panel-actions">
+                <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <form asp-action="SignupConfirm" asp-controller="Account" asp-area="Admin" id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">نام <span class="red-color">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Firstname" type="text" class="form-control">
+                        <span asp-validation-for="Firstname"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">نام خانوادگی <span class="red-color">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Lastname" type="text" class="form-control">
+                        <span asp-validation-for="Lastname"></span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">نام کاربری <span class="red-color">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Username" type="text" class="form-control">
+                        <span asp-validation-for="Username"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">ایمیل</label>
+                    <div class="col-sm-10">
+                        <input asp-for="Email" type="email" class="form-control">
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">کلمه عبور <span class="red-color">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Password" type="password" class="form-control">
+                        <span asp-validation-for="Password"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">تکرار کلمه عبور <span class="red-color">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="ConfirmPassword" type="password" class="form-control">
+                        <span asp-validation-for="ConfirmPassword"></span>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">تاریخ تولد</label>
+                    <div class="col-sm-10">
+                        <input asp-for="Dateofbirth" type="text" id="pdpBig" class="form-control" autocomplete="off">
+                        <span asp-validation-for="Dateofbirth"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">کد ملی</label>
+                    <div class="col-sm-10">
+                        <input asp-for="Nationalcode" type="number" class="form-control">
+                        <span asp-validation-for="Nationalcode"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">تلفن تماس</label>
+                    <div class="col-sm-10">
+                        <input asp-for="Phonenumber" type="number" class="form-control">
+                        <span asp-validation-for="Phonenumber"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">جنسیت</label>
+                    <div class="col-sm-10">
+                        <div class="radio inline-element sp-rl-padding-10">
+                            <input asp-for="Gender" value="true" name="group1" type="radio" id="Option_1" checked>
+                            <label for="Option_1">آقا</label>
+                        </div>
+                        <div class="radio inline-element sp-rl-padding-10">
+                            <input asp-for="Gender" value="true" name="group1" type="radio" id="Option_2">
+                            <label for="Option_2">خانم</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">تصویر کاربر</label>
+                    <div class="col-sm-10">
+                        <div class="custom-file">
+                            <input asp-for="img" type="file" class="custom-file-input" >
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">تنظیمات کاربری</label>
+                    <div class="col-sm-10">
+                        <div class="radio inline-element sp-rl-padding-10">
+                            <input asp-for="Status" value="true" type="checkbox" id="chk1" checked>
+                            <label for="chk1">فعال</label>
+                        </div>
+                        <div class="radio inline-element sp-rl-padding-10">
+                            <input asp-for="Specialuser" value="true" type="checkbox" id="chk2">
+                            <label for="chk2">کاربر ویژه</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="col-sm-4 col-sm-offset-2">
+                    <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                    <button class="btn btn-primary" type="submit">ثبت کاربر</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+    <script>
+        $("#pdpBig").persianDatepicker({
+            cellWidth: 48,
+            cellHeight: 30,
+            fontSize: 15
+        });
+        $("#btnCancel").click(function () {
+            $("#form1")[0].reset();
+        })
+    </script>
+</div>
+
+

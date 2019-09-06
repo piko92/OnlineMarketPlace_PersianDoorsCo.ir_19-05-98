@@ -1,0 +1,100 @@
+﻿[
+  //====== notice ======
+  {
+    "Status": true,
+    "Heading": "ثبت موفقیت آمیز",
+    "Text": "عملیات ثبت رکورد با موفقیت انجام پذیرفت.",
+    "ColorCode": "#06d79c",
+    "Icon": "notice",
+    "Subject": "Success_Insert"
+  },
+  {
+    "Status": true,
+    "Heading": " حذف موفقیت آمیز",
+    "Text": "عملیات حذف رکورد با موفقیت انجام پذیرفت.",
+    "ColorCode": "#06d79c",
+    "Icon": "warning",
+    "Subject": "Success_Remove"
+  },
+  {
+    "Status": true,
+    "Heading": "ویرایش موفقیت آمیز",
+    "Text": "عملیات ویرایش رکورد با موفقیت انجام پذیرفت.",
+    "ColorCode": "#06d79c",
+    "Icon": "notice",
+    "Subject": "Success_Update"
+  },
+  {
+    "Status": true,
+    "Heading": "ورود موفقیت آمیز",
+    "Text": "ورود شما با موفقیت انجام پذیرفت.",
+    "ColorCode": "#06d79c",
+    "Icon": "notice",
+    "Subject": "Success_Login"
+  },
+  //====== Errors ======
+  {
+    "Status": true,
+    "Heading": "خطا در ثبت رکورد",
+    "Text": "عملیات ثبت رکورد با خطا مواجه گردید.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Insert"
+  },
+  {
+    "Status": true,
+    "Heading": "خطا در ویرایش رکورد",
+    "Text": "عملیات ویرایش رکورد با خطا مواجه گردید.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Update"
+  },
+  {
+    "Status": true,
+    "Heading": "خطا در حذف رکورد",
+    "Text": "عملیات حذف رکورد با خطا مواجه گردید.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Remove"
+  },
+  {
+    "Status": true,
+    "Heading": "خطا در انجام عملیات",
+    "Text": "عملیات درخواستی با خطا مواجه گردید.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Operation"
+  },
+  {
+    "Status": true,
+    "Heading": "خطا در ورود",
+    "Text": "ورود شما به پروفایل کاربری با خطا مواجه گردید.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Login"
+  },
+  {
+    "Status": true,
+    "Heading": "اطلاعات ورودی نادرست",
+    "Text": "داده های ورودی نادرست و یا ناقص وارد گردیده اند.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "Wrong_Values"
+  },
+  {
+    "Status": true,
+    "Heading": "نیازمند ورود",
+    "Text": "ابتدا بایستی به پروفایل کاربری خود وارد شوید.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "Require_Login"
+  },
+  {
+    "Status": true,
+    "Heading": "خطا در ثبت تصویر",
+    "Text": "خطا در ثبت تصویر بارگذاری شده.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Failed_Insert_Image"
+  }
+]

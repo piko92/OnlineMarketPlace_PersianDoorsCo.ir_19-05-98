@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OnlineMarketPlace.ClassLibraries.Middleware;
 using OnlineMarketPlace.Repository;
 
 namespace OnlineMarketPlace
@@ -37,6 +36,18 @@ namespace OnlineMarketPlace
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             //Add Repository Services
             services.AddTransient(typeof(DbRepository<,,>));
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Events = new Microsoft.AspNetCore.Authentication.Cookies.CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = x =>
+                    {
+                        x.Response.Redirect("/Admin/Account/Signin");
+                        return Task.CompletedTask;
+                    }
+                };
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,7 +63,14 @@ namespace OnlineMarketPlace
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseStatusCodePages(async context =>
+            {
+                var statusCode = context.HttpContext.Response.StatusCode;
+                if (statusCode == 404)
+                {
+                    context.HttpContext.Response.Redirect("/PageNotFound");
+                }
+            });
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();

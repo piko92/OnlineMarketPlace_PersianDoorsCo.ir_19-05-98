@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineMarketPlace.Areas.Identity.Data;
-using OnlineMarketPlace.ClassLibraries.DefaultPaths;
 using OnlineMarketPlace.ClassLibraries.MessageHandler;
 using OnlineMarketPlace.Models.ViewModels;
 
@@ -21,9 +20,7 @@ namespace OnlineMarketPlace.Controllers
         UserManager<ApplicationUser> _userManager;
         SignInManager<ApplicationUser> _signInManager;
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
-
-        List<Messages> messages = new List<Messages>();//keeps the list of all "alerts" messages
-        List<DefaultPath> defaultPaths = new List<DefaultPath>();
+        string contentRootPath;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -32,81 +29,70 @@ namespace OnlineMarketPlace.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _hostingEnvironment = hostingEnvironment;
 
-            string contentRootPath = _hostingEnvironment.ContentRootPath;//returns the root path of the website
-            //returns all messages from and push them into the List<Messages> messages...
-            var ParsedJson_Alert = JsonToClassConverter.ReadJsonFile(contentRootPath + "/JsonFiles/Messages.json", "alerts");//list of json array and parse into string list
-            //var DefaultImagePath_User = JsonToClassConverter.ReadJsonFile(contentRootPath + "/JsonFiles/DefaultPaths.json", "ImagePaths");
-            foreach (var item in ParsedJson_Alert)
-            {
-                messages.Add(JsonConvert.DeserializeObject<Messages>(item));
-            }
-            //foreach (var item in DefaultImagePath_User)
-            //{
-            //    defaultPaths.Add(JsonConvert.DeserializeObject<DefaultPath>(item));
-            //}
+            _hostingEnvironment = hostingEnvironment;
+            contentRootPath = _hostingEnvironment.ContentRootPath;//returns the root path of the website
 
         }//end AccountController(Constructor)
 
-        public IActionResult Register() => View();
-        public async Task<IActionResult> RegisterConfirm(RegisterViewModel model)
-        {
-            if (model != null)
-            {
-                ApplicationUser NewUser = new ApplicationUser()
-                {
-                    Email = model.Email,
-                    UserName = model.Email
-                };
-                var status = await _userManager.CreateAsync(NewUser, model.Password);
-                if (status.Succeeded)
-                {
-                    TempData["message"] = messages.Find(x => x.Title == "RegisterSuccess").Content;
-                }
-                return RedirectToAction("Index", "Home");
-            }
-            TempData["message"] = messages.Find(x => x.Title == "NotCompletedFields").Content;
-            return RedirectToAction("Register");
-        }//end RegisterConfirm
+        //public IActionResult Register() => View();
+        //public async Task<IActionResult> RegisterConfirm(RegisterViewModel model)
+        //{
+        //    if (model != null)
+        //    {
+        //        ApplicationUser NewUser = new ApplicationUser()
+        //        {
+        //            Email = model.Email,
+        //            UserName = model.Email
+        //        };
+        //        var status = await _userManager.CreateAsync(NewUser, model.Password);
+        //        if (status.Succeeded)
+        //        {
+        //            TempData["message"] = messages.Find(x => x.Title == "RegisterSuccess").Content;
+        //        }
+        //        return RedirectToAction("Index", "Home");
+        //    }
+        //    TempData["message"] = messages.Find(x => x.Title == "NotCompletedFields").Content;
+        //    return RedirectToAction("Register");
+        //}//end RegisterConfirm
 
-        public ViewResult Login() => View();
-        public async Task<IActionResult> LoginConfirm(LoginViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return RedirectToAction("Login");
-            }
-            else
-            {
-                var foundUser = await _userManager.FindByNameAsync(model.UserName);
-                if (foundUser != null)
-                {
-                    var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
-                    if (status.Succeeded)
-                    {
-                        TempData["message"] = messages.Find(x => x.Title == "LoginSuccess").Content;
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        TempData["message"] = messages.Find(x => x.Title == "LoginWrongValues").Content;
-                        return RedirectToAction("Login");
-                    }
-                }
-                TempData["message"] = messages.Find(x => x.Title == "UserNotFound").Content;
-                return RedirectToAction("Login");
-            }
-            TempData["message"] = messages.Find(x => x.Title == "LoginEmptyValues").Content;
-            return RedirectToAction("Login");
+        //public ViewResult Login() => View();
+        //public async Task<IActionResult> LoginConfirm(LoginViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return RedirectToAction("Login");
+        //    }
+        //    else
+        //    {
+        //        var foundUser = await _userManager.FindByNameAsync(model.UserName);
+        //        if (foundUser != null)
+        //        {
+        //            var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
+        //            if (status.Succeeded)
+        //            {
+        //                TempData["message"] = messages.Find(x => x.Title == "LoginSuccess").Content;
+        //                return RedirectToAction("Index", "Home");
+        //            }
+        //            else
+        //            {
+        //                TempData["message"] = messages.Find(x => x.Title == "LoginWrongValues").Content;
+        //                return RedirectToAction("Login");
+        //            }
+        //        }
+        //        TempData["message"] = messages.Find(x => x.Title == "UserNotFound").Content;
+        //        return RedirectToAction("Login");
+        //    }
+        //    TempData["message"] = messages.Find(x => x.Title == "LoginEmptyValues").Content;
+        //    return RedirectToAction("Login");
 
-        }//end LoginConfirm
+        //}//end LoginConfirm
 
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
+        //public async Task<IActionResult> Logout()
+        //{
+        //    await _signInManager.SignOutAsync();
+        //    return RedirectToAction("Index", "Home");
+        //}
 
     }//end AccountController
 }

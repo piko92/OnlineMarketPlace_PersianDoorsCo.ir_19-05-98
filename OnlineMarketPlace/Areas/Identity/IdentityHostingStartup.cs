@@ -19,7 +19,7 @@ namespace OnlineMarketPlace.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("OnlineMarketContextConnection")));
 
-                services.AddDefaultIdentity<ApplicationUser>()
+                services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<OnlineMarketContext>();
             });
         }

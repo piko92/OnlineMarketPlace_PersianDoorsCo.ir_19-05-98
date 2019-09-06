@@ -1,0 +1,84 @@
+﻿@{
+    TempData["title"] = "صفحه مورد نظر یافت نشد";
+    Layout = null;
+}
+
+
+<!DOCTYPE html>
+<html lang="fa">
+
+<!-- Mirrored from aries-admin-templates.websitedesignmarketingagency.com/ariesadmin-1_2/ariesadmin-horizontal-nav/pages/samplepage/404.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 25 Jul 2019 16:39:39 GMT -->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="http://aries-admin-templates.websitedesignmarketingagency.com/ariesadmin-1_2/images/favicon.ico">
+
+    <title>@TempData["title"]</title>
+
+    <!-- Bootstrap 4.0-->
+    <link rel="stylesheet" href="~/shared/NotFound/bootstrap/dist/css/bootstrap.min.css">
+
+    <!-- Bootstrap 4.0-->
+    <link rel="stylesheet" href="~/shared/NotFound/bootstrap/dist/css/bootstrap-extend.css">
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/shared/NotFound/master_style.css">
+
+    <!-- Aries_admin Skins. Choose a skin from the css/skins
+       folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/shared/NotFound/skins/_all-skins.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body class="hold-transition">
+    <div class="error-body">
+        <div class="error-page">
+
+            <div class="error-content">
+                <div class="container">
+
+                    <h2 class="headline text-yellow"> 404</h2>
+
+                    <h3 class="margin-top-0"><i class="fa fa-warning text-yellow"></i> صفحه مورد نظر یافت نشد !</h3>
+
+                    <p>
+                        به نظر میرسد شما قصد دسترسی به صفحه ای که موجود نمیباشد را داشته اید
+                    </p>
+                    <div class="text-center">
+                        <a asp-action="Index" asp-controller="Home" class="btn btn-info btn-block margin-top-10">بازگشت به صفحه اصلی</a>
+                    </div>
+
+                </div>
+            </div>
+            <!-- /.error-content -->
+            <footer class="main-footer">
+                Copyright &copy; 2019 <a href="">Pixel</a>. All Rights Reserved.
+            </footer>
+
+        </div>
+        <!-- /.error-page -->
+    </div>
+
+    <!-- jQuery 3 -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <!-- popper -->
+    <script src="~/shared/NotFound/popper/dist/popper.min.js"></script>
+
+    <!-- Bootstrap 4.0-->
+    <script src="~/shared/NotFound/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Fontawesome styles and icons -->
+    <script src="https://kit.fontawesome.com/51385ea701.js"></script>
+</body>
+
+</html>

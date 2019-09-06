@@ -1,0 +1,12 @@
+{
+  "ImagePaths": [
+    {
+      "Name": "Users",
+      "Path": "\\wwwroot\\images\\ImageDatabase\\User\\"
+    },
+    {
+      "Name": "Products",
+      "Path": "\\wwwroot\\images\\ImageDatabase\\Product\\DefaultProduct\\"
+    }
+  ]
+}

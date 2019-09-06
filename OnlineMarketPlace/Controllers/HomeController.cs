@@ -8,9 +8,12 @@ namespace OnlineMarketPlace.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index() //Home Page
         {
             return View();
         }
+
+        [Route("[action]")]
+        public ViewResult PageNotFound() => View(); //Independant layout
     }
 }

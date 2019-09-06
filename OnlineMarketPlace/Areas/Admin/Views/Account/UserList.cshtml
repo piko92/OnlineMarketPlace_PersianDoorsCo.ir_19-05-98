@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewData["Title"] = "UserList";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<UserDetailViewModel>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card ">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title"> Basic Data tables</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th>نام خانوادگی</th>
+                            <th>نام</th>
+                            <th>نام کاربری</th>
+                            <th>تلفن تماس</th>
+                            <th>تاریخ ثبت</th>
+                            <th>تصویر</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>نام خانوادگی</th>
+                            <th>نام</th>
+                            <th>نام کاربری</th>
+                            <th>تلفن تماس</th>
+                            <th>تاریخ ثبت</th>
+                            <th>تصویر</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>@item.LastName</td>
+                                <td>@item.FirstName</td>
+                                <td>@item.UserName</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@CustomizeCalendar.GregorianToPersianDateTime(item.RegisteredDateTime)</td>
+                                <td>
+                                    @if (item.ThumbnailImage != null)
+                                    {
+                                        <img width="75" height="70" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(item.ThumbnailImage)}")" />
+                                    }
+                                    else
+                                    {
+                                        <img width="75" height="70" src="~/images/user-profile.png" />
+                                    }
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-info">ویرایش</a>
+                                    <a href="#" class="btn btn-danger">حذف</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div><!-- End .panel -->
+    </div><!--end .col-->
+</div><!--end .row-->
