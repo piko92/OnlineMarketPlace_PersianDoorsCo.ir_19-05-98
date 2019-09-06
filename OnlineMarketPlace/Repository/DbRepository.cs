@@ -1,7 +1,9 @@
-﻿using OnlineMarketPlace.Areas.Identity.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using OnlineMarketPlace.Areas.Identity.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace OnlineMarketPlace.Repository
@@ -38,6 +40,17 @@ namespace OnlineMarketPlace.Repository
         public List<TEntity> GetAll()
         {
             return db.Set<TEntity>().ToList();
+        }
+
+        public IList<TEntity> Include(Expression<Func<TEntity, object>> Where, params string[] Navigations)
+        {
+                IQueryable<TEntity> query = null;
+                foreach (var include in Navigations)
+                {
+                    query = db.Set<TEntity>().Include(include);
+                }
+
+                return query.ToList();
         }
 
         public TKey Insert(TEntity Entity)
