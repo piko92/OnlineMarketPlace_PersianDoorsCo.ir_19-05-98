@@ -12,7 +12,7 @@ namespace OnlineMarketPlace.Repository
         TEntity FindById(TKey Id);
         TEntity FindSingleByName(string Name);
         List<TEntity> GetAll();
-        IList<TEntity> Include(Expression<Func<TEntity, object>> Where, params string[] Navigations);
+        IList<TEntity> GetInclude(params Expression<Func<TEntity, object>>[] includes);
         List<TEntity> FindByName(string Name);
         TKey Insert(TEntity Entity);
         bool Update(TEntity Entity);

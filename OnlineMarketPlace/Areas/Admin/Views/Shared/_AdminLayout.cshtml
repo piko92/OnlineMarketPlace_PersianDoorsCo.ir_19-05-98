@@ -160,8 +160,7 @@
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                        <a href="#"><i class="fa fa-edit"></i> <span class="">6</span></a>
-
+                       
                         var fullname = $"{user.FirstName} {user.LastName}";
                         <div class="username-holder">
                             <span>@fullname</span>

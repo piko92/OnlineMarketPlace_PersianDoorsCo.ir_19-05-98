@@ -17,57 +17,84 @@ namespace OnlineMarketPlace.Repository
         {
             db = _db;
         }
+        //DeleteById
         public bool DeleteById(TKey Id)
         {
-            throw new NotImplementedException();
-        }
+            var entity = this.db.Set<TEntity>().Find(Id);
+            if (entity != null)
+            {
+                db.Set<TEntity>().Remove(entity);
+                Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
 
+        }
+        //FindById
         public TEntity FindById(TKey Id)
         {
-            throw new NotImplementedException();
+            return db.Set<TEntity>().Find(Id);
         }
-
+        //FindByName
         public List<TEntity> FindByName(string Name)
         {
             throw new NotImplementedException();
         }
-
+        //FindSingleByName
         public TEntity FindSingleByName(string Name)
         {
             throw new NotImplementedException();
         }
-
+        //GetAll
         public List<TEntity> GetAll()
         {
             return db.Set<TEntity>().ToList();
         }
-
-        public IList<TEntity> Include(Expression<Func<TEntity, object>> Where, params string[] Navigations)
+        //GetInclude
+        public IList<TEntity> GetInclude(params Expression<Func<TEntity, Object>>[] includes)
         {
-                IQueryable<TEntity> query = null;
-                foreach (var include in Navigations)
-                {
-                    query = db.Set<TEntity>().Include(include);
-                }
+            IQueryable<TEntity> query = null;
 
-                return query.ToList();
+            if (includes.Length > 0)
+            {
+                query = db.Set<TEntity>().Include(includes[0]);
+            }
+            for (int queryIndex = 1; queryIndex < includes.Length; ++queryIndex)
+            {
+                query = query.Include(includes[queryIndex]);
+            }
+
+            return query.ToList();
         }
-
+        //Insert
         public TKey Insert(TEntity Entity)
         {
             db.Add(Entity);
             Save();
             return Entity.Id;
         }
-
+        //Update
+        public bool Update(TEntity Entity)
+        {
+            var entity = this.db.Set<TEntity>().Find(Entity.Id);
+            if (entity != null)
+            {
+                entity = Entity;
+                Save();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        //Save
         public void Save()
         {
             db.SaveChanges();
-        }
-
-        public bool Update(TEntity Entity)
-        {
-            throw new NotImplementedException();
         }
     }
 }
