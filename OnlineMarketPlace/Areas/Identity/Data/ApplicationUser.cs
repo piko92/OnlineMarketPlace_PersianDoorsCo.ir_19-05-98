@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Newtonsoft.Json;
 using OnlineMarket.Models;
 
 namespace OnlineMarketPlace.Areas.Identity.Data
@@ -25,6 +27,10 @@ namespace OnlineMarketPlace.Areas.Identity.Data
 
         [ForeignKey("DefinedByUserId")]
         public virtual ApplicationUser DefinedByUser { get; set; }
+
+        [JsonIgnore]
+        [IgnoreDataMember]
+        [InverseProperty("DefinedByUser")]
         public virtual ICollection<ApplicationUser> InverseDefinedByUser { get; set; }
 
         public virtual ICollection<Address> Address { get; set; }

@@ -24,7 +24,7 @@ namespace OnlineMarketPlace.Repository
 
         public TEntity FindById(TKey Id)
         {
-            throw new NotImplementedException();
+            return db.Find<TEntity>(Id);
         }
 
         public List<TEntity> FindByName(string Name)

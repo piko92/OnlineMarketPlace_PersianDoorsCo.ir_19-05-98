@@ -77,6 +77,11 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         public static string Failed_Insert_Image { get; set; } = "Failed_Insert_Image";
 
         /// <summary>
+        /// رکورد موجود نمیباشد
+        /// </summary>
+        public static string Record_Not_Exist { get; set; } = "Record_Not_Exist";
+
+        /// <summary>
         /// <para>Read Json file and serialize to 'NotificationViewModel'</para>
         /// خواندن فایل متن و تبدیل آن به مدل 'NotificationViewModel'
         /// </summary>

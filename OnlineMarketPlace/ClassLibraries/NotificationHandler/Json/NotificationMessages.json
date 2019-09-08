@@ -96,5 +96,13 @@
     "ColorCode": "#ef5350",
     "Icon": "error",
     "Subject": "Failed_Insert_Image"
+  },
+  {
+    "Status": true,
+    "Heading": "رکورد ناموجود",
+    "Text": "رکورد درخواستی جهت حذف و یا ویرایش موجود نمیباشد.",
+    "ColorCode": "#ef5350",
+    "Icon": "error",
+    "Subject": "Record_Not_Exist"
   }
 ]

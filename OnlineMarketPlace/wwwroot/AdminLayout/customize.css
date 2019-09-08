@@ -1,4 +1,13 @@
 ﻿
+@font-face {
+    font-family: 'NumIRANSans';
+    src: url('../shared/webFonts/FarsiNumbers/webFonts/fonts/eot/IRANSansWeb(FaNum).eot'); /* IE9 Compat Modes */
+    src: url('../shared/webFonts/FarsiNumbers/webFonts/fonts/eot/IRANSansWeb(FaNum).eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('../shared/webFonts/FarsiNumbers/webFonts/fonts/woff2/IRANSansWeb(FaNum).woff2') format('woff2'), /* Super Modern Browsers */
+    url('../shared/webFonts/FarsiNumbers/webFonts/fonts/woff/IRANSansWeb(FaNum).woff') format('woff'), /* Pretty Modern Browsers */
+    url('../shared/webFonts/FarsiNumbers/webFonts/fonts/ttf/IRANSansWeb(FaNum).ttf') format('truetype') /* Safari, Android, iOS */
+}
+
 .jq-toast-wrap
 {
     z-index:9999 !important;
@@ -49,3 +58,76 @@
         line-height:1;
         color: #000758;
     }
+.farsi-num {
+    font-family: 'NumIRANSans', Tahoma;
+}
+.image-container{
+    position:relative;
+}
+.file-upload {
+    display: inline-block;
+    position: absolute;
+    bottom: -10%;
+    left: 33%;
+    transform: translate(-50%);
+    width: 30px;
+    height: 30px;
+    background: #fe9b80;
+    border-radius: 50%;
+    color: #fff;
+    text-align: center;
+    line-height: 2.1;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    cursor: pointer;
+    opacity:0;
+    transition:0.5s;
+}
+
+#imgBrowser {
+    z-index: -1;
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+}
+.image-container:hover > .file-upload {
+    opacity: 1 !important;
+}
+.user-details tbody tr td{
+    position:relative !important;
+}
+    .user-details .invisible-input {
+        position: absolute;
+        top: 3%;
+        left: 0;
+        z-index:99;
+        visibility:hidden;
+        width:100%;
+        display:block;
+    }
+    .visible-input{
+        visibility:visible !important;
+    }
+.invisible-input select{
+    /*margin-top:5px;*/
+    padding:2px 5px;
+}
+.operational-key-times,
+.operational-key-check {
+    position: absolute;
+    top: 110%;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    border-radius: 100%;
+    line-height: 1.7
+}
+.operational-key-check {
+    left: 5%;
+}
+.operational-key-times {
+    left: 20%;
+}

@@ -34,5 +34,6 @@ namespace OnlineMarketPlace.Models.ViewModels
         public bool Specialuser { get; set; }
         public bool Status { get; set; }
         public string DefinedByUserId { get; set; }
+        public string RoleName { get; set; }
     }
 }

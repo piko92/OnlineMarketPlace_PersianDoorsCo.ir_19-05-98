@@ -5,140 +5,248 @@
     var selectedUser = ViewData["selectedUser"] as ApplicationUser;
 }
 @model SignupViewModel
+@inject UserManager<ApplicationUser> _userManager;
+@inject OnlineMarketContext _db;
 
 
-<div class="col-md-4 margin-b-30">
-    <div class="profile-overview">
-        <div class="avtar text-center">
-            <img src="images/avtar-1.jpg" alt="" class="img-thumbnail">
-            <h3>Peter Emrald</h3>
-            <hr>
-            @*<ul class="socials list-inline">
-                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
-                <li><a href="#"><i class="fa fa-github"></i></a></li>
-            </ul>
-            <hr>*@
+<form class="form-horizontal" asp-action="EditUserConfirm" asp-controller="Account" asp-area="Admin" method="post" enctype="multipart/form-data">
+    <div class="col-md-4 margin-b-30">
+        <div class="profile-overview">
+            <div class="avtar text-center">
+                <div class="image-container">
+                    <input name="Id" value="@selectedUser.Id" hidden />
+                    @if (selectedUser.UserImage.Count > 0)
+                    {
+                        var singleUserImage = selectedUser.UserImage.FirstOrDefault();
+                        if (singleUserImage.ImageThumbnail != null)
+                        {
+                            <img id="avator" alt="" width="120" height="120" class="img-thumbnail" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(singleUserImage.ImageThumbnail)}")" />
+                        }
+                        else
+                        {
+                            <img id="avator" width="120" height="120" alt="" class="img-thumbnail" src="~/images/user-profile.png" />
+                        }
+                    }
+                    else
+                    {
+                        <img id="avator" width="120" height="120" alt="" class="img-thumbnail" src="~/images/user-profile.png" />
+                    }
+                    <label class="file-upload" for="imgBrowser">
+                        <i class="fa fa-upload"></i>
+                    </label>
+                    <input asp-for="img" name="img" type="file" id="imgBrowser" />
+                </div>
+
+                <h3>@($"{selectedUser.FirstName} {selectedUser.LastName}")</h3>
+                <hr>
+            </div>
+            <table class="table profile-detail table-condensed table-hover user-details">
+                <thead>
+                    <tr>
+                        <th colspan="3">اطلاعات کاربری</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>نام کاربری:</td>
+                        <td>
+                            @selectedUser.UserName
+                        </td>
+                    </tr>
+                    @if (selectedUser.Email != null)
+                    {
+                        <tr>
+                            <td>ایمیل:</td>
+                            <td>
+                                <a href="mailto:@selectedUser.Email">
+                                    @selectedUser.Email
+                                </a>
+                                <div class="invisible-input">
+                                    <input asp-for="Email" type="text" value="@selectedUser.Email" />
+                                    <span class="operational-key-check">
+                                        <i class="fa fa-check"></i>
+                                    </span>
+                                    <span class="operational-key-times">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="edit-field"><a class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                        </tr>
+                    }
+                    @if (selectedUser.PhoneNumber != null)
+                    {
+                        <tr>
+                            <td>تلفن:</td>
+                            <td class="farsi-num">
+                                <a href="tel:@selectedUser.PhoneNumber">@selectedUser.PhoneNumber</a>
+                                @* invisible input *@
+                                <div class="invisible-input">
+                                    <input asp-for="Phonenumber" type="text" value="@selectedUser.PhoneNumber" />
+                                    <span class="operational-key-check">
+                                        <i class="fa fa-check"></i>
+                                    </span>
+                                    <span class="operational-key-times">
+                                        <i class="fa fa-times"></i>
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="edit-field"><a class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>آخرین ورود</td>
+                        <td class="farsi-num">52 دقیقه قبل</td>
+                    </tr>
+                    @{
+                        var definedByUser = await _userManager.FindByIdAsync(selectedUser.DefinedByUserId);
+                        if (definedByUser != null)
+                        {
+                            <tr>
+                                <td>ایجاد شده توسط: </td>
+                                <td>
+                                    @definedByUser.UserName
+                                </td>
+                            </tr>
+                        }
+                    }
+                    @{
+                        var usersRoles = _db.UserRoles.Where(x => x.UserId == selectedUser.Id).ToList();
+                        List<string> thisUserRolesName = new List<string>();
+                        usersRoles.ForEach(x =>
+                        {
+                            string roleName = _db.Roles.Where(y => y.Id == x.RoleId).FirstOrDefault().Name;
+                            thisUserRolesName.Add(roleName);
+                        });
+                    }
+                    @if (thisUserRolesName.Count > 0)
+                    {
+                        <tr>
+                            <td>سطح دسترسی</td>
+                            @foreach (var item in thisUserRolesName)
+                            {
+                                <td>
+                                    <a class="label label-sm @(item.ToLower() == "supervisor" ? "label-success":"label-purple")">@item</a>
+                                    <div class="invisible-input">
+                                        @{
+                                            var roles = _db.Roles.ToList();
+                                        }
+                                        <select asp-for="RoleName" class="form-list">
+                                            @foreach (var i in roles)
+                                            {
+                                                <option value="@i.Name">@i.Name</option>
+                                            }
+                                        </select>
+                                        <span class="operational-key-check">
+                                            <i class="fa fa-check"></i>
+                                        </span>
+                                        <span class="operational-key-times">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="edit-field">
+                                    <a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a>
+                                </td>
+                            }
+                        </tr>
+                    }
+                    <tr>
+                        <td>وضعیت</td>
+                        <td>
+                            <a>
+                                @(selectedUser.Status ? "فعال" : "غیر فعال")
+                            </a>
+                            <div class="invisible-input">
+                                <select asp-for="Status" class="form-list">
+                                    <option value="true">فعال</option>
+                                    <option value="false">غیر فعال</option>
+                                </select>
+                                <input type="checkbox" value="true" checked />
+                                <span class="operational-key-check">
+                                    <i class="fa fa-check"></i>
+                                </span>
+                                <span class="operational-key-times">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="edit-field"><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>کاربر</td>
+                        <td>
+                            <a>
+                                @(selectedUser.SpecialUser ? "ویژه" : "عادی")
+                            </a>
+                            <div class="invisible-input">
+                                <select asp-for="Specialuser" class="form-list">
+                                    <option value="false">عادی</option>
+                                    <option value="true">ویژه</option>
+                                </select>
+                                <span class="operational-key-check">
+                                    <i class="fa fa-check"></i>
+                                </span>
+                                <span class="operational-key-times">
+                                    <i class="fa fa-times"></i>
+                                </span>
+                            </div>
+                        </td>
+                        <td class="edit-field"><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
+                    </tr>
+                    <tr>
+                        <td>تاریخ ثبت</td>
+                        <td class="farsi-num">@CustomizeCalendar.GregorianToPersian(selectedUser.RegisteredDateTime)</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
-        <table class="table profile-detail table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th colspan="3">اطلاعات کاربری</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>url</td>
-                    <td>
-                        <a href="#">
-                            www.example.com
-                        </a>
-                    </td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>email:</td>
-                    <td>
-                        <a href="#">
-                            peter@example.com
-                        </a>
-                    </td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>phone:</td>
-                    <td>(641)-734-4763</td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>skye</td>
-                    <td>
-                        <a href="#">
-                            peterclark82
-                        </a>
-                    </td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table profile-detail table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th colspan="3">General information</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Position</td>
-                    <td>UI Designer</td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>Last Logged In</td>
-                    <td>56 min</td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>Position</td>
-                    <td>Senior Marketing Manager</td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>Supervisor</td>
-                    <td>
-                        <a href="#">
-                            Kenneth Ross
-                        </a>
-                    </td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-                <tr>
-                    <td>Status</td>
-                    <td><span class="label label-sm label-info">Administrator</span></td>
-                    <td><a href="#panel_edit_account" class="show-tab"><i class="fa fa-pencil edit-user-info"></i></a></td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
-</div>
-<div class="col-md-5 margin-b-30">
-    <div class="profile-edit">
-        <form class="form-horizontal" method="get">
-            <h4 class="mb-xlg">Personal Information</h4>
+    <div class="col-md-5 margin-b-30">
+        <div class="profile-edit">
+            @*<form class="form-horizontal" method="get">*@
+            <h4 class="mb-xlg">اطلاعات شخصی</h4>
             <fieldset>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileFirstName">First Name</label>
+                    <label class="col-md-3 control-label" for="profileFirstName">نام</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileFirstName">
+                        <input type="text" asp-for="Firstname" value="@selectedUser.FirstName" class="form-control" id="profileFirstName">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileLastName">Last Name</label>
+                    <label class="col-md-3 control-label" for="profileLastName">نام خانوادگی</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileLastName">
+                        <input type="text" asp-for="Lastname" value="@selectedUser.LastName" class="form-control" id="profileLastName">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileAddress">Address</label>
+                    <label class="col-md-3 control-label" for="profileNat">کد ملی</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileAddress">
+                        <input type="text" asp-for="Nationalcode" value="@selectedUser.NationalCode" class="form-control" id="profileNat">
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileCompany">Company</label>
+                    <label class="col-md-3 control-label" for="profileGen">جنسیت</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileCompany">
+                        <select asp-for="Gender">
+                            <option value="true">آقا</option>
+                            <option value="false">خانم</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="pdpBig">تاریخ تولد</label>
+                    <div class="col-md-8">
+                        <input type="text" asp-for="Dateofbirth" value="@CustomizeCalendar.GregorianToPersian(selectedUser.DateOfBirth ?? DateTime.Now)" class="form-control" id="pdpBig">
                     </div>
                 </div>
             </fieldset>
             <hr class="dotted tall">
-            <h4 class="mb-xlg">About Yourself</h4>
+            <h4 class="mb-xlg">توضیحات</h4>
             <fieldset>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileBio">Biographical Info</label>
+                    <label class="col-md-3 control-label" for="profileBio">بیوگرافی</label>
                     <div class="col-md-8">
                         <textarea class="form-control" rows="3" id="profileBio"></textarea>
                     </div>
@@ -146,83 +254,97 @@
 
             </fieldset>
 
-            <h4 class="mb-xlg">Change Password</h4>
+            <h4 class="mb-xlg">تغییر کلمه عبور (موقتا غیر فعال)</h4>
             <fieldset class="mb-xl">
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileNewPassword">New Password</label>
+                    <label class="col-md-3 control-label" for="profileNewPassword">کلمه عبور قدیمی</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileNewPassword">
+                        <input type="text" class="form-control" id="profileNewPassword" disabled>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="profileNewPasswordRepeat">Repeat New Password</label>
+                    <label class="col-md-3 control-label" for="profileNewPassword">کلمه عبور جدید</label>
                     <div class="col-md-8">
-                        <input type="text" class="form-control" id="profileNewPasswordRepeat">
+                        <input type="text" class="form-control" id="profileNewPassword" disabled>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="profileNewPasswordRepeat">تکرار کلمه عبور جدید</label>
+                    <div class="col-md-8">
+                        <input type="text" class="form-control" id="profileNewPasswordRepeat" disabled>
                     </div>
                 </div>
             </fieldset>
             <div class="panel-footer">
                 <div class="row">
                     <div class="col-md-9 col-md-offset-3">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                        <button type="reset" class="btn btn-default">Reset</button>
+                        <button type="submit" class="btn btn-primary">اعمال تغییرات</button>
+                        <button type="reset" class="btn btn-default">صرف نظر</button>
                     </div>
                 </div>
             </div>
 
-        </form>
-    </div>
-</div>
-<div class="col-md-3">
-    <div class="profile-states">
-        <h3>Sales States</h3>
-        <div class="sale-state-box">
-            <h3>654</h3>
-            <span>Lorem ipsum</span>
-        </div>
-        <div class="sale-state-box">
-            <h3>$9,45,5665.00</h3>
-            <span>Palem isuro</span>
-        </div>
-        <div class="sale-state-box">
-            <h3>16</h3>
-            <span>Adict asro</span>
+            @*</form>*@
         </div>
     </div>
-    <div class="recent-activities">
-        <h3>Recent Activities</h3>
-        <div class="media">
-            <div class="media-left">
-                <a href="#">
-                    <img class="media-object" src="images/avtar-1.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading"> Adict pasans loria</h4>
-                Lorem ipsum dolor sit
-            </div>
-        </div><!--media-->
-        <div class="media">
-            <div class="media-left">
-                <a href="#">
-                    <img class="media-object" src="images/avtar-2.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading"> Adict pasans loria</h4>
-                Lorem ipsum dolor sit
-            </div>
-        </div><!--media-->
-        <div class="media">
-            <div class="media-left">
-                <a href="#">
-                    <img class="media-object" src="images/avtar-3.jpg" alt="...">
-                </a>
-            </div>
-            <div class="media-body">
-                <h4 class="media-heading"> Adict pasans loria</h4>
-                Lorem ipsum dolor sit
-            </div>
-        </div><!--media-->
-    </div>
-</div>
+</form>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+<script>
+    $("#pdpBig").persianDatepicker({
+        cellWidth: 48,
+        cellHeight: 30,
+        fontSize: 15
+    });
+    //image preview
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#avator').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(function () {
+        $("#imgBrowser").change(function (e) {
+            readURL(this);
+        })
+    })
+
+    //show and hide input elements
+    $("td.edit-field").click(function () {
+        $(this).siblings("td").children(".invisible-input").toggleClass("visible-input")
+        $(this).siblings("td").children(".invisible-input").val($.trim($(this).siblings("td").children("a").html()));
+    })
+    $(".invisible-input,td.edit-field, .form-list").click(function (e) {
+        e.stopPropagation();
+        return false;
+    });
+    $(document).click(function () {
+        $(".invisible-input").removeClass("visible-input")
+    });
+    $(".operational-key-times").click(function () {
+        $(".invisible-input").removeClass("visible-input")
+        $(this).siblings("input").val($.trim($(this).parent().siblings("a").html()))
+    });
+    $(".operational-key-check").click(function () {
+        $(this).parent().siblings("a").html($(this).siblings("input").val())
+        $(".invisible-input").removeClass("visible-input")
+    })
+    $(".form-list").change(function () {
+        $(this).parent().siblings("a").html($(this).val())
+        var value = $(this).val()
+        if (value == "فعال") {
+            $(this).siblings("input").val(true)
+            $(this).siblings("input").prop("checked")
+        } else {
+            $(this).siblings("input").val(false)
+        }
+        $(this).siblings("input").val()
+        $(".invisible-input").removeClass("visible-input")
+    })
+</script>

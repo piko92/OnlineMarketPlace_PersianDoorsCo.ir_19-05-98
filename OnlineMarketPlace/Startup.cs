@@ -34,6 +34,7 @@ namespace OnlineMarketPlace
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+               
             //Add Repository Services
             services.AddTransient(typeof(DbRepository<,,>));
 

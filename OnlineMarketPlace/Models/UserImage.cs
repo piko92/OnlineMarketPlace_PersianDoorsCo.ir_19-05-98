@@ -1,11 +1,12 @@
 ﻿using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
 {
-    public partial class UserImage
+    public partial class UserImage : IEntity<int>
     {
         public int Id { get; set; }
         public string Caption { get; set; }
