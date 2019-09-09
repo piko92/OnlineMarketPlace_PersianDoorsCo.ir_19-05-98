@@ -27,7 +27,8 @@
                             <th>دسته بندی</th>
                             <th>قیمت</th>
                             <th>تصویر</th>
-                            <th></th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -48,31 +49,33 @@
                             int Counter = 1;
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@Counter</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Brand.Name</td>
-                                    <td>@item.Category.Name</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Name</td>
-                                    @*<td>@CustomizeCalendar.GregorianToPersianDateTime(item.RegisteredDateTime)</td>
+                        <tr>
+                            <td>@Counter</td>
+                            <td>@item.Name</td>
+                            <td>@item.Name</td>
+                            <td>@item.Brand.Name</td>
+                            <td>@item.Category.Name</td>
+                            <td>@item.Name</td>
+                            <td>
+                                @if (item.ProductImage.FirstOrDefault().ImageThumbnail != null)
+                                {
+                                    <img width="75" height="70" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(item.ProductImage.FirstOrDefault().ImageThumbnail)}")" />
+                                }
+                                else
+                                {
+                                    <img width="75" height="70" src="~/AdminLayout/images/avtar-1.png" />
+                                }
+                            </td>
+                            @*<td>@CustomizeCalendar.GregorianToPersianDateTime(item.RegisteredDateTime)</td>
 
-                                        <td>
-                                            @if (item.ThumbnailImage != null)
-                                            {
-                                                <img width="75" height="70" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(item.ThumbnailImage)}")" />
-                                            }
-                                            else
-                                            {
-                                                <img width="75" height="70" src="~/images/user-profile.png" />
-                                            }
-                                        </td>*@
-                                    <td>
-                                        <a href="#" class="btn btn-info">ویرایش</a>
-                                        <a href="#" class="btn btn-danger">حذف</a>
-                                    </td>
-                                </tr>
+                            *@
+                            <td>
+                                <a asp-action="EditProduct" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
+                            </td>
+                            <td>
+                                <a asp-action="DeleteProduct" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
+                            </td>
+                        </tr>
                                 Counter++;
                             }
                         }

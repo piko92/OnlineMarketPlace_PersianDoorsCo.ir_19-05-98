@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineMarketPlace.Models.AdminViewModels
 {
-    public class ProductAbstractViewModel
+    public class ProductViewModel
     {
         public int Id { get; set; }
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]

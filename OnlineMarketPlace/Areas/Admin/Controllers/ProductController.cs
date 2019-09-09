@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -88,13 +90,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 return RedirectToAction("ShowBrand");
             }
             return RedirectToAction("InsertBrand");
-
         }
         //Brand--End
         //Product--Start
         public IActionResult ShowProduct()
         {
-            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category);
+            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage);
             return View(dbViewModel);
         }
         public IActionResult InsertProduct()
@@ -103,7 +104,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             ViewData["Category"] = dbCategory.GetAll();
             return View();
         }
-        public IActionResult InsertProductConfirm(ProductAbstractViewModel model)
+        public IActionResult InsertProductConfirm(ProductViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -115,13 +116,92 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     Status = model.Status,
 
                 };
+                List<ProductImage> productImages = new List<ProductImage>();
+                foreach (var item in model.img)
+                {
+                    byte[] b = new byte[item.Length];
+                    item.OpenReadStream().Read(b, 0, (int)item.Length);
+                    //Thumbnail
+                    MemoryStream mem1 = new MemoryStream(b);
+                    Image img = Image.FromStream(mem1);
+                    Bitmap bmp = new Bitmap(img, 300, 300);
+                    MemoryStream mem2 = new MemoryStream();
+                    bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ProductImage productImage = new ProductImage()
+                    {
+                        Image = b,
+                        ImageThumbnail = mem2.ToArray()
+                    };
+
+                    productImages.Add(productImage);
+                }
+                productAbstract.ProductImage = productImages;
                 dbProductAbstract.Insert(productAbstract);
                 TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
                 return RedirectToAction("ShowProduct");
             }
             return RedirectToAction("InsertProduct");
-
         }
+        public IActionResult DeleteProduct(int Id)
+        {
+            var status = dbProductAbstract.DeleteById(Id);
+            if (status)
+            {
+
+            }
+            else
+            {
+
+            }
+            return RedirectToAction("ShowProduct");
+        }
+        public IActionResult EditProduct(int Id)
+        {
+            ViewData["Brand"] = dbBrand.GetAll();
+            ViewData["Category"] = dbCategory.GetAll();
+            ViewData["ProductAbstract"] = dbProductAbstract.GetIncludeById(Id, e => e.Brand, e => e.Category, e => e.ProductImage);
+            //var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage);
+            return View();
+        }
+        public IActionResult EditProductConfirm(ProductViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ProductAbstract productAbstract = new ProductAbstract()
+                {
+                    Name = model.Name,
+                    BrandId = model.BrandI,
+                    CategoryId = model.CategoryId,
+                    Status = model.Status,
+
+                };
+                List<ProductImage> productImages = new List<ProductImage>();
+                foreach (var item in model.img)
+                {
+                    byte[] b = new byte[item.Length];
+                    item.OpenReadStream().Read(b, 0, (int)item.Length);
+                    //Thumbnail
+                    MemoryStream mem1 = new MemoryStream(b);
+                    Image img = Image.FromStream(mem1);
+                    Bitmap bmp = new Bitmap(img, 300, 300);
+                    MemoryStream mem2 = new MemoryStream();
+                    bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                    ProductImage productImage = new ProductImage()
+                    {
+                        Image = b,
+                        ImageThumbnail = mem2.ToArray()
+                    };
+
+                    productImages.Add(productImage);
+                }
+                productAbstract.ProductImage = productImages;
+                dbProductAbstract.Insert(productAbstract);
+                TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
+                return RedirectToAction("ShowProduct");
+            }
+            return RedirectToAction("InsertProduct");
+        }
+        
         //Brand--End
         //Test--Start
         public IActionResult FindById(int id)

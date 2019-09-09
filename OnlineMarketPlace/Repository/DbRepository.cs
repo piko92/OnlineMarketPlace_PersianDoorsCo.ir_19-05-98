@@ -69,6 +69,23 @@ namespace OnlineMarketPlace.Repository
 
             return query.ToList();
         }
+        //GetIncludeById
+        public TEntity GetIncludeById(TKey id, params Expression<Func<TEntity, object>>[] includes)
+        {
+            db.Set<TEntity>();
+            IQueryable<TEntity> query = null;
+            
+            if (includes.Length > 0)
+            {
+                query = db.Set<TEntity>().Include(includes[0]);
+            }
+            for (int queryIndex = 1; queryIndex < includes.Length; ++queryIndex)
+            {
+                query = query.Include(includes[queryIndex]);
+            }
+
+            return query.First(x=>x.Id.Equals(id));
+        }
         //Insert
         public TKey Insert(TEntity Entity)
         {
@@ -96,5 +113,7 @@ namespace OnlineMarketPlace.Repository
         {
             db.SaveChanges();
         }
+
+
     }
 }
