@@ -41,7 +41,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         public IActionResult ShowCategory()
         {
             //var dbViewModel = dbCategory.GetAll();
-            var dbViewModel = dbCategory.Include(e => e.Field, "Field");
+            var dbViewModel = dbCategory.GetInclude(e => e.Field);
             return View(dbViewModel);
         }
         public IActionResult InsertCategory()
@@ -74,7 +74,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult InsertBrand(BrandViewModel model)
+        public IActionResult InsertBrandConfirm(BrandViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -94,20 +94,26 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         //Product--Start
         public IActionResult ShowProduct()
         {
-            return View(dbProductAbstract.GetAll());
+            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category);
+            return View(dbViewModel);
         }
         public IActionResult InsertProduct()
         {
+            ViewData["Brand"] = dbBrand.GetAll();
+            ViewData["Category"] = dbCategory.GetAll();
             return View();
         }
-        public IActionResult InsertProductConfirm(BrandViewModel model)
+        public IActionResult InsertProductConfirm(ProductAbstractViewModel model)
         {
             if (ModelState.IsValid)
             {
                 ProductAbstract productAbstract = new ProductAbstract()
                 {
                     Name = model.Name,
-                    
+                    BrandId = model.BrandI,
+                    CategoryId = model.CategoryId,
+                    Status = model.Status,
+
                 };
                 dbProductAbstract.Insert(productAbstract);
                 TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
@@ -117,5 +123,38 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         }
         //Brand--End
+        //Test--Start
+        public IActionResult FindById(int id)
+        {
+            var entity = dbProductAbstract.FindById(id);
+            if (entity != null)
+            {
+                return Json(new { errMsg = entity.Name.ToString() });
+            }
+            else
+            {
+                return Json(new { errMsg = false });
+            }
+        }
+        public IActionResult DeleteById(int id)
+        {
+            var status = dbProductAbstract.DeleteById(id);
+            return Json(new { errMsg = status });
+        }
+        public IActionResult UpdateEntity(int id, string name)
+        {
+            var entity = dbProductAbstract.FindById(id);
+            if (entity != null)
+            {
+                entity.Name = name;
+                var status = dbProductAbstract.Update(entity);
+                return Json(new { errMsg = status });
+            }
+            else
+            {
+                return Json(new { errMsg = false });
+            }
+        }
+        //Test--End
     }
 }

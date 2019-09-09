@@ -10,7 +10,7 @@ namespace OnlineMarketPlace.Models.AdminViewModels
     public class BrandViewModel
     {
         public int Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName("نام برند ")]
         public string Name { get; set; }
         [DisplayName("توضیحات")]
