@@ -10,7 +10,7 @@
         <div class="panel panel-card ">
             <!-- Start .panel -->
             <div class="panel-heading">
-                <h4 class="panel-title"> Basic Data tables</h4>
+                <h4 class="panel-title">لیست کاربران سایت</h4>
                 <div class="panel-actions">
                     <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
                     <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
@@ -52,7 +52,7 @@
                                 <td>
                                     @if (item.UserImage.Count > 0)
                                     {
-                                        var singleUserImage = item.UserImage.FirstOrDefault();
+                                        var singleUserImage = item.UserImage.Where(x => x.Status == true).LastOrDefault();
                                         if (singleUserImage.ImageThumbnail != null)
                                         {
                                             <img width="75" height="70" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(singleUserImage.ImageThumbnail)}")" />
@@ -69,7 +69,7 @@
                                 </td>
                                 <td>
                                     <a asp-action="EditUser" asp-controller="Account" asp-area="Admin" asp-route-UserId="@item.Id" class="btn btn-info">ویرایش</a>
-                                    <a asp-action="RemoveUser" asp-controller="Account" asp-area="Admin" asp-route-UserId="@item.Id" class="btn btn-danger">حذف</a>
+                                    <a class="btn btn-danger" id="btnWarning" title="غیرفعال" dataId="@item.Id">حذف</a>
                                 </td>
                             </tr>
                         }
@@ -79,3 +79,41 @@
         </div><!-- End .panel -->
     </div><!--end .col-->
 </div><!--end .row-->
+<!-- Sweet-Alert  -->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $(function () {
+        $(".btn-danger").click(function () {
+            var userId = $(this).attr("dataId");
+            var thisElement = $(this);
+            swal({
+                title: "آیا از حذف این آیتم اطمینان دارید؟",
+                text: "پس از تایید دیگر به هیچ وجه بازیابی این آیتم امکان پذیر نمی باشد.",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "بله، حذف شود",
+                cancelButtonText: "خیر، منصرف شدم",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    $.post("/Admin/Account/RemoveUserConfirm", { id: userId }, function (value) {
+                        var objj = JSON.stringify(value);
+                        var result = jQuery.parseJSON(objj);
+                        
+                        if (result.status == true) {
+                            swal("حذف گردید!", result.text, "success");
+                            thisElement.parent().parent().fadeOut();
+                        } else {
+                            swal("حذف ناموفق", result.text , "warning");
+                        }
+                    })
+                    
+                } else {
+                    swal("انصراف از حذف", "این آیتم همچنان در لیست شما باقی می ماند :)", "error");
+                }
+            });
+        })
+    });
+</script>

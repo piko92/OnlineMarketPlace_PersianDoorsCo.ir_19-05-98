@@ -104,5 +104,29 @@
     "ColorCode": "#ef5350",
     "Icon": "error",
     "Subject": "Record_Not_Exist"
+  },
+  {
+    "Status": true,
+    "Heading": "عدم دسترسی",
+    "Text": "شما دسترسی به مشاهده و یا ایجاد تغییرات در این بخش را ندارید.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "Access_denied"
+  },
+  {
+    "Status": false,
+    "Heading": "عدم دسترسی حذف",
+    "Text": "شما جهت حذف رکوردها دسترسی ندارید.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "Access_denied_delete"
+  },
+  {
+    "Status": false,
+    "Heading": "عدم دسترسی حذف",
+    "Text": "شما نمیتوانید حساب کاربری خود را حذف نمایید.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "Access_denied_self_delete"
   }
 ]

@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "جستجوی کاربر";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="col-md-12">
+    <div class="panel panel-card margin-b-30">
+        <div class="panel-heading">
+            <h4 class="panel-title"> جستجوی کاربران سایت</h4>
+            <div class="panel-actions">
+                <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+            </div>
+        </div>
+        <div class="panel-body">
+            <!-- /.box-header -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="rtl-elements">
+                        <div class="form-group">
+                            <label for="txtSearchUser">جستجوی کاربر</label>
+                            <input type="text" id="txtSearchUser" placeholder="نام کاربری، شماره تلفن و یا نام خانوادگی کاربر را وارد نمایید..." />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="box-body" id="divResult">
+                <!-- partial view result goes here -->
+            </div>
+            <!-- /.box-body -->
+        </div>
+        
+    </div>
+</div>
+    <!-- /.box -->
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script>
+        $(function () {
+            $("#txtSearchUser").keyup(function () {
+                $.post('/Admin/Admin/SearchUser', { name: $(this).val() }, function (value) {
+                    if (value) {
+                        $("#divResult").html(value);
+                    }
+                });
+            })
+        });
+    </script>
+
+

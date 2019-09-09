@@ -2,6 +2,7 @@
     var nvm = ViewData["nvm"] as NotificationViewModel;
 }
 @inject UserManager<ApplicationUser> _userManager
+@inject OnlineMarketContext _db;
 
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
@@ -28,6 +29,9 @@
     <link href="~/AdminLayout/customize.css" rel="stylesheet" />
     <link href="~/AdminLayout/jquery-growl/stylesheets/jquery.growl.css" rel="stylesheet" />
     <link href="~/AdminLayout/jquery-growl/stylesheets/sample.css" rel="stylesheet" />
+
+    <!--alerts CSS -->
+    <link href="~/AdminLayout/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
 
     <!-- Persian date picker -->
     <link href="~/persian_datepicker/css/persianDatepicker-default.css" rel="stylesheet" />
@@ -64,93 +68,93 @@
             <div id="navbar" class="navbar-collapse collapse">
 
                 @*<ul class="nav navbar-nav">
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Action</a></li>
-                    <li><a href="#">Another action</a></li>
-                    <li><a href="#">Something else here</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Nav header</li>
-                    <li><a href="#">Separated link</a></li>
-                    <li><a href="#">One more separated link</a></li>
-                </ul>
-            </li>
-        </ul>*@
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Action</a></li>
+                                <li><a href="#">Another action</a></li>
+                                <li><a href="#">Something else here</a></li>
+                                <li role="separator" class="divider"></li>
+                                <li class="dropdown-header">Nav header</li>
+                                <li><a href="#">Separated link</a></li>
+                                <li><a href="#">One more separated link</a></li>
+                            </ul>
+                        </li>
+                    </ul>*@
                 @* قسمت پیغام ها *@
                 <ul class="nav navbar-nav navbar-right navbar-top-drops">
                     @*<li class="dropdown">
-                        <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-envelope"></i> <span class="badge badge-xs badge-info">6</span></a>
+                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-envelope"></i> <span class="badge badge-xs badge-info">6</span></a>
 
-                        <ul class="dropdown-menu dropdown-lg">
-                            <li class="notify-title">
-                                3 New messages
-                            </li>
-                            <li class="clearfix">
-                                <a href="#">
-                                    <span class="pull-left">
-                                        <img src="~/AdminLayout/images/avtar-1.jpg" alt="" class="img-circle" width="30">
-                                    </span>
-                                    <span class="block">
-                                        کاربر اول
-                                    </span>
-                                    <span class="media-body">
-                                        متن پیام کاربر
-                                        <em>28 minutes ago</em>
-                                    </span>
-                                </a>
-                            </li>
+                            <ul class="dropdown-menu dropdown-lg">
+                                <li class="notify-title">
+                                    3 New messages
+                                </li>
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <span class="pull-left">
+                                            <img src="~/AdminLayout/images/avtar-1.jpg" alt="" class="img-circle" width="30">
+                                        </span>
+                                        <span class="block">
+                                            کاربر اول
+                                        </span>
+                                        <span class="media-body">
+                                            متن پیام کاربر
+                                            <em>28 minutes ago</em>
+                                        </span>
+                                    </a>
+                                </li>
 
 
-                            <li class="read-more"><a href="#">View All Messages <i class="fa fa-angle-right"></i></a></li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="badge badge-xs badge-warning">6</span></a>
+                                <li class="read-more"><a href="#">View All Messages <i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="badge badge-xs badge-warning">6</span></a>
 
-                        <ul class="dropdown-menu dropdown-lg">
-                            <li class="notify-title">
-                                3 New messages
-                            </li>
-                            <li class="clearfix">
-                                <a href="#">
-                                    <span class="pull-left">
-                                        <i class="fa fa-envelope"></i>
-                                    </span>
+                            <ul class="dropdown-menu dropdown-lg">
+                                <li class="notify-title">
+                                    3 New messages
+                                </li>
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <span class="pull-left">
+                                            <i class="fa fa-envelope"></i>
+                                        </span>
 
-                                    <span class="media-body">
-                                        15 New Messages
-                                        <em>20 Minutes ago</em>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="clearfix">
-                                <a href="#">
-                                    <span class="pull-left">
-                                        <i class="fa fa-twitter"></i>
-                                    </span>
+                                        <span class="media-body">
+                                            15 New Messages
+                                            <em>20 Minutes ago</em>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <span class="pull-left">
+                                            <i class="fa fa-twitter"></i>
+                                        </span>
 
-                                    <span class="media-body">
-                                        13 New Followers
-                                        <em>2 hours ago</em>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="clearfix">
-                                <a href="#">
-                                    <span class="pull-left">
-                                        <i class="fa fa-download"></i>
-                                    </span>
+                                        <span class="media-body">
+                                            13 New Followers
+                                            <em>2 hours ago</em>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="clearfix">
+                                    <a href="#">
+                                        <span class="pull-left">
+                                            <i class="fa fa-download"></i>
+                                        </span>
 
-                                    <span class="media-body">
-                                        Download complete
-                                        <em>2 hours ago</em>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="read-more"><a href="#">View All Alerts <i class="fa fa-angle-right"></i></a></li>
-                        </ul>
-                    </li>*@
+                                        <span class="media-body">
+                                            Download complete
+                                            <em>2 hours ago</em>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li class="read-more"><a href="#">View All Alerts <i class="fa fa-angle-right"></i></a></li>
+                            </ul>
+                        </li>*@
                     <li>
                         <a asp-area="Admin" asp-controller="Account" asp-action="signout"><i class="fa fa-sign-out"></i> </a>
                     </li>
@@ -160,7 +164,7 @@
                     var user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
-                       
+
                         var fullname = $"{user.FirstName} {user.LastName}";
                         <div class="username-holder">
                             <span>@fullname</span>
@@ -183,12 +187,32 @@
                         <li class="nav-header">
                             <div class="dropdown side-profile text-left">
                                 <span style="display: block;">
-                                    <img alt="image" class="img-circle" src="~/AdminLayout/images/avtar-1.png" width="40">
+                                    @{
+                                        var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                                        var currentUserImage = _db.UserImage.Where(x => x.UserId == currentUser.Id && x.Status == true).LastOrDefault();
+                                        if (currentUserImage != null)
+                                        {
+                                            if (currentUserImage.ImageThumbnail != null)
+                                            {
+                                                <img width="40" alt="image" class="img-circle" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(currentUserImage.ImageThumbnail)}")" />
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <img width="40" alt="image" class="img-circle" src="~/images/user-profile.png" />
+                                        }
+                                    }
+
+
                                 </span>
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <span class="clear" style="display: block;">
                                         <span class="block m-t-xs">
-                                            <strong class="font-bold">مدیر وب سایت  <b class="caret"></b></strong>
+                                            @{ 
+                                                var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
+                                                var thisUserRoleName = currentUserRoles.FirstOrDefault();
+                                            }
+                                            <strong class="font-bold">@(thisUserRoleName.ToLower() == "admin" ? "مدیر" : "کاربر") وب سایت  <b class="caret"></b></strong>
                                         </span>
                                     </span>
                                 </a>
@@ -229,7 +253,7 @@
                             <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                                 <li><a asp-action="Signup" asp-controller="Account" asp-area="Admin">ثبت کاربر جدید</a></li>
                                 <li><a asp-action="UserList" asp-controller="Account" asp-area="Admin">لیست کاربران</a></li>
-                                <li><a asp-action="UserRoles" asp-controller="Account" asp-area="Admin">سطوح دسترسی</a></li>
+                                <li><a asp-action="FindUser" asp-controller="Account" asp-area="Admin">جستجوی کاربر</a></li>
                             </ul>
                         </li>
                         <li>
@@ -371,6 +395,11 @@
     <script src="~/AdminLayout/jquery-growl/javascripts/jquery.growl.js"></script>
     <script src="~/AdminLayout/jquery-growl/javascripts/rainbow.js"></script>
 
+    <!-- Sweet-Alert  -->
+    <script src="~/AdminLayout/sweetalert/sweetalert.min.js"></script>
+    <script src="~/AdminLayout/sweetalert/jquery.sweet-alert.custom.js"></script>
+
+
     @if (nvm != null)
     {
         <script>
@@ -383,10 +412,16 @@
         </script>
     }
 
-
     <!--page js-->
     <script>
-
+        //remove query string
+        $(document).ready(function () {
+            var uri = window.location.toString();
+            if (uri.indexOf("?") > 0) {
+                var clean_uri = uri.substring(0, uri.indexOf("?"));
+                window.history.replaceState({}, document.title, clean_uri);
+            }
+        });
         $("#sparkline8").sparkline([5, 6, 7, 2, 0, 4, 2, 4, 5, 7, 2, 4, 12, 14, 4, 2, 14, 12, 7], {
             type: 'bar',
             barWidth: 4,

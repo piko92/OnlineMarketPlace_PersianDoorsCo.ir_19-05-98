@@ -131,3 +131,7 @@
 .operational-key-times {
     left: 20%;
 }
+button,
+.sweet-alert p {
+    font-family: 'FontShabnam', Tahoma !important;
+}

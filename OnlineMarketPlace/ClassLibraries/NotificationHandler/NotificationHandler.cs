@@ -82,6 +82,21 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         public static string Record_Not_Exist { get; set; } = "Record_Not_Exist";
 
         /// <summary>
+        /// عدم دسترسی
+        /// </summary>
+        public static string Access_denied { get; set; } = "Access_denied";
+
+        /// <summary>
+        /// عدم دسترسی حذف
+        /// </summary>
+        public static string Access_denied_delete { get; set; } = "Access_denied_delete";
+
+        /// <summary>
+        /// عدم دسترسی حذف حساب کاربری
+        /// </summary>
+        public static string Access_denied_self_delete { get; set; } = "Access_denied_self_delete";
+
+        /// <summary>
         /// <para>Read Json file and serialize to 'NotificationViewModel'</para>
         /// خواندن فایل متن و تبدیل آن به مدل 'NotificationViewModel'
         /// </summary>

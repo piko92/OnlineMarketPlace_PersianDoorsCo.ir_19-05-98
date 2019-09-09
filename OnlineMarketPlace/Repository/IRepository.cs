@@ -18,5 +18,6 @@ namespace OnlineMarketPlace.Repository
         bool Update(TEntity Entity);
         bool DeleteById(TKey Id);
         void Save();
+
     }
 }

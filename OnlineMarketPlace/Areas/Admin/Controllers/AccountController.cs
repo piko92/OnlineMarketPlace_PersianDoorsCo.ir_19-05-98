@@ -33,13 +33,15 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
         string contentRootPath;
+        private readonly string MainAdmin = "admin@admin.com";
 
         public AccountController(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<IdentityRole> roleManager,
             OnlineMarketContext db,
             IHostingEnvironment hostingEnvironment,
-            DbRepository<OnlineMarketContext, UserModified, int> dbUserModified)
+            DbRepository<OnlineMarketContext, UserModified, int> dbUserModified,
+            DbRepository<OnlineMarketContext, UserImage, int> dbUserImage)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -47,6 +49,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             _db = db;
 
             _dbUserModified = dbUserModified;
+            _dbUserImage = dbUserImage;
 
             _hostingEnvironment = hostingEnvironment;
             contentRootPath = _hostingEnvironment.ContentRootPath;//returns the root path of the website
@@ -78,6 +81,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 var claimedUser = await _userManager.FindByNameAsync(model.Username);
                 if (claimedUser != null)
                 {
+                    if (claimedUser.Status == false)
+                    {
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Login, contentRootPath);
+                        return RedirectToAction("Index", "Home", new { notification = nvm }); //successful signin
+                    }
                     var status = await _signInManager.PasswordSignInAsync(claimedUser, model.Password, model.IsRemember, false);
                     if (status.Succeeded)
                     {
@@ -111,13 +119,13 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
 
             //check if Admin account exist or not ?! if not, create
-            var AdminExist = await _userManager.FindByNameAsync("admin@admin.com");
+            var AdminExist = await _userManager.FindByNameAsync(MainAdmin);
             if (AdminExist == null)
             {
                 ApplicationUser admin = new ApplicationUser()
                 {
-                    UserName = "admin@admin.com",
-                    Email = "admin@admin.com",
+                    UserName = MainAdmin,
+                    Email = MainAdmin,
                     FirstName = "Saeed",
                     LastName = "Panahi",
                     Gendre = 1,
@@ -302,6 +310,21 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         public async Task<IActionResult> EditUser(string UserId, string notification)
         {
+            string nvm;
+
+            //check if other users want to change 'Admin' deny their access to do that
+            var userModifier = await _userManager.FindByNameAsync(User.Identity.Name);
+            var userModifierRoleId = _db.UserRoles.Where(x => x.UserId == userModifier.Id).FirstOrDefault().RoleId;
+            var userModifierRoleName = _db.Roles.Where(x => x.Id == userModifierRoleId).FirstOrDefault().Name;
+
+            var userRoleId = _db.UserRoles.Where(x => x.UserId == UserId).FirstOrDefault().RoleId;
+            var userRoleName = _db.Roles.Where(x => x.Id == userRoleId).FirstOrDefault().Name;
+            if (userModifierRoleName != "Admin" && userRoleName == "Admin")
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Access_denied, contentRootPath);
+                return RedirectToAction("UserList", new { notification = nvm });
+            }
+
             var selectedUser = await _userManager.FindByIdAsync(UserId);
             if (selectedUser != null)
             {
@@ -313,7 +336,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 ViewData["selectedUser"] = user;
                 return View();
             }
-            var nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
             return RedirectToAction("Signin", new { notification = nvm });
         }//end EditUser
 
@@ -322,97 +345,256 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             string nvm;
             var user = await _userManager.FindByIdAsync(Id);
             var userModifier = await _userManager.FindByNameAsync(User.Identity.Name);
-            if (user == null)
+            try
             {
-                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Record_Not_Exist, contentRootPath);
-                return RedirectToAction("EditUser", new { notification = nvm });
-            }
-            //Get Backup From The User Into 'UserModified' Table
-            var userJSONForBackup = JsonConvert.SerializeObject(user);
-            
-            UserModified UM = new UserModified()
-            {
-                LastUserBackupJson = userJSONForBackup,
-                ModifedByUserId = userModifier.Id,
-                UserId = user.Id,
-                Comment = "Edited by " + userModifier.UserName
-            };
-            _dbUserModified.Insert(UM);
+                if (user == null)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Record_Not_Exist, contentRootPath);
+                    return RedirectToAction("UserList", new { notification = nvm });
+                }
 
-            var greDate = CustomizeCalendar.PersianToGregorian(model.Dateofbirth ?? DateTime.Now);
-            using (var transaction = _db.Database.BeginTransaction())
-            {
-                user.FirstName = model.Firstname;
-                user.LastName = model.Lastname;
-                user.Email = model.Email;
-                user.PhoneNumber = model.Phonenumber;
-                user.SpecialUser = model.Specialuser;
-                user.Status = model.Status;
-                user.DateOfBirth = greDate;
-                if (model.Gender == true)
+                //check if other users want to change 'Admin' deny their access to do that
+                var userModifierRoleId = _db.UserRoles.Where(x => x.UserId == userModifier.Id).FirstOrDefault().RoleId;
+                var userModifierRoleName = _db.Roles.Where(x => x.Id == userModifierRoleId).FirstOrDefault().Name;
+
+                var userRoleId = _db.UserRoles.Where(x => x.UserId == Id).FirstOrDefault().RoleId;
+                var userRoleName = _db.Roles.Where(x => x.Id == userRoleId).FirstOrDefault().Name;
+                if (userModifierRoleName != "Admin" && userRoleName == "Admin")
                 {
-                    user.Gendre = 1; //male
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Access_denied, contentRootPath);
+                    return RedirectToAction("UserList", new { notification = nvm });
                 }
-                else if (model.Gender == false)
+
+                //Get Backup From The User Into 'UserModified' Table
+                var userJSONForBackup = JsonConvert.SerializeObject(user);
+
+                using (var transaction = _db.Database.BeginTransaction())
                 {
-                    user.Gendre = 2; //female
-                }
-                else
-                {
-                    user.Gendre = null; //not specified
-                }
-                //--------------------------------
-                //disable the last images of the user
-                var doesUserHaveImage = _db.UserImage.Where(x => x.UserId == Id).ToList();
-                if (doesUserHaveImage.Count > 0)
-                {
-                    foreach (var item in doesUserHaveImage)
+                    UserModified UM = new UserModified()
                     {
-                        var userOldImage = _db.UserImage.FirstOrDefault();
-                        if (userOldImage != null)
+                        LastUserBackupJson = userJSONForBackup,
+                        ModifedByUserId = userModifier.Id,
+                        UserId = user.Id,
+                        Comment = "Edited by " + userModifier.UserName
+                    };
+                    _dbUserModified.Insert(UM);
+
+                    var greDate = CustomizeCalendar.PersianToGregorian(model.Dateofbirth ?? DateTime.Now);
+                    user.FirstName = model.Firstname;
+                    user.LastName = model.Lastname;
+                    user.Email = model.Email;
+                    user.PhoneNumber = model.Phonenumber;
+                    user.SpecialUser = model.Specialuser;
+                    //user.Status = model.Status;
+                    user.DateOfBirth = greDate;
+                    if (model.Gender == true)
+                    {
+                        user.Gendre = 1; //male
+                    }
+                    else if (model.Gender == false)
+                    {
+                        user.Gendre = 2; //female
+                    }
+                    else
+                    {
+                        user.Gendre = null; //not specified
+                    }
+
+                    if (userRoleName != model.RoleName)
+                    {
+                        if (userModifierRoleName != "Admin")
                         {
-                            userOldImage.Status = false;
+                            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Access_denied, contentRootPath);
+                            return RedirectToAction("UserList", new { notification = nvm });
                         }
-                        _dbUserImage.Update(userOldImage); //needs repository
                     }
-                }
-                //--------------------------------
-                //add new image of the user
-                UserImage userImage = new UserImage()
-                {
-                    UserId = Id,
-                    Caption = model.Lastname + "_" + DateTime.Now
-                };
-                img.ForEach(x =>
-                {
-                    if (x != null)
+                    //only admin can disable other users
+                    if (userModifierRoleName == "Admin")
                     {
-                        byte[] b = new byte[x.Length];
-                        x.OpenReadStream().Read(b, 0, b.Length);
-                        userImage.Image = b;
-
-                        //Make Thumbnail
-                        MemoryStream mem1 = new MemoryStream(b);
-                        Image img2 = Image.FromStream(mem1);
-                        Bitmap bmp = new Bitmap(img2, 120, 120);
-                        MemoryStream mem2 = new MemoryStream();
-                        bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
-                        userImage.ImageThumbnail = mem2.ToArray();
+                        //"admin@admin.com" will never be disable
+                        if (user.UserName != MainAdmin)
+                        {
+                            user.Status = model.Status;
+                            //change user role
+                            IdentityResult rol_status_1 = new IdentityResult(), rol_status_2 = new IdentityResult();
+                            if (userRoleName != model.RoleName)
+                            {
+                                rol_status_1 = await _userManager.RemoveFromRoleAsync(user, userRoleName);
+                                rol_status_2 = await _userManager.AddToRoleAsync(user, model.RoleName);
+                            }
+                        }
+                        else
+                        {
+                            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Access_denied, contentRootPath);
+                            return RedirectToAction("UserList", new { notification = nvm });
+                        }
                     }
-                });
-                _dbUserImage.Insert(userImage);
-                //--------------------------------
-                var status = await _userManager.UpdateAsync(user);
-                if (status.Succeeded)
-                {
-                    transaction.Commit(); //saves the database
 
-                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
-                    return RedirectToAction("EditUser", new { notification = nvm });
+
+                    //--------------------------------
+                    if (img.Count > 0)
+                    {
+                        //disable the last images of the user
+                        var doesUserHaveImage = _db.UserImage.Where(x => x.UserId == Id).ToList();
+                        if (doesUserHaveImage.Count > 0)
+                        {
+                            foreach (var item in doesUserHaveImage)
+                            {
+                                var lastImagesOfUser = _dbUserImage.FindById(item.Id);
+                                lastImagesOfUser.Status = false;
+                                lastImagesOfUser.Comment = $"Edited by {userModifier.UserName}";
+                                _db.UserImage.Update(lastImagesOfUser);
+                            }
+                        }
+                        //--------------------------------
+                        //add new image of the user
+                        UserImage userImage = new UserImage()
+                        {
+                            UserId = Id,
+                            Caption = model.Lastname + "_" + DateTime.Now
+                        };
+                        img.ForEach(x =>
+                        {
+                            if (x != null)
+                            {
+                                byte[] b = new byte[x.Length];
+                                x.OpenReadStream().Read(b, 0, b.Length);
+                                userImage.Image = b;
+
+                                //Make Thumbnail
+                                MemoryStream mem1 = new MemoryStream(b);
+                                Image img2 = Image.FromStream(mem1);
+                                Bitmap bmp = new Bitmap(img2, 120, 120);
+                                MemoryStream mem2 = new MemoryStream();
+                                bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
+                                userImage.ImageThumbnail = mem2.ToArray();
+                            }
+                        });
+                        _dbUserImage.Insert(userImage);
+                    }
+
+                    
+
+                    //--------------------------------
+                    var status = await _userManager.UpdateAsync(user);
+                    if (status.Succeeded)
+                    {
+
+                        transaction.Commit(); //Save the new records in 'User' table and 'UserImage' table
+
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                        return RedirectToAction("UserList", new { notification = nvm });
+                    }
                 }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("UserList", new { notification = nvm });
             }
+            catch (Exception ex)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("UserList", new { notification = nvm });
+            }
+        }//end EditUserConfirm
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> RemoveUserConfirm(string id)
+        {
+            NotificationViewModel nvm;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    if (id.Length > 0)
+                    {
+                        var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                        var currentUserRole = await _userManager.GetRolesAsync(currentUser);
+                        var isUserExist = await _userManager.FindByIdAsync(id);
+
+                        //only MainAdmin can Remove other users
+                        if (User.Identity.Name != MainAdmin)
+                        {
+                            nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Access_denied_delete, contentRootPath);
+                            return Json(nvm);
+                        }
+
+                        //cannot remove yourself
+                        if (isUserExist.UserName == User.Identity.Name)
+                        {
+                            nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Access_denied_self_delete, contentRootPath);
+                            return Json(nvm);
+                        }
+
+                        var selectUserToRemove_role = await _userManager.GetRolesAsync(isUserExist);
+
+                        if (isUserExist != null)
+                        {
+                            using (var transaction = _db.Database.BeginTransaction())
+                            {
+                                bool delUserImage = true, delUserModified = true;
+                                IdentityResult result = null;
+
+                                //remove user roles
+                                if (selectUserToRemove_role.Count() > 0)
+                                {
+                                    foreach (var item in selectUserToRemove_role.ToList())
+                                    {
+                                        // item should be the name of the role
+                                        result = await _userManager.RemoveFromRoleAsync(isUserExist, item);
+                                    }
+                                }
+
+                                //remove user images
+                                var doesUserHaveImage = _db.UserImage.Where(x => x.UserId == isUserExist.Id).ToList();
+                                if (doesUserHaveImage.Count > 0)
+                                {
+                                    foreach (var item in doesUserHaveImage)
+                                    {
+                                        delUserImage = _dbUserImage.DeleteById(item.Id);
+                                    }
+                                }
+
+                                //remove user backups
+                                var doesUserHaveBackup = _db.UserModified.Where(x => x.UserId == isUserExist.Id).ToList();
+                                if (doesUserHaveBackup.Count > 0)
+                                {
+                                    foreach (var item in doesUserHaveBackup)
+                                    {
+                                        delUserModified = _dbUserModified.DeleteById(item.Id);
+                                    }
+                                }
+                                var status = await _userManager.DeleteAsync(isUserExist);
+
+                                if (status.Succeeded && result.Succeeded && delUserImage == true && delUserModified == true)
+                                {
+                                    transaction.Commit(); //saves the database
+
+                                    //removed successfully
+                                    nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Success_Remove, contentRootPath);
+                                    return Json(nvm);
+                                }
+                            }
+                        }
+                    }
+                }
+                nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Remove, contentRootPath);
+                return Json(nvm);
+            }
+            catch (Exception ex)
+            {
+                //failed operation
+                nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Operation, contentRootPath);
+                return Json(nvm);
+            }
+        }//end RemoveUserConfirm
+
+        public ViewResult FindUser(string notification)
+        {
+            if (notification != null)
+            {
+                ViewData["nvm"] = JsonConvert.DeserializeObject<NotificationViewModel>(notification);
+                return View();
+            }
             return View();
-        }
+        }//end FindUser
     }
 }
