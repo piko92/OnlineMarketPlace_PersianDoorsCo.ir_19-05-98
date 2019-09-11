@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewData["Title"] = "نمایش مقالات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@model List<Article>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست مقالات</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>نویسنده</th>
+                            <th>خلاصه مقاله</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>نویسنده</th>
+                            <th>خلاصه مقاله</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Writer</td>
+                                    <td>@item.Summery</td>
+                                    <td>
+                                        <a asp-action="EditPost" asp-controller="Blog" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeletePost" asp-controller="Blog" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>

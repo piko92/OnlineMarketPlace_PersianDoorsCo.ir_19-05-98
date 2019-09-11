@@ -66,95 +66,7 @@
                 <a class="navbar-brand" href="#">پنل مدیریت وب سایت</a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
-
-                @*<ul class="nav navbar-nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="#">Action</a></li>
-                                <li><a href="#">Another action</a></li>
-                                <li><a href="#">Something else here</a></li>
-                                <li role="separator" class="divider"></li>
-                                <li class="dropdown-header">Nav header</li>
-                                <li><a href="#">Separated link</a></li>
-                                <li><a href="#">One more separated link</a></li>
-                            </ul>
-                        </li>
-                    </ul>*@
-                @* قسمت پیغام ها *@
                 <ul class="nav navbar-nav navbar-right navbar-top-drops">
-                    @*<li class="dropdown">
-                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-envelope"></i> <span class="badge badge-xs badge-info">6</span></a>
-
-                            <ul class="dropdown-menu dropdown-lg">
-                                <li class="notify-title">
-                                    3 New messages
-                                </li>
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <span class="pull-left">
-                                            <img src="~/AdminLayout/images/avtar-1.jpg" alt="" class="img-circle" width="30">
-                                        </span>
-                                        <span class="block">
-                                            کاربر اول
-                                        </span>
-                                        <span class="media-body">
-                                            متن پیام کاربر
-                                            <em>28 minutes ago</em>
-                                        </span>
-                                    </a>
-                                </li>
-
-
-                                <li class="read-more"><a href="#">View All Messages <i class="fa fa-angle-right"></i></a></li>
-                            </ul>
-                        </li>
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle button-wave" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="badge badge-xs badge-warning">6</span></a>
-
-                            <ul class="dropdown-menu dropdown-lg">
-                                <li class="notify-title">
-                                    3 New messages
-                                </li>
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <span class="pull-left">
-                                            <i class="fa fa-envelope"></i>
-                                        </span>
-
-                                        <span class="media-body">
-                                            15 New Messages
-                                            <em>20 Minutes ago</em>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <span class="pull-left">
-                                            <i class="fa fa-twitter"></i>
-                                        </span>
-
-                                        <span class="media-body">
-                                            13 New Followers
-                                            <em>2 hours ago</em>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="clearfix">
-                                    <a href="#">
-                                        <span class="pull-left">
-                                            <i class="fa fa-download"></i>
-                                        </span>
-
-                                        <span class="media-body">
-                                            Download complete
-                                            <em>2 hours ago</em>
-                                        </span>
-                                    </a>
-                                </li>
-                                <li class="read-more"><a href="#">View All Alerts <i class="fa fa-angle-right"></i></a></li>
-                            </ul>
-                        </li>*@
                     <li>
                         <a asp-area="Admin" asp-controller="Account" asp-action="signout"><i class="fa fa-sign-out"></i> </a>
                     </li>
@@ -208,7 +120,7 @@
                                 <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                     <span class="clear" style="display: block;">
                                         <span class="block m-t-xs">
-                                            @{ 
+                                            @{
                                                 var currentUserRoles = await _userManager.GetRolesAsync(currentUser);
                                                 var thisUserRoleName = currentUserRoles.FirstOrDefault();
                                             }
@@ -217,7 +129,7 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a href="#"><i class="fa fa-user"></i>پروفتیل کاربری</a></li>
+                                    <li><a href="#"><i class="fa fa-user"></i>پروفایل کاربری</a></li>
                                     <li><a href="#"><i class="fa fa-envelope"></i>ایمیل ها</a></li>
                                     <li class="divider"></li>
                                     <li><a asp-action="Signout" asp-controller="Account" asp-area="Admin"><i class="fa fa-key"></i>خروج</a></li>
@@ -257,49 +169,30 @@
                             <a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">وبلاگ</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">پست جدید</a></li>
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">مدیریت پست ها </a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">مدیریت پست ها </a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">مدیریت نظرات </a></li>
 
                             </ul>
                         </li>
                         <li>
-                            <a href="mailbox.html"><i class="fa fa-envelope"></i> <span class="nav-label">ایمیل </span><span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">سفارشات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
-                                <li><a href="mailbox.html">Inbox</a></li>
-                                <li><a href="mail_detail.html">Email view</a></li>
-                                <li><a href="mail_compose.html">Compose email</a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">لیست سفارشات</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">نمودارها</span><span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">پیام ها</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
-                                <li><a href="flot_charts.html">Flot charts</a></li>
-                                <li><a href="morris_js.html">Morris.js</a></li>
-                                <li><a href="chart_js.html">Chart.js</a></li>
-                                <li><a href="chartist.html">Chartist</a></li>
-                                <li><a href="chart_sparkline.html">Sparkline</a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">ارتباط با ما</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">تجارت</span><span class="fa arrow"></span></a>
+                            <a href="#"><i class="fa fa-laptop"></i> <span class="nav-label">تنظیمات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
-                                <li><a href="orders.html">orders</a></li>
-                                <li><a href="order-view.html">order View</a></li>
-                                <li><a href="products.html">Products</a></li>
-
-
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن صفحه اول</a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن نوار پایین</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="grid_options.html"><i class="fa fa-laptop"></i> <span class="nav-label">تنظیمات</span></a>
-                        </li>
-                        <li>
-                            <a href="#"><i class="fa fa-table"></i> <span class="nav-label">جداول</span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level collapse">
-                                <li><a href="table_basic.html">Static Tables</a></li>
-                                <li><a href="table_data_tables.html">Data Tables</a></li>
-                            </ul>
-                        </li>
-
                     </ul>
 
                 </div>

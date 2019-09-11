@@ -42,12 +42,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         //Category--Start
         public IActionResult ShowCategory()
         {
-            //var dbViewModel = dbCategory.GetAll();
-            var dbViewModel = dbCategory.GetInclude(e => e.Field);
+            var dbViewModel = dbCategory.GetAll();
             return View(dbViewModel);
         }
         public IActionResult InsertCategory()
         {
+            ViewData["Category"] = dbCategory.GetAll();
             return View();
         }
         public IActionResult InsertConfirmCategory(CategoryViewModel model)

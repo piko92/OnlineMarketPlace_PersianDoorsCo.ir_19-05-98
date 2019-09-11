@@ -1,30 +1,101 @@
 ﻿
 @{
-    ViewData["Title"] = "InsertPost";
+    ViewData["Title"] = "افزودن مقاله";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var Product = ViewData["Product"] as List<ProductAbstract>;
 }
-
-<div class="row" style="font-family:FontShabnam">
+@model ArticleViewModel
+<div class="row">
     <div class="col-md-12">
         <div class="panel panel-card margin-b-30">
-            <!-- Start .panel -->
             <div class="panel-heading">
-                <h4 class="panel-title"> ساخت پست جدید</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>
-                </div>
+                <h4 class="panel-title"> افزودن مقاله  </h4>
             </div>
             <div class="panel-body">
-                <form role="form">
-                    <div class="form-group"><label>عنوان</label> <input type="" placeholder="عنوان پست" class="form-control"></div>
-                    <div class="form-group"><label>متن پست</label> <textarea type="" placeholder="پست" class="form-control"></textarea></div>
-                    <div>
-                        <button class="btn btn-lg btn-block btn-primary pull-right m-t-n-xs" type="submit"><strong>ذخیره</strong></button>
-                        @*<label> <input type="checkbox" class="i-checks"> Remember me </label>*@
-                    </div>
-                </form>
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Blog" asp-action="InsertPostConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان مقاله<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Title" type="text" class="form-control">
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان لاتین</label>
+                            <div class="col-sm-10">
+                                <input asp-for="LatinTitle" type="text" class="form-control">
+                                <span asp-validation-for="LatinTitle"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">خلاصه مقاله</label>
+                            <div class="col-sm-10">
+                                <textarea asp-for="Summery" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="Summery"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">متن اصلی</label>
+                            <div class="col-sm-10">
+                                <textarea asp-for="ContentHtml" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="ContentHtml"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">کالای مرتبط<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" asp-for="RelatedProductId">
+                                    @if (Product.Count > 0)
+                                    {
+                                        @foreach (var item in Product)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="RelatedProductId"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تصویر </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input asp-for="MainImage" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                    <label for="Option_1">فعال</label>
+                                </div>
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="false" type="radio" id="Option_2">
+                                    <label for="Option_2">غیر فعال</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت  </button>
+                        </div>
+                    </form>
+                </div>
             </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
         </div>
     </div>
 
