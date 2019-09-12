@@ -31,6 +31,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
         public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<City> City { get; set; }
         public virtual DbSet<Color> Color { get; set; }
+        public virtual DbSet<ContactUs> ContactUs { get; set; }
         public virtual DbSet<Continent> Continent { get; set; }
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<Coupon> Coupon { get; set; }
