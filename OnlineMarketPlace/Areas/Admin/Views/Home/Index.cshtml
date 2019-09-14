@@ -8,251 +8,96 @@
     <div class="col-lg-4">
         <div class="widget-box clearfix">
             <div class="pull-left">
-                <h4>User Performance</h4>
-                <h2>17,50</h2>
+                <a asp-area="Admin" asp-controller="Product" asp-action="ShowProduct">
+                    <h1> <i class="fa fa-list"></i></h1>
+                </a>
             </div>
             <div class="text-right">
-                <span id="sparkline8"></span>
+                <h4>لیست محصولات</h4>
+                <h2>150</h2>
             </div>
         </div>
     </div>
-    <div class="col-lg-8">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="widget-box clearfix">
-                    <div>
-                        <h4>New orders</h4>
-                        <h2>580 <i class="fa fa-plus pull-right"></i></h2>
-                    </div>
-                </div>
+    <div class="col-lg-4">
+        <div class="widget-box clearfix">
+            <div class="pull-left">
+                <a asp-area="Admin" asp-controller="Account" asp-action="UserList">
+                    <h1> <i class="fa fa-user"></i></h1>
+                </a>
             </div>
-            <div class="col-md-3">
-                <div class="widget-box clearfix">
-                    <div>
-                        <h4>Total sale today</h4>
-                        <h2>$970 <i class="fa fa-shopping-cart pull-right"></i></h2>
-                    </div>
-                </div>
+            <div class="text-right">
+                <h4>لیست کاربران</h4>
+                <h2>45</h2>
             </div>
-            <div class="col-md-3">
-                <div class="widget-box clearfix">
-                    <div>
-                        <h4>Pending Orders</h4>
-                        <h2>256 <i class="fa fa-tasks pull-right"></i></h2>
-                    </div>
-                </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="widget-box clearfix">
+            <div class="pull-left">
+                <a asp-area="Admin" asp-controller="PurchaseCart" asp-action="ShowPurchaseCart">
+                    <h1> <i class="fa fa-shopping-cart"></i></h1>
+                </a>
             </div>
-            <div class="col-md-3">
-                <div class="widget-box clearfix">
-                    <div>
-                        <h4>Total Income</h4>
-                        <h2>$9.7k <i class="fa fa-usd pull-right"></i></h2>
-                    </div>
-                </div>
+            <div class="text-right">
+                <h4>لیست سفارشات</h4>
+                <h2>15</h2>
             </div>
         </div>
     </div>
 </div>
+<div class="row">
+    <div class="col-lg-4">
+        <div class="widget-box clearfix">
+            <div class="pull-left">
+                <a asp-area="Admin" asp-controller="Tools" asp-action="ShowComment">
+                    <h1> <i class="fa fa-envelope"></i></h1>
+                </a>
+            </div>
+            <div class="text-right">
+                <h4>پیام های ارتباط با ما</h4>
+                <h2>2</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="widget-box clearfix">
+            <div class="pull-left">
+                <a asp-area="Admin" asp-controller="Product" asp-action="ShowCategory">
+                    <h1> <i class="fa fa-th"></i></h1>
+                </a>
+            </div>
+            <div class="text-right">
+                <h4>دسته بندی ها</h4>
+                <h2>5</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="widget-box clearfix">
+            <div class="pull-left">
+                <a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">
+                    <h1> <i class="fa fa-file-text"></i></h1>
+                </a>
+            </div>
+            <div class="text-right">
+                <h4>مقالات</h4>
+                <h2>17</h2>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="hr-line-dashed"></div>
+
+
 
 
 
 <div class="row">
     <div class="col-sm-8">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Total Product Sales</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div>
-                    <canvas id="lineChart" height="110"></canvas>
-                </div>
 
-            </div>
-        </div><!-- End .panel -->
     </div>
     <div class="col-sm-4">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Monthly sale Compare</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div>
-                    <canvas id="polarChart" height="242"></canvas>
-                </div>
-
-            </div>
-        </div><!-- End .panel -->
+        
+       
     </div>
 </div>
-<div class="row">
-    <div class="col-sm-4">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Weekly Overview</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div>
-                    <canvas id="barChart" height="150"></canvas>
-                </div>
-
-
-            </div>
-        </div><!-- End .panel -->
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Radar chart</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div>
-                    <canvas id="radarChart"></canvas>
-                </div>
-
-            </div>
-        </div><!-- End .panel -->
-    </div>
-    <div class="col-sm-4">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Browser support</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div>
-                    <canvas id="doughnutChart" height="150"></canvas>
-                </div>
-
-            </div>
-        </div><!-- End .panel -->
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Overall Sales Average</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body text-center">
-                <div id="morris-line-chart"></div>
-
-            </div>
-        </div><!-- End .panel -->
-    </div>
-    <div class="col-sm-6">
-        <div class="panel panel-card recent-activites">
-            <!-- Start .panel -->
-            <div class="panel-heading">
-                <h4 class="panel-title">Overall Sales Average</h4>
-                <div class="panel-actions">
-                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
-                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
-                </div>
-            </div>
-            <div class="panel-body">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Phone</th>
-                                <th>Street Address</th>
-                                <th>% Share</th>
-
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Abraham</td>
-                                <td>0500 854198</td>
-                                <td>294-318 Duis Ave</td>
-                                <td><div class="sparkline8"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div> </td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Phelan</td>
-                                <td>0500 854198</td>
-                                <td>680-1097 Mi Rd.</td>
-                                <td><div class="sparkline10"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Raya</td>
-                                <td>0500 854198</td>
-                                <td>Ap #289-8161 In Avenue</td>
-                                <td><div class="sparkline11"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Azalia</td>
-                                <td>0500 854198</td>
-                                <td>226-4861 Augue. St.</td>
-                                <td><div class="sparkline12"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Garth</td>
-                                <td>0500 854198</td>
-                                <td>3219 Elit Avenue</td>
-                                <td><div class="sparkline13"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Garth</td>
-                                <td>0500 854198</td>
-                                <td>3219 Elit Avenue</td>
-                                <td><div class="sparkline13"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                            <tr>
-                                <td>Garth</td>
-                                <td>0500 854198</td>
-                                <td>3219 Elit Avenue</td>
-                                <td><div class="sparkline13"><canvas width="17" height="17" style="display: inline-block; width: 17px; height: 17px; vertical-align: top;"></canvas></div></td>
-
-                                <td><a href="#" class="btn btn-default btn-xs">View</a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div><!-- End .panel -->
-    </div>
-</div>
-

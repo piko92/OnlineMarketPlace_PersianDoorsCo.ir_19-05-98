@@ -1,11 +1,12 @@
 ﻿using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
 {
-    public partial class Subject
+    public partial class Subject : IEntity<int>
     {
         //public Subject()
         //{

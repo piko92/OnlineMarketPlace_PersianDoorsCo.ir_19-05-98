@@ -19,6 +19,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
     public class ToolsController : Controller
     {
+        #region Inject
         //Inject DataBase--Start
         IHostingEnvironment env = null;
 
@@ -33,13 +34,15 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             this.env = env;
         }
         //Inject DataBase--End
+        #endregion
+        #region Contact_us
         //Contact_Us-Start
-        public IActionResult ShowComments()
+        public IActionResult ShowComment()
         {
             var dbViewModel = dbContactUs.GetAll();
             return View(dbViewModel);
         }
-        public IActionResult DeleteComments(int Id)
+        public IActionResult DeleteComment(int Id)
         {
             var status = dbContactUs.DeleteById(Id);
             if (status)
@@ -50,15 +53,16 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             {
 
             }
-            return RedirectToAction("ShowComments");
+            return RedirectToAction("ShowComment");
         }
         public IActionResult ReplyComment(int Id)
         {
-            ViewData["dbContactUs"] = dbContactUs.GetAll();
+            ViewData["dbContactUs"] = dbContactUs.FindById(Id);
             return View();
         }
-
         //Contact_Us-End
+        #endregion
+        #region Email
         //Email-Start
         public IActionResult SendEmail()
         {
@@ -76,32 +80,42 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 MailMessage msg = new MailMessage(SenderEmail, ReceiverEmail);
                 msg.Subject = Subject;
                 msg.Body = Content;
-                //foreach (var item in model.AttachedFiles)
-                //{
-                //    using (var ms = new MemoryStream())
-                //    {
-                //        item.CopyTo(ms);
-                //        var fileBytes = ms.ToArray();
-                //        Attachment att = new Attachment(new MemoryStream(fileBytes), item.FileName);
-                //        msg.Attachments.Add(att);
-                //    }
-                //}
+                if (model.AttachedFiles !=null)
+                {
+                    foreach (var item in model.AttachedFiles)
+                    {
+                        MemoryStream ms = null;
+                        using (ms = new MemoryStream())
+                        {
+                            item.CopyTo(ms);
+                            var fileBytes = ms.ToArray();
+                            Attachment att = new Attachment(new MemoryStream(fileBytes), item.FileName);
+                            msg.Attachments.Add(att);
+                        }
+                    }
+                }
                 //msg.IsBodyHtml = true;
                 //msg.Priority = MailPriority.High;
                 SmtpClient smtpClient = new SmtpClient("mail.persiandoorsco.ir", 587);
                 smtpClient.Credentials = new System.Net.NetworkCredential(SenderEmail, Password);
                 // smtpClient.EnableSsl = true;
-                smtpClient.Send(msg);
+                try
+                {
+                    smtpClient.Send(msg);
+                }
+                catch (Exception)
+                {
+                    return RedirectToAction("SendEmail");
+                }
+
                 return RedirectToAction("Index", "Home");
             }
-
             else
             {
                 return RedirectToAction("SendEmail");
             }
-
-
         }
         //Email-End
+        #endregion
     }
 }
