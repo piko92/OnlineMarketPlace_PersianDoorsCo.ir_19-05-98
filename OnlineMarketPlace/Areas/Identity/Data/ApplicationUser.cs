@@ -44,6 +44,9 @@ namespace OnlineMarketPlace.Areas.Identity.Data
         public virtual ICollection<Category> Category { get; set; }
 
         [InverseProperty("ApprovedByUser")]
+        public virtual ICollection<ContactUs> ContactUsApprovedByUser { get; set; }
+
+        [InverseProperty("ApprovedByUser")]
         public virtual ICollection<Coupon> CouponApprovedByUser { get; set; }
         [InverseProperty("SpecialUser")]
         public virtual ICollection<Coupon> CouponSpecialUser { get; set; }
@@ -77,6 +80,13 @@ namespace OnlineMarketPlace.Areas.Identity.Data
         public virtual ICollection<Subject> Subject { get; set; }
         public virtual ICollection<Tag> Tag { get; set; }
         public virtual ICollection<TopSlider> TopSlider { get; set; }
+
+        [InverseProperty("ApprovedByUser")]
+        public virtual ICollection<UserArticleReview> UserArticleReviewApprovedByUser { get; set; }
+
+        [InverseProperty("User")]
+        public virtual ICollection<UserArticleReview> UserArticleReviewUser { get; set; }
+
         public virtual ICollection<UserCategoryVisit> UserCategoryVisit { get; set; }
         public virtual ICollection<UserFavoriteProduct> UserFavoriteProduct { get; set; }
         public virtual ICollection<UserImage> UserImage { get; set; }

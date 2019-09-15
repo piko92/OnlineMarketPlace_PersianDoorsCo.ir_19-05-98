@@ -44,5 +44,6 @@ namespace OnlineMarket.Models
         public virtual ApplicationUser User { get; set; }
 
         public virtual ICollection<ArticleModified> ArticleModified { get; set; }
+        public virtual ICollection<UserArticleReview> UserArticleReview { get; set; }
     }
 }

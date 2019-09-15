@@ -1,8 +1,68 @@
 ﻿
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "مقالات";
+    var dbArticle = ViewData["Article"] as List<Article>;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @model List<Article>
-<h1>Index</h1>
+        <!--Blog section start-->
+<div class="blog-section section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-40 pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 order-lg-2 order-2">
+                <!-- Single Sidebar Start  -->
+                @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle)
+                <!-- Single Sidebar End  -->
+            </div>
+            <div class="col-lg-9 order-lg-1 order-1">
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <div class="blog col-lg-6 col-md-6" >
+                            <div class="blog-inner mb-30">
+                                <div class="blog-media">
+                                    <a  asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id" class="image">
+                                        @if (item.MainImage!=null)
+                                        {
+                                            <img width="330" height="230" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(item.MainImage)}")>
+                                        }
+                                    </a>
+                                </div>
+                                <div class="content">
+                                    <ul class="meta  ">
+                                        <li>1398/06/11 تاریخ</li>
+                                        <li><a href="#">25 پسندیدن</a></li>
+                                        <li><a href="#">28 بازدید</a></li>
+                                    </ul>
+                                    <h3 class="title  text-right">
+                                        <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">
+                                            @item.Title
+                                        </a>
+                                    </h3>
+                                    <a class="read-more text-left" asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">مشاهده مقاله</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
 
+
+
+
+                </div>
+                <div class="row mt-20 mt-xs-0">
+                    <div class="col">
+                        <ul class="page-pagination">
+                            <li class="active"><a href="#">01</a></li>
+                            <li><a href="#">02</a></li>
+                            <li><a href="#">03</a></li>
+                            <li><a href="#">04</a></li>
+                            <li><a href="#">05</a></li>
+                            <li><a href="#">Next</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Blog section end-->

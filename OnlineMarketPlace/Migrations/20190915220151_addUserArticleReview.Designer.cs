@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20190915220151_addUserArticleReview")]
+    partial class addUserArticleReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2746,8 +2748,6 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<DateTime?>("ApprovedDateTime");
 
-                    b.Property<int>("ArticleId");
-
                     b.Property<string>("Comment");
 
                     b.Property<bool?>("Fake");
@@ -2769,8 +2769,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
-
-                    b.HasIndex("ArticleId");
 
                     b.HasIndex("ParentId");
 
@@ -3930,11 +3928,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "ApprovedByUser")
                         .WithMany("UserArticleReviewApprovedByUser")
                         .HasForeignKey("ApprovedByUserId");
-
-                    b.HasOne("OnlineMarket.Models.Article", "Article")
-                        .WithMany("UserArticleReview")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineMarket.Models.UserArticleReview", "Parent")
                         .WithMany("InverseParent")
