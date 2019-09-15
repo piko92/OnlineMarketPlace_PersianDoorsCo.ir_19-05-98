@@ -3,10 +3,11 @@ using OnlineMarketPlace.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using OnlineMarketPlace.Repository.Extension;
 
 namespace OnlineMarket.Models
 {
-    public partial class Brand : IEntity<int>
+    public partial class Brand : IEntity<int>, IEntityEx<string>
     {
         //public Brand()
         //{
