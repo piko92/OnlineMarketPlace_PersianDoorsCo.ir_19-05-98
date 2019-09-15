@@ -4,17 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineMarketPlace.Migrations
 {
-    public partial class addContactUsClass_01 : Migration
+    public partial class RepeatAllMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<string>(
-                name: "UserId",
-                table: "Brand",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldNullable: true);
-
             migrationBuilder.CreateTable(
                 name: "ContactUs",
                 columns: table => new
@@ -42,43 +35,17 @@ namespace OnlineMarketPlace.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Brand_UserId",
-                table: "Brand",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ContactUs_ApprovedUserId",
                 table: "ContactUs",
                 column: "ApprovedUserId");
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Brand_AspNetUsers_UserId",
-                table: "Brand",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Restrict);
+            
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Brand_AspNetUsers_UserId",
-                table: "Brand");
-
             migrationBuilder.DropTable(
                 name: "ContactUs");
-
-            migrationBuilder.DropIndex(
-                name: "IX_Brand_UserId",
-                table: "Brand");
-
-            migrationBuilder.AlterColumn<string>(
-                name: "UserId",
-                table: "Brand",
-                nullable: true,
-                oldClrType: typeof(string),
-                oldNullable: true);
         }
     }
 }
