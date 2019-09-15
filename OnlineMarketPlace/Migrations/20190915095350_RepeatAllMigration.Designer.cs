@@ -10,14 +10,14 @@ using OnlineMarketPlace.Areas.Identity.Data;
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    [Migration("20190912080618_addContactUsClass_01")]
-    partial class addContactUsClass_01
+    [Migration("20190915095350_RepeatAllMigration")]
+    partial class RepeatAllMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 

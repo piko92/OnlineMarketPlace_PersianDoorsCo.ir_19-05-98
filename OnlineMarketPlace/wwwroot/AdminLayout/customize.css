@@ -135,3 +135,6 @@ button,
 .sweet-alert p {
     font-family: 'FontShabnam', Tahoma !important;
 }
+input[type="text"]:disabled {
+    background: #e0e0e0;
+}

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
 {
-    public partial class Subject: IEntityEx<string>, IEntity<int>
+    public partial class Subject: IEntity<int>, IEntityEx<string>
     {
         //public Subject()
         //{

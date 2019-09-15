@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewData["Title"] = "رزولوشن صفحه نمایش";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var _screen = ViewData["Screen"] as List<ScreenResulation>;
+}
+@model ScreenResulation
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> افزودن رزولوشن جدید </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="Admin" asp-controller="Gallery" asp-action="InsertScreenResolutionConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">نام  <span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Name" type="text" class="form-control">
+                                <span asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">نام انگلیسی </label>
+                            <div class="col-sm-10">
+                                <input asp-for="LatinName" type="text" class="form-control">
+                                <span asp-validation-for="LatinName"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">ابعاد تصویر <span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Dimensions" type="text" class="form-control">
+                                <span asp-validation-for="Dimensions"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                    <label for="Option_1">فعال</label>
+                                </div>
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="false" type="radio" id="Option_2">
+                                    <label for="Option_2">غیر فعال</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- End .Form -->
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست ابعاد تصویر</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <td>نام </td>
+                            <td>نام انگلیسی</td>
+                            <td>ابعاد تصویر</td>
+                            <td>#</td>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <td>نام </td>
+                            <td>نام انگلیسی</td>
+                            <td>ابعاد تصویر</td>
+                            <td>#</td>
+                        </tr>
+                    </tfoot>
+                    <tbody id="tblBody">
+                        @if (_screen.Count > 0)
+                        {
+                            foreach (var item in _screen)
+                            {
+                                <tr>
+                                    <th>@item.Name</th>
+                                    <th>@item.LatinName</th>
+                                    <th>@item.Dimensions</th>
+                                    <th>
+                                        <a asp-action="DeleteScreenResolution" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger">حذف</a>
+                                    </th>
+                                </tr>
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+<script>
+
+    $("form").submit(function (event) {
+        event.preventDefault();
+        // some validation check and then
+
+        $.post("/Admin/Gallery/InsertScreenResolutionConfirm", $(this).serialize(), function (value) {
+            if (value != null) {
+                var objj = JSON.stringify(value);
+                var result = jQuery.parseJSON(objj);
+
+                console.log(result);
+
+                var tableHTML = `<tr>
+                                    <td>${result.name}</td>
+                                    <td>${result.latinName}</td>
+                                    <td>${result.dimensions}</td>
+                                    <td><a asp-action="DeleteScreenResolution" asp-controller="Gallery" asp-area="Admin" asp-route-Id="${result.id}" class="btn btn-danger">حذف</a></td>
+                                 </tr>`;
+                $("#tblBody").append(tableHTML);
+            }
+        });
+    });
+    $(".btn-primary").click(function () {
+        $("form")[0].reset();
+    })
+</script>
