@@ -1,5 +1,4 @@
-﻿@page
-@model OnlineMarketPlace.Views.Shared.Header._PartialHeaderModel
+﻿
 @{
     Layout = null;
 }
@@ -45,20 +44,21 @@
                                     </ul>
                                 </li>
                                 <li><a href="shop.html">کالاهای جدید</a></li>
-                                <li>
-                                    <a href="blog.html">صفحات</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about.html">درباره ما</a></li>
-                                        <li><a href="compare.html">مقایسه کالا</a></li>
-                                        <li><a href="cart.html">سبد خرید</a></li>
-                                        <li><a href="checkout.html">پرداخت</a></li>
-                                        <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                                        <li><a href="my-account.html">حساب کاربری</a></li>
-                                        <li><a href="login-register.html">ورود به حساب</a></li>
-                                        <li><a href="faq.html">سوالات متداول</a></li>
-                                        <li><a href="404.html">ارور 404</a></li>
-                                    </ul>
-                                </li>
+                                @*<li>
+                                        <a href="blog.html">صفحات</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="about.html">درباره ما</a></li>
+                                            <li><a href="compare.html">مقایسه کالا</a></li>
+                                            <li><a href="cart.html">سبد خرید</a></li>
+                                            <li><a href="checkout.html">پرداخت</a></li>
+                                            <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
+                                            <li><a href="my-account.html">حساب کاربری</a></li>
+                                            <li><a href="login-register.html">ورود به حساب</a></li>
+                                            <li><a href="faq.html">سوالات متداول</a></li>
+                                            <li><a href="404.html">ارور 404</a></li>
+                                        </ul>
+                                    </li>*@
+                                <li><a asp-controller="Blog" asp-action="Index">مقالات</a></li>
                                 <li><a href="contact.html">تماس با ما</a></li>
                             </ul>
                         </nav>
@@ -76,21 +76,21 @@
                                 <ul class="currency-dropdown">
                                     <!--Language Currency Start-->
                                     @*<li>
-                                        <a href="#">language</a>
-                                        <ul>
-                                            <li class="active"><a href="#"><img src="~/shared/main/assets/images/icons/en-gb.png" alt="">English</a></li>
-                                            <li><a href="#"><img src="~/shared/main/assets/images/icons/de-de.png" alt="">French</a></li>
-                                        </ul>
-                                    </li>*@
+                                            <a href="#">language</a>
+                                            <ul>
+                                                <li class="active"><a href="#"><img src="~/shared/main/assets/images/icons/en-gb.png" alt="">English</a></li>
+                                                <li><a href="#"><img src="~/shared/main/assets/images/icons/de-de.png" alt="">French</a></li>
+                                            </ul>
+                                        </li>*@
                                     <!--Language Currency End-->
                                     <!--USD Currency Start-->
                                     @*<li>
-                                        <a href="#">Currency</a>
-                                        <ul>
-                                            <li><a href="#"> € Euro</a></li>
-                                            <li><a href="#"> $ US Dollar</a></li>
-                                        </ul>
-                                    </li>*@
+                                            <a href="#">Currency</a>
+                                            <ul>
+                                                <li><a href="#"> € Euro</a></li>
+                                                <li><a href="#"> $ US Dollar</a></li>
+                                            </ul>
+                                        </li>*@
                                     <!--USD Currency End-->
                                     <!--Account Currency Start-->
                                     <li>
@@ -288,19 +288,19 @@
                             </ul>
                         </li>
                         @*<li class="menu-item-has-children">
-                            <a href="#">CURRENCY: USD </a>
-                            <ul class="submenu2">
-                                <li><a href="javascript:void(0)">€ Euro</a></li>
-                                <li><a href="javascript:void(0)">$ US Dollar</a></li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children">
-                            <a href="#">LANGUAGE: EN-GB </a>
-                            <ul class="submenu2">
-                                <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/en-gb.png" alt=""> English</a></li>
-                                <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/de-de.png" alt=""> Germany</a></li>
-                            </ul>
-                        </li>*@
+                                <a href="#">CURRENCY: USD </a>
+                                <ul class="submenu2">
+                                    <li><a href="javascript:void(0)">€ Euro</a></li>
+                                    <li><a href="javascript:void(0)">$ US Dollar</a></li>
+                                </ul>
+                            </li>
+                            <li class="menu-item-has-children">
+                                <a href="#">LANGUAGE: EN-GB </a>
+                                <ul class="submenu2">
+                                    <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/en-gb.png" alt=""> English</a></li>
+                                    <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/de-de.png" alt=""> Germany</a></li>
+                                </ul>
+                            </li>*@
                     </ul>
                 </nav>
             </div>
