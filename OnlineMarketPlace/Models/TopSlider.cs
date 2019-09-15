@@ -1,11 +1,12 @@
 ﻿using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
 {
-    public partial class TopSlider
+    public partial class TopSlider: IEntity<int>
     {
         public int Id { get; set; }
         public int? ScreenResulationId { get; set; }

@@ -1,0 +1,257 @@
+﻿
+@{
+    ViewData["Title"] = "افزودت عکس اسلایدر";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var screen = ViewData["screen"] as List<ScreenResulation>;
+    var category = ViewData["category"] as List<Category>;
+    var brand = ViewData["brand"] as List<Brand>;
+}
+
+@model TopSliderViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> افزودن عکس اسلایدر </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="Admin" asp-controller="Gallery" asp-action="InsertSliderImageConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان  <span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Title" type="text" class="form-control">
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">خلاصه توضیحات </label>
+                            <div class="col-sm-10">
+                                <input asp-for="Summery" type="text" class="form-control">
+                                <span asp-validation-for="Summery"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> توضیحات </label>
+                            <div class="col-sm-10">
+                                <textarea rows="3" asp-for="Description" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">متن Alt Tag </label>
+                            <div class="col-sm-10">
+                                <input asp-for="AltName" type="text" class="form-control">
+                                <span asp-validation-for="AltName"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> لینک </label>
+                            <div class="col-sm-10">
+                                <input asp-for="Link" type="text" class="form-control">
+                                <span asp-validation-for="Link"></span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">اندازه پیش فرض</label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" asp-for="ScreenResulationId">
+                                    @if (screen != null)
+                                    {
+                                        <option value="-1">-- انتخاب اندازه --</option>
+                                        @foreach (var item in screen)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="ScreenResulationId"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تصویر <span class="red-color">*</span></label>
+                            <div class="col-sm-3">
+                                <div class="custom-file">
+                                    <input asp-for="Image" type="file" class="custom-file-input" id="img1">
+                                </div>
+                                <span asp-validation-for="Image"></span>
+                            </div>
+                            <div class="col-sm-2">
+                                <img class="img-thumbnail" width="120" height="120" id="avator" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                    <label for="Option_1">فعال</label>
+                                </div>
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Status" value="false" type="radio" id="Option_2">
+                                    <label for="Option_2">غیر فعال</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت نمایش </label>
+                            <div class="col-sm-10">
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Active" value="true" type="radio" id="Option_active_1" checked>
+                                    <label for="Option_active_1">فعال</label>
+                                </div>
+                                <div class="radio inline-element sp-rl-padding-10">
+                                    <input asp-for="Active" value="false" type="radio" id="Option_active_2">
+                                    <label for="Option_active_2">غیر فعال</label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">اتصال به: </label>
+                            <div class="col-sm-3">
+                                <label>دسته بندی: </label>
+                                <select class="form-control m-b" asp-for="ConnectedCategoryId">
+                                    @if (category != null)
+                                    {
+                                        <option value="-1">-- انتخاب دسته --</option>
+                                        @foreach (var item in category)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="ConnectedCategoryId"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>برند: </label>
+                                <select class="form-control m-b" asp-for="ConnectedBrandId">
+                                    @if (brand != null)
+                                    {
+                                        <option value="-1">-- انتخاب برند --</option>
+                                        @foreach (var item in brand)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="ConnectedBrandId"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>محصول: </label>
+                                <input asp-for="ConnectedProductId" type="text" class="form-control" placeholder="کد محصول">
+                                <span asp-validation-for="ConnectedProductId"></span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تنظیمات</label>
+                            <div class="col-sm-3">
+                                <label for="setFuture">نمایش در آینده </label>
+                                <div>
+                                    <input id="setFuture" asp-for="SetForFuture" type="checkbox" value="true" class="custom-checkbox">
+                                    <span asp-validation-for="SetForFuture"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>تاریخ نمایش </label>
+                                <input disabled asp-for="ShowDateTime" type="text" id="pdpBig" class="form-control" autocomplete="off">
+                                <span asp-validation-for="ShowDateTime"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>تاریخ انقضاء </label>
+                                <input disabled asp-for="ExpireDateTime" type="text" id="pdpBig2" class="form-control" autocomplete="off">
+                                <span asp-validation-for="ExpireDateTime"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> اولویت </label>
+                            <div class="col-sm-2">
+                                <input asp-for="Priotity" type="number" class="form-control">
+                                <span asp-validation-for="Priotity"></span>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> تنظیمات کلید </label>
+                            <div class="col-sm-3">
+                                <label for="hasKey">کلید دارد </label>
+                                <div>
+                                    <input id="hasKey" asp-for="HasButton" type="checkbox" value="true" class="custom-checkbox">
+                                    <span asp-validation-for="HasButton"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>متن کلید </label>
+                                <input disabled asp-for="ButtonContent" type="text" id="btnContent" class="form-control" autocomplete="off">
+                                <span asp-validation-for="ButtonContent"></span>
+                            </div>
+                            <div class="col-sm-3">
+                                <label>لینک کلید </label>
+                                <input disabled asp-for="ButtonLink" type="text" id="btnLink" class="form-control" autocomplete="off">
+                                <span asp-validation-for="ButtonLink"></span>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+            <script>
+                //image preview
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function (e) {
+                            $('#avator').attr('src', e.target.result);
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+                $("#img1").change(function (e) {
+                    readURL(this);
+                })
+                $("#pdpBig").persianDatepicker({
+                    cellWidth: 30,
+                    cellHeight: 20,
+                    fontSize: 12
+                });
+                $("#pdpBig2").persianDatepicker({
+                    cellWidth: 30,
+                    cellHeight: 20,
+                    fontSize: 12
+                });
+                $("#setFuture").change(function () {
+                    if ($(this).prop("checked")) {
+                        $("#pdpBig, #pdpBig2").removeAttr("disabled")
+                    } else {
+                        $("#pdpBig, #pdpBig2").attr("disabled", "disabled")
+                        $("#pdpBig, #pdpBig2").val("")
+                    }
+                });
+                $("#hasKey").change(function () {
+                    if ($(this).prop("checked")) {
+                        $("#btnContent, #btnLink").removeAttr("disabled")
+                    } else {
+                        $("#btnContent, #btnLink").attr("disabled", "disabled")
+                        $("#btnContent, #btnLink").val("")
+                    }
+                });
+            </script>
+            <!-- End .Form -->
+        </div>
+    </div>
+</div>
+
+
