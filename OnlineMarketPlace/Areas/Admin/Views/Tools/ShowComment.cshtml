@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "پیام های ارتباط با ما";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<ContactUs>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card ">
+            <!-- Start .panel -->
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست پیام ها </h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>کد</th>
+                            <th>پیام</th>
+                            <th>ایمیل</th>
+                            <th>تایید</th>
+                            <th>پاسخ</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>کد</th>
+                            <th>پیام</th>
+                            <th>ایمیل</th>
+                            <th>پاسخ</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Comment</td>
+                                    <td>@item.Approved</td>
+                                    <td>@CustomizeCalendar.GregorianToPersianDateTime(item.RegdDateTime)</td>
+                                    <td>
+                                        <a asp-action="ReplyComment" asp-controller="Tools" asp-area="Admin" asp-route-Id="@item.Id"
+                                           class="btn btn-success btn-block">ارسال پاسخ</a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeleteComment" asp-controller="Tools" asp-area="Admin" asp-route-Id="@item.Id"
+                                           class="btn btn-danger btn-block">حذف</a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>

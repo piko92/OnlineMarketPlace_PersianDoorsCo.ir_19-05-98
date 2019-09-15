@@ -1,76 +1,61 @@
 ﻿
 @{
-    ViewData["Title"] = "افزودن مقاله";
+    ViewData["Title"] = "افزودن عکس به گالری";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    var Product = ViewData["Product"] as List<ProductAbstract>;
+    var Subject = ViewData["Subject"] as List<Subject>;
+
 }
-@model ArticleViewModel
+
+
+@model PhotoGalleryViewModel
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-card margin-b-30">
             <div class="panel-heading">
-                <h4 class="panel-title"> افزودن مقاله  </h4>
+                <h4 class="panel-title"> افزودن عکس به گالری </h4>
             </div>
             <div class="panel-body">
                 <!-- Start .Form -->
                 <div class="panel-body">
-                    <form asp-area="admin" asp-controller="Blog" asp-action="InsertPostConfirm"
+                    <form asp-area="Admin" asp-controller="Gallery" asp-action="InsertPhotoConfirm"
                           id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">عنوان مقاله<span class="red-color">*</span></label>
+                            <label class="col-sm-2 control-label">نام  <span class="red-color">*</span></label>
                             <div class="col-sm-10">
-                                <input asp-for="Title" type="text" class="form-control">
-                                <span asp-validation-for="Title"></span>
+                                <input asp-for="Name" type="text" class="form-control">
+                                <span asp-validation-for="Name"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">عنوان لاتین</label>
+                            <label class="col-sm-2 control-label">نام انگلیسی موضوع</label>
                             <div class="col-sm-10">
-                                <input asp-for="LatinTitle" type="text" class="form-control">
-                                <span asp-validation-for="LatinTitle"></span>
+                                <input asp-for="LatinName" type="text" class="form-control">
+                                <span asp-validation-for="LatinName"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">خلاصه مقاله</label>
+                            <label class="col-sm-2 control-label">موضوع<span class="red-color">*</span></label>
                             <div class="col-sm-10">
-                                <textarea asp-for="Summery" type="text" class="form-control"></textarea>
-                                <span asp-validation-for="Summery"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">متن اصلی</label>
-                            <div class="col-sm-10">
-                                <textarea asp-for="ContentHtml" type="text" class="form-control"></textarea>
-                                <span asp-validation-for="ContentHtml"></span>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">کالای مرتبط<span class="red-color">*</span></label>
-                            <div class="col-sm-10">
-                                <select class="form-control m-b" asp-for="RelatedProductId">
-                                    @if (Product.Count > 0)
+                                <select class="form-control m-b" asp-for="SubjectId">
+                                    @if (Subject != null)
                                     {
-                                        @foreach (var item in Product)
+                                        @foreach (var item in Subject)
                                         {
                                             <option value="@item.Id">@item.Name</option>
                                         }
                                     }
                                 </select>
-                                <span asp-validation-for="RelatedProductId"></span>
+                                <span asp-validation-for="SubjectId"></span>
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">تصویر </label>
+                            <label class="col-sm-2 control-label">تصویر <span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <div class="custom-file">
-                                    <input asp-for="MainImage" type="file" class="custom-file-input">
+                                    <input asp-for="Image" type="file" class="custom-file-input">
                                 </div>
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">وضعیت </label>
                             <div class="col-sm-10">
@@ -87,7 +72,7 @@
                         <div class="hr-line-dashed"></div>
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
-                            <button class="btn btn-primary" type="submit">ثبت  </button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
                         </div>
                     </form>
                 </div>
@@ -95,8 +80,11 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
             <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+            <!-- End .Form -->
         </div>
     </div>
-
 </div>
+
+
+
+

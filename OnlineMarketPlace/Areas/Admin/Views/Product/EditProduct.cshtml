@@ -13,7 +13,7 @@
     <div class="col-md-12">
         <div class="panel panel-card margin-b-30">
             <div class="panel-heading">
-                <h4 class="panel-title"> افزودن محصول </h4>
+                <h4 class="panel-title"> ویرایش محصول </h4>
             </div>
             <div class="panel-body">
                 <!-- Start .Form -->
@@ -42,7 +42,15 @@
                                     {
                                         @foreach (var item in brand)
                                         {
-                                            <option value="@item.Id">@item.Name</option>
+                                            if (@ProductAbstract.BrandId == item.Id)
+                                            {
+
+                                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -57,7 +65,15 @@
                                     {
                                         @foreach (var item in category)
                                         {
-                                            <option value="@item.Id">@item.Name</option>
+                                            if (@ProductAbstract.CategoryId == item.Id)
+                                            {
+
+                                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -69,7 +85,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">قیمت <span class="red-color">*</span></label>
                             <div class="col-sm-10">
-                                <input asp-for="BasePrice" type="text" class="form-control">
+                                <input asp-for="BasePrice" type="text" value=@ProductAbstract.BasePrice class="form-control">
                                 <span asp-validation-for="BasePrice"></span>
                             </div>
                         </div>
