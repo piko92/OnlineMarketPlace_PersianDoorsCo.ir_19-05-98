@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "صفحه اصلی";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var userManagerCount=   ViewData[" userManagerCount"];
+   var ProductFeatureCount = ViewData[" ProductFeatureCount"];
+    var CategoryCount = ViewData[" CategoryCount"];
+    var ContactUsCount = ViewData[" ContactUsCount"];
+    var ArticleCount = ViewData[" ArticleCount"];
 }
 
 <div class="row">
@@ -14,7 +19,7 @@
             </div>
             <div class="text-right">
                 <h4>لیست محصولات</h4>
-                <h2>150</h2>
+                <h2>@ProductFeatureCount</h2>
             </div>
         </div>
     </div>
@@ -27,7 +32,7 @@
             </div>
             <div class="text-right">
                 <h4>لیست کاربران</h4>
-                <h2>45</h2>
+                <h2>@userManagerCount</h2>
             </div>
         </div>
     </div>
@@ -40,7 +45,7 @@
             </div>
             <div class="text-right">
                 <h4>لیست سفارشات</h4>
-                <h2>15</h2>
+                <h2>0</h2>
             </div>
         </div>
     </div>
@@ -55,7 +60,7 @@
             </div>
             <div class="text-right">
                 <h4>پیام های ارتباط با ما</h4>
-                <h2>2</h2>
+                <h2>@ContactUsCount</h2>
             </div>
         </div>
     </div>
@@ -68,7 +73,7 @@
             </div>
             <div class="text-right">
                 <h4>دسته بندی ها</h4>
-                <h2>5</h2>
+                <h2>@CategoryCount</h2>
             </div>
         </div>
     </div>
@@ -81,7 +86,7 @@
             </div>
             <div class="text-right">
                 <h4>مقالات</h4>
-                <h2>17</h2>
+                <h2>@ArticleCount</h2>
             </div>
         </div>
     </div>

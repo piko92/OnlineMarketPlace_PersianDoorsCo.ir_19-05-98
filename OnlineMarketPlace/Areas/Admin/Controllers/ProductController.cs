@@ -5,9 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries.NotificationHandler;
 using OnlineMarketPlace.Models.AdminViewModels;
 using OnlineMarketPlace.Repository;
 
@@ -18,27 +21,48 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
     public class ProductController : Controller
     {
+        #region Inject
         //Inject DataBase--Start
-        //Call DataBase Function From Repository
+        UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, Brand, int> dbBrand;
         DbRepository<OnlineMarketContext, Category, int> dbCategory;
         DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;
+        DbRepository<OnlineMarketContext, AdditionalFeatures, int> dbAdditionalFeatures;
+        DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> dbProductAdditionalFeatures;
+        DbRepository<OnlineMarketContext, ProductFeature, int> dbProductFeature;
+        private readonly IHostingEnvironment hostingEnvironment;
+        string contentRootPath;
         public ProductController
             (
+                UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, Brand, int> _dbBrand,
                 DbRepository<OnlineMarketContext, Category, int> _dbCategory,
-                DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract
+                DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract,
+                DbRepository<OnlineMarketContext, AdditionalFeatures, int> _dbAdditionalFeatures,
+                DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> _dbProductAdditionalFeatures,
+                DbRepository<OnlineMarketContext, ProductFeature, int> _dbProductFeature,
+                IHostingEnvironment _hostingEnvironment
             )
         {
+            userManager = _userManager;
             dbBrand = _dbBrand;
             dbCategory = _dbCategory;
             dbProductAbstract = _dbProductAbstract;
+            dbAdditionalFeatures = _dbAdditionalFeatures;
+            dbProductAdditionalFeatures = _dbProductAdditionalFeatures;
+            dbProductFeature = _dbProductFeature;
+            hostingEnvironment = _hostingEnvironment;
+            contentRootPath = hostingEnvironment.ContentRootPath;
         }
         //Inject DataBase--End
+        #endregion
+        #region Index
         public IActionResult Index()
         {
             return View();
         }
+        #endregion
+        #region Category
         //Category--Start
         public IActionResult ShowCategory()
         {
@@ -67,6 +91,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         }
         //Category--End
+        #endregion
+        #region Brand
         //Brand--Start
         public IActionResult ShowBrand()
         {
@@ -92,6 +118,124 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             return RedirectToAction("InsertBrand");
         }
         //Brand--End
+        #endregion
+        #region Feature
+        //Feature--Start
+        public IActionResult ShowFeature(string notification)
+        {
+            var dbViewModel = dbAdditionalFeatures.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
+            return View(dbViewModel);
+        }
+        public IActionResult InsertFeature(string notification)
+        {
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+        public async Task<IActionResult> InsertFeatureConfirm(AdditionalFeaturesViewModel model)
+        {
+            ApplicationUser user = null;
+            string nvm;
+            if (User.Identity.IsAuthenticated)
+            {
+                user = await userManager.FindByNameAsync(User.Identity.Name);
+                model.UserId = user.Id;
+            }
+            if (!ModelState.IsValid)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("InsertFeature", new { notification = nvm });
+            }
+            try
+            {
+                AdditionalFeatures additionalFeatures = new AdditionalFeatures()
+                {
+                    Name = model.Name,
+                    LatinName = model.LatinName,
+                    Description = model.Description,
+                    UserId = model.UserId,
+                    RegDateTime = DateTime.Now,
+                    Status = model.Status,
+                };
+                dbAdditionalFeatures.Insert(additionalFeatures);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                return RedirectToAction("InsertFeature", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertFeature", new { notification = nvm });
+            }
+        }
+        public IActionResult DeleteFeature(int Id)
+        {
+            var status = dbAdditionalFeatures.DeleteById(Id);
+            string nvm;
+            if (status)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                return RedirectToAction("ShowFeature", new { notification = nvm });
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+            return RedirectToAction("ShowFeature", new { notification = nvm });
+
+        }
+        public IActionResult EditFeature(int Id, string notification)
+        {
+            ViewData["Feature"] = dbAdditionalFeatures.FindById(Id);
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+        public async Task<IActionResult> EditFeatureConfirm(AdditionalFeaturesViewModel model)
+        {
+            ApplicationUser user = null;
+            string nvm;
+            if (User.Identity.IsAuthenticated)
+            {
+                user = await userManager.FindByNameAsync(User.Identity.Name);
+                model.UserId = user.Id;
+            }
+            if (!ModelState.IsValid)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("EditFeature", new {Id=model.Id, notification = nvm });
+            }
+
+            try
+            {
+                var entity = dbAdditionalFeatures.FindById(model.Id);
+                entity.Name = model.Name;
+                entity.LatinName = model.LatinName;
+                entity.Description = model.Description;
+                entity.Status = model.Status;
+                entity.UserId = model.UserId;
+
+                dbAdditionalFeatures.Update(entity);
+
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                return RedirectToAction("ShowFeature", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("EditFeature", new { Id = model.Id, notification = nvm });
+            }
+        }
+        //Feature--End
+        #endregion
+        #region Product
         //Product--Start
         public IActionResult ShowProduct()
         {
@@ -201,8 +345,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return RedirectToAction("InsertProduct");
         }
-        
-        //Brand--End
+        //Product--End
+        #endregion
+        #region Test
         //Test--Start
         public IActionResult FindById(int id)
         {
@@ -236,5 +381,6 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }
         //Test--End
+        #endregion
     }
 }

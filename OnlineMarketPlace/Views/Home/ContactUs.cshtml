@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "ارتباط با ما";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model ContactUsViewModel
+<div class="conact-section section pt-85 pt-lg-65 pt-md-55 pt-sm-45 pt-xs-35  pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50" dir="rtl">
+    <div class="container">
+        <div class="row text-right border p-3">
+            <div class="col-12">
+                <div class="contact-form-wrap">
+                    <h3 class="contact-title">ارتباط با ما</h3>
+                    <form asp-controller="Home" asp-action="InsertContactUsConfirm" id="Form1" method="post">
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <div class="name-fild-padding mb-sm-30 mb-xs-30">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="contact-form-style mb-20">
+                                                <label class="fild-name"><b>نام:</b></label>
+                                                <input asp-for="Name" type="text" placeholder="نام خود را وارد کنید.">
+                                                <span asp-validation-for="Name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="contact-form-style mb-20">
+                                                <label class="fild-name"><b>ایمیل:</b></label>
+                                                <input asp-for="Email" type="text" placeholder="ایمیل خود را وارد کنید.">
+                                                <span asp-validation-for="Email"></span>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-12">
+                                                <div class="check-box">
+                                                    <input type="checkbox" id="create_account">
+                                                    <label>من ربات نیستم</label>
+                                                </div>
+                                            </div>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <div class="name-fild-padding mb-sm-30 mb-xs-30">
+                                    <div class="contact-form-style">
+                                        <label class="fild-name pl-15"><b>متن پیام:</b></label>
+                                        <textarea class="pl-15" asp-for="Comment" placeholder="پیام خود را وارد کنید."></textarea>
+                                        <span asp-validation-for="Comment"></span>
+                                        <button class="btn" type="submit"><span>ارسال پیام</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+

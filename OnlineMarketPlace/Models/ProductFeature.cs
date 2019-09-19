@@ -69,6 +69,7 @@ namespace OnlineMarket.Models
         [ForeignKey("WarehouseId")]
         public virtual Warehouse Warehouse { get; set; }
 
+        public virtual ICollection<ProductAdditionalFeatures> ProductAdditionalFeatures { get; set; }
         public virtual ICollection<CouponIndex> CouponIndex { get; set; }
         public virtual ICollection<InvoiceProduct> InvoiceProduct { get; set; }
         public virtual ICollection<ProductFeatureModifed> ProductFeatureModifed { get; set; }

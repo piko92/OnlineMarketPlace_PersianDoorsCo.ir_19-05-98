@@ -17,6 +17,8 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             : base(options)
         {
         }
+        
+        public virtual DbSet<AdditionalFeatures> AdditionalFeatures { get; set; }
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AdminMenu> AdminMenu { get; set; }
         public virtual DbSet<Article> Article { get; set; }

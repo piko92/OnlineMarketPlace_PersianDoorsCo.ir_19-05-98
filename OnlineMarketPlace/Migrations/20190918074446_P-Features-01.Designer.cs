@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20190918074446_P-Features-01")]
+    partial class PFeatures01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -828,13 +830,9 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<string>("Tags");
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ContactUs");
                 });
@@ -3496,10 +3494,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "ApprovedByUser")
                         .WithMany("ContactUsApprovedByUser")
                         .HasForeignKey("ApprovedByUserId");
-
-                    b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "User")
-                        .WithMany("ContactUsUser")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Country", b =>
