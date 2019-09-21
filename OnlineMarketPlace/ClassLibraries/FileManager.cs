@@ -40,7 +40,14 @@ namespace OnlineMarketPlace.ClassLibraries
                 using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
-                    result = folderPath + $"{entityId}\\" + fileName;
+                    if (nested == true)
+                    {
+                        result = folderPath + $"{entityId}\\" + fileName;
+                    }
+                    else
+                    {
+                        result = folderPath + fileName;
+                    }
                 }
             }
 
@@ -80,13 +87,31 @@ namespace OnlineMarketPlace.ClassLibraries
                 using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                 {
                     bmp.Save(fileStream, format);
-                    result = folderPath + $"{entityId}\\120x120\\" + fileName;
+                    
+                    if (nested == true)
+                    {
+                        result = folderPath + $"{entityId}\\120x120\\" + fileName;
+                    }
+                    else
+                    {
+                        result = folderPath + fileName;
+                    }
                 }
                 return result;
             }
             return null;
         }//end SaveThumbnailAsync
 
+        public static bool DeleteFile(string contentRootPath, string imagePath)
+        {
+            var fileName = contentRootPath + "\\" + imagePath;
+            if ((System.IO.File.Exists(fileName)))
+            {
+                System.IO.File.Delete(fileName);
+                return true;
+            }
+            return false;
+        }
 
     }
 }

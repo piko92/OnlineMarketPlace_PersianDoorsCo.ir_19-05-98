@@ -368,8 +368,28 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult DeleteProduct(int Id)
         {
-            var status = dbProductAbstract.DeleteById(Id);
-            if (status)
+            var entity = dbProductAbstract.FindById(Id);
+            if (entity != null)
+            {
+                //...
+                //rest of the codes...
+                //-----------------------------
+                //delete related image files:
+                var thisEntityFiles = _db.ProductImage.Where(x => x.ProductId == entity.Id).ToList();
+                if (thisEntityFiles.Count > 0)
+                {
+                    foreach (var item in thisEntityFiles)
+                    {
+                        bool imgDel = FileManager.DeleteFile(contentRootPath, item.ImagePath);
+                        bool thumbnailImgDel = FileManager.DeleteFile(contentRootPath, item.ImageThumbnailPath);
+                    }
+                }
+                //حذف "دسته ای" در ریپازیتوری موجود نبود
+                _db.ProductImage.RemoveRange(thisEntityFiles);
+                _db.SaveChanges();
+            }
+            var entityDeleted = dbProductAbstract.DeleteById(Id);
+            if (entityDeleted)
             {
 
             }
