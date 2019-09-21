@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,10 +37,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, AdditionalFeatures, int> dbAdditionalFeatures;
         DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> dbProductAdditionalFeatures;
         DbRepository<OnlineMarketContext, ProductFeature, int> dbProductFeature;
+        DbRepository<OnlineMarketContext, ProductImage, int> dbProductImage;
 
         private readonly IHostingEnvironment hostingEnvironment;
         private IConfiguration _configuration;
         string contentRootPath;
+        
         public ProductController
             (
                 UserManager<ApplicationUser> _userManager,
@@ -49,6 +52,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, AdditionalFeatures, int> _dbAdditionalFeatures,
                 DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> _dbProductAdditionalFeatures,
                 DbRepository<OnlineMarketContext, ProductFeature, int> _dbProductFeature,
+                DbRepository<OnlineMarketContext, ProductImage, int> _dbProductImage,
                 //DBRepositoryEx<OnlineMarketContext, Category, string> _dbCategoryEx,
                 IHostingEnvironment _hostingEnvironment,
                 IConfiguration configuration,
@@ -63,6 +67,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbProductAdditionalFeatures = _dbProductAdditionalFeatures;
             dbProductFeature = _dbProductFeature;
             //dbCategoryEx = _dbCategoryEx;
+            dbProductImage = _dbProductImage;
             _db = db;
 
             hostingEnvironment = _hostingEnvironment;
@@ -109,6 +114,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 {
                     //check if the 'Name' field value does exist in DB, returns error to user
                     //var isExist = dbCategoryEx.FindExactName(model.Name);
+
                     var isExist = _db.Category.Where(x => x.Name.ToLower() == model.Name.ToLower()).ToList();
                     if (isExist.Count > 0)
                     {
@@ -140,10 +146,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
                     //Insert Image
                     string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
-                    var savePath = await FileCopier.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
+                    var savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
+                    
                     category.ImagePath = savePath;
+                    dbCategory.Insert(category);// Insert
 
-                    dbCategory.Insert(category);
                     TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
 
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
@@ -316,8 +323,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             ViewData["Category"] = dbCategory.GetAll();
             return View();
         }
-        public IActionResult InsertProductConfirm(ProductViewModel model)
+        public async Task<IActionResult> InsertProductConfirm(ProductViewModel model)
         {
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
             if (ModelState.IsValid)
             {
                 ProductAbstract productAbstract = new ProductAbstract()
@@ -326,29 +334,33 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     BrandId = model.BrandI,
                     CategoryId = model.CategoryId,
                     Status = model.Status,
-
+                    UserId = currentUser.Id
                 };
-                List<ProductImage> productImages = new List<ProductImage>();
+                int id = dbProductAbstract.Insert(productAbstract);
+
+                //List<ProductImage> productImages = new List<ProductImage>();
                 foreach (var item in model.img)
                 {
-                    byte[] b = new byte[item.Length];
-                    item.OpenReadStream().Read(b, 0, (int)item.Length);
-                    //Thumbnail
-                    MemoryStream mem1 = new MemoryStream(b);
-                    Image img = Image.FromStream(mem1);
-                    Bitmap bmp = new Bitmap(img, 300, 300);
-                    MemoryStream mem2 = new MemoryStream();
-                    bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
                     ProductImage productImage = new ProductImage()
                     {
-                        Image = b,
-                        ImageThumbnail = mem2.ToArray()
+                        ProductId = id,
+                        UserId = currentUser.Id,
+                        GrayScale = false,
+                        Compressed = false
                     };
 
-                    productImages.Add(productImage);
+                    //Insert Image
+                    string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
+
+                    string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
+                    string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
+
+                    productImage.ImagePath = savePath;
+                    productImage.ImageThumbnailPath = thumnailSavePath;
+
+                    dbProductImage.Insert(productImage);
                 }
-                productAbstract.ProductImage = productImages;
-                dbProductAbstract.Insert(productAbstract);
+
                 TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
                 return RedirectToAction("ShowProduct");
             }

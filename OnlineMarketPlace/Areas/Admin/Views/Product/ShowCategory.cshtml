@@ -20,6 +20,7 @@
                     <th>#</th>
                     <th>دسته بندی</th>
                     <th>توضیحات</th>
+                    <th>تصویر</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,16 @@
                             <td>@Counter</td>
                             <td>@item.Name</td>
                             <td>@item.Description</td>
+                            <td>
+                                @if (item.ImagePath != null)
+                                {
+                                    <img src="@(item.ImagePath.Replace("wwwroot",""))" class="img-thumbnail" width="80" />
+                                }
+                                else
+                                {
+                                    <img src="~/images/box.png" class="img-thumbnail" width="80" />
+                                }
+                            </td>
                         </tr>
                         Counter++;
                     }

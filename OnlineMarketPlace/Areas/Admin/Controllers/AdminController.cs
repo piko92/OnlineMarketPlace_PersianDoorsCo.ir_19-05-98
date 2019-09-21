@@ -40,8 +40,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult Test()
         {
-            var config = _configuration.GetSection("DefaultPaths").GetSection("GalleryImage").Value;
-            var x = 1;
+
             return View();
         }
     }
