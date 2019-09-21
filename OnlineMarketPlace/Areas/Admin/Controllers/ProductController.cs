@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.NotificationHandler;
 using OnlineMarketPlace.Models.AdminViewModels;
 using OnlineMarketPlace.Repository;
+using OnlineMarketPlace.Repository.Extension;
 
 namespace OnlineMarketPlace.Areas.Admin.Controllers
 {
@@ -23,14 +26,19 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
     {
         #region Inject
         //Inject DataBase--Start
+        OnlineMarketContext _db;
         UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, Brand, int> dbBrand;
         DbRepository<OnlineMarketContext, Category, int> dbCategory;
+        //DBRepositoryEx<OnlineMarketContext, Category, string> dbCategoryEx;
+
         DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;
         DbRepository<OnlineMarketContext, AdditionalFeatures, int> dbAdditionalFeatures;
         DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> dbProductAdditionalFeatures;
         DbRepository<OnlineMarketContext, ProductFeature, int> dbProductFeature;
+
         private readonly IHostingEnvironment hostingEnvironment;
+        private IConfiguration _configuration;
         string contentRootPath;
         public ProductController
             (
@@ -41,7 +49,10 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, AdditionalFeatures, int> _dbAdditionalFeatures,
                 DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> _dbProductAdditionalFeatures,
                 DbRepository<OnlineMarketContext, ProductFeature, int> _dbProductFeature,
-                IHostingEnvironment _hostingEnvironment
+                //DBRepositoryEx<OnlineMarketContext, Category, string> _dbCategoryEx,
+                IHostingEnvironment _hostingEnvironment,
+                IConfiguration configuration,
+                OnlineMarketContext db
             )
         {
             userManager = _userManager;
@@ -51,8 +62,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbAdditionalFeatures = _dbAdditionalFeatures;
             dbProductAdditionalFeatures = _dbProductAdditionalFeatures;
             dbProductFeature = _dbProductFeature;
+            //dbCategoryEx = _dbCategoryEx;
+            _db = db;
+
             hostingEnvironment = _hostingEnvironment;
             contentRootPath = hostingEnvironment.ContentRootPath;
+            _configuration = configuration;
         }
         //Inject DataBase--End
         #endregion
@@ -69,26 +84,83 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             var dbViewModel = dbCategory.GetAll();
             return View(dbViewModel);
         }
-        public IActionResult InsertCategory()
+        public IActionResult InsertCategory(string notification)
         {
             ViewData["Category"] = dbCategory.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
             return View();
         }
-        public IActionResult InsertConfirmCategory(CategoryViewModel model)
+        public async Task<IActionResult> InsertCategoryConfirm(CategoryViewModel model)
         {
-            if (ModelState.IsValid)
+            string nvm;
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            try
             {
-                Category category = new Category()
+                if (!ModelState.IsValid)
                 {
-                    Name = model.Name,
-                    Description = model.Description
-                };
-                dbCategory.Insert(category);
-                TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
-                return RedirectToAction("ShowCategory");
-            }
-            return RedirectToAction("InsertCategory");
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                    return RedirectToAction("InsertCategory", new { notification = nvm });
+                }
+                if (model != null)
+                {
+                    //check if the 'Name' field value does exist in DB, returns error to user
+                    //var isExist = dbCategoryEx.FindExactName(model.Name);
+                    var isExist = _db.Category.Where(x => x.Name.ToLower() == model.Name.ToLower()).ToList();
+                    if (isExist.Count > 0)
+                    {
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.DuplicatedValue, contentRootPath);
+                        return RedirectToAction("InsertCategory", new { notification = nvm });
+                    }
+                    Category category = new Category()
+                    {
+                        Name = model.Name,
+                        LatinName = model.LatinName,
+                        Description = model.Description,
+                        UserId = currentUser.Id,
+                        AliasName = model.AliasName,
+                        TitleAltName = model.TitleAltName,
+                        OrderedCount = 0,
+                        TotalVisit = 0
+                    };
+                    var isParentExist = dbCategory.FindById(model.ParentId);
+                    if (isParentExist != null)
+                    {
+                        category.ParentId = model.ParentId;
+                    }
+                    else
+                    {
+                        category.ParentId = 0;
+                    }
 
+                    //Insert Image
+                    var files = HttpContext.Request.Form.Files;
+                    foreach (var Image in files)
+                    {
+                        if (Image != null && Image.Length > 0)
+                        {
+                            var savePath = await FileCopier.SaveImageInDirectory("DefaultPaths", "CategoryImage", Image);
+                            category.ImagePath = savePath;
+                        }
+                    }
+
+                    dbCategory.Insert(category);
+                    TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
+
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                    return RedirectToAction("InsertCategory", new { notification = nvm });
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("InsertCategory", new { notification = nvm });
+            }
+            catch(Exception ex)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertCategory", new { notification = nvm });
+            }
         }
         //Category--End
         #endregion

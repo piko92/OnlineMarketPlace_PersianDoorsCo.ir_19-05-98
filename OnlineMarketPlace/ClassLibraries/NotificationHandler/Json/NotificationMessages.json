@@ -128,5 +128,13 @@
     "ColorCode": "#ef5350",
     "Icon": "warning",
     "Subject": "Access_denied_self_delete"
+  },
+  {
+    "Status": false,
+    "Heading": "داده ورودی تکراری",
+    "Text": "این نام قبلا استفاده گردیده است، لطفا از نام دیگری استفاده نمایید.",
+    "ColorCode": "#ef5350",
+    "Icon": "warning",
+    "Subject": "DuplicatedValue"
   }
 ]

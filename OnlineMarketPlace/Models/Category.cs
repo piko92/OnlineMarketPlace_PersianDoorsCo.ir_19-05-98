@@ -1,7 +1,9 @@
 ﻿using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.Repository;
+using OnlineMarketPlace.Repository.Extension;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
@@ -19,6 +21,7 @@ namespace OnlineMarket.Models
         //}
 
         public int Id { get; set; }
+
         public string Name { get; set; }
         public string LatinName { get; set; }
         public string AliasName { get; set; }

@@ -97,6 +97,11 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         public static string Access_denied_self_delete { get; set; } = "Access_denied_self_delete";
 
         /// <summary>
+        /// این اطلاعات تکراری میباشند
+        /// </summary>
+        public static string DuplicatedValue { get; set; } = "DuplicatedValue";
+
+        /// <summary>
         /// <para>Read Json file and serialize to 'NotificationViewModel'</para>
         /// خواندن فایل متن و تبدیل آن به مدل 'NotificationViewModel'
         /// </summary>

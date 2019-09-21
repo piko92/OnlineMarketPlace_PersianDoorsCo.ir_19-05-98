@@ -9,5 +9,6 @@ namespace OnlineMarketPlace.Repository.Extension
         where TEntity : class, IEntityEx<TName>
     {
         List<TEntity> FindAlikeByName(TName name);
+        List<TEntity> FindExactName(TName name);
     }
 }

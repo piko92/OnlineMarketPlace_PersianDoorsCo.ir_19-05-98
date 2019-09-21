@@ -62,6 +62,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             if (notification != null)
             {
                 ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
             }
             return View();
         }//end Signin

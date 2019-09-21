@@ -20,9 +20,11 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         public string LatinName { get; set; }
         public string AliasName { get; set; }
         public string TitleAltName { get; set; }
-        [Required(ErrorMessage = "انتخاب این فیلد الزامیست")]
+
+        //[Required(ErrorMessage = "انتخاب این فیلد الزامیست")]
         [DisplayName("زیر مجموعه دسته بندی")]
-        public int? ParentId { get; set; }
+        public int ParentId { get; set; }
+
         [DisplayName("عکس")]
         public IFormFile Image1 { get; set; }
         public IFormFile ImageForMenu { get; set; }
@@ -32,5 +34,6 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         public bool ShowInMainPage { get; set; }
         public bool ShowInMenu { get; set; }
         public bool ShowInFooter { get; set; }
+        public int? Priority { get; set; }
     }
 }
