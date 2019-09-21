@@ -12,23 +12,10 @@ namespace OnlineMarketPlace.ClassLibraries
 {
     public class FileCopier
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
-        private static IConfiguration _configuration;
-        static string contentRootPath;
 
-        public FileCopier(
-            IHostingEnvironment hostingEnvironment,
-            IConfiguration configuration)
+        public static async Task<string> SaveImageInDirectory(string rootPath, string folderPath, IFormFile FormFile)
         {
-            _hostingEnvironment = hostingEnvironment;
-            _configuration = configuration;
-            contentRootPath = hostingEnvironment.ContentRootPath;
-        }
-
-        public static async Task<string> SaveImageInDirectory(string ParentSectionName, string SectionName, IFormFile FormFile)
-        {
-            string folderPath = _configuration.GetSection(ParentSectionName).GetSection(SectionName).Value;
-            string uploads = Path.Combine(contentRootPath, folderPath);
+            string uploads = Path.Combine(rootPath, folderPath);
             bool exists = System.IO.Directory.Exists(uploads);
             string result = "";
             if (!exists)

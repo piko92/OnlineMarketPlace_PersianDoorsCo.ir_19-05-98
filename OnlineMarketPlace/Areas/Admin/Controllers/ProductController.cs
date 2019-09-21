@@ -124,7 +124,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         AliasName = model.AliasName,
                         TitleAltName = model.TitleAltName,
                         OrderedCount = 0,
-                        TotalVisit = 0
+                        TotalVisit = 0,
+                        Priority = model.Priority,
+                        Status = model.Status
                     };
                     var isParentExist = dbCategory.FindById(model.ParentId);
                     if (isParentExist != null)
@@ -133,19 +135,13 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     }
                     else
                     {
-                        category.ParentId = 0;
+                        category.ParentId = null;
                     }
 
                     //Insert Image
-                    var files = HttpContext.Request.Form.Files;
-                    foreach (var Image in files)
-                    {
-                        if (Image != null && Image.Length > 0)
-                        {
-                            var savePath = await FileCopier.SaveImageInDirectory("DefaultPaths", "CategoryImage", Image);
-                            category.ImagePath = savePath;
-                        }
-                    }
+                    string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
+                    var savePath = await FileCopier.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
+                    category.ImagePath = savePath;
 
                     dbCategory.Insert(category);
                     TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
