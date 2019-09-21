@@ -1,0 +1,65 @@
+﻿
+@{
+    var dbArticle = ViewData["Article"] as List<Article>;
+    Layout = null;
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!-- Single Sidebar Start  -->
+<div dir="rtl">
+    <div class="common-sidebar-widget">
+        <h3 class="sidebar-title text-right">آخرین پست ها</h3>
+        @for (int i = 0; i < 3; i++)
+        {
+            if (dbArticle[i] != null)
+            {
+                <div class="sidebar-blog">
+                    <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
+                        <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
+                    </a>
+                    <div class="content">
+                        <h5>
+                            <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id">
+                                @dbArticle[i].Title
+                            </a>
+                        </h5>
+                        <span>تاریخ 1398/06/15</span>
+                    </div>
+                </div>
+            }
+
+        }
+    </div>
+    <!-- Single Sidebar End  -->
+    <!-- Single Sidebar Start  -->
+    <div class="common-sidebar-widget text-right">
+        <h3 class="sidebar-title "> آخرین نظرات</h3>
+        <div class="sidebar-blog">
+            <div class="content">
+                <p>فاطمه:</p>
+                <a href="#">سایت خوبی است</a>
+            </div>
+        </div>
+    </div>
+    <!-- Single Sidebar End  -->
+    <!-- Single Sidebar Start  -->
+    <div class="common-sidebar-widget text-right">
+        <h3 class="sidebar-title">دسته بندی ها</h3>
+        <ul class="sidebar-list">
+            @foreach (var item in dbArticle)
+            {
+                <li><a href="#"><i class="ion-plus"></i>Accessories <span class="count">(14)</span></a></li>
+            }
+        </ul>
+    </div>
+    <!-- Single Sidebar End  -->
+    <!-- Single Sidebar Start  -->
+    <div class="common-sidebar-widget text-right">
+        <h3 class="sidebar-title bb-0">تگ ها</h3>
+        <ul class="sidebar-tag">
+            @foreach (var item in dbArticle)
+            {
+                <li><a href="#">Painting</a></li>
+            }
+        </ul>
+    </div>
+</div>

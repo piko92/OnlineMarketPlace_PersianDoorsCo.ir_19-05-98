@@ -7153,7 +7153,7 @@ a.popup-img {
   left: 0;
   width: 70px;
   height: 2px;
-  background: #151515;
+  /*background: #151515;*/
 }
 
 .contact-form-wrap .fild-name {

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20190915220151_addUserArticleReview")]
+    partial class addUserArticleReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -131,41 +133,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("OnlineMarket.Models.AdditionalFeatures", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description");
-
-                    b.Property<byte[]>("Image");
-
-                    b.Property<string>("ImageIcon");
-
-                    b.Property<string>("ImagePath");
-
-                    b.Property<string>("LatinName");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int?>("ParentId");
-
-                    b.Property<DateTime>("RegDateTime");
-
-                    b.Property<bool>("Status");
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("AdditionalFeatures");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Address", b =>
@@ -828,13 +795,9 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<string>("Tags");
 
-                    b.Property<string>("UserId");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("ContactUs");
                 });
@@ -1756,11 +1719,9 @@ namespace OnlineMarketPlace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("AdditionalFeaturesId");
-
                     b.Property<string>("LatinTitle");
 
-                    b.Property<int>("ProductFeatureId");
+                    b.Property<int>("ProductAbstractId");
 
                     b.Property<DateTime?>("RegDateTime")
                         .ValueGeneratedOnAdd()
@@ -1778,9 +1739,7 @@ namespace OnlineMarketPlace.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AdditionalFeaturesId");
-
-                    b.HasIndex("ProductFeatureId");
+                    b.HasIndex("ProductAbstractId");
 
                     b.HasIndex("UserId");
 
@@ -1835,8 +1794,6 @@ namespace OnlineMarketPlace.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<bool>("Active");
-
-                    b.Property<int?>("AdditionalFeaturesId");
 
                     b.Property<bool>("Approved")
                         .ValueGeneratedOnAdd()
@@ -1893,8 +1850,6 @@ namespace OnlineMarketPlace.Migrations
                     b.Property<int?>("WarehouseId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AdditionalFeaturesId");
 
                     b.HasIndex("ColorId");
 
@@ -2222,13 +2177,11 @@ namespace OnlineMarketPlace.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Dimensions")
-                        .IsRequired();
+                    b.Property<string>("Dimensions");
 
                     b.Property<string>("LatinName");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
@@ -2795,8 +2748,6 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<DateTime?>("ApprovedDateTime");
 
-                    b.Property<int>("ArticleId");
-
                     b.Property<string>("Comment");
 
                     b.Property<bool?>("Fake");
@@ -2818,8 +2769,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApprovedByUserId");
-
-                    b.HasIndex("ArticleId");
 
                     b.HasIndex("ParentId");
 
@@ -3319,17 +3268,6 @@ namespace OnlineMarketPlace.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OnlineMarket.Models.AdditionalFeatures", b =>
-                {
-                    b.HasOne("OnlineMarket.Models.AdditionalFeatures", "Parent")
-                        .WithMany("InverseParent")
-                        .HasForeignKey("ParentId");
-
-                    b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "User")
-                        .WithMany("AdditionalFeatures")
-                        .HasForeignKey("UserId");
-                });
-
             modelBuilder.Entity("OnlineMarket.Models.Address", b =>
                 {
                     b.HasOne("OnlineMarket.Models.City", "City")
@@ -3496,10 +3434,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "ApprovedByUser")
                         .WithMany("ContactUsApprovedByUser")
                         .HasForeignKey("ApprovedByUserId");
-
-                    b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "User")
-                        .WithMany("ContactUsUser")
-                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Country", b =>
@@ -3729,14 +3663,9 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.ProductAdditionalFeatures", b =>
                 {
-                    b.HasOne("OnlineMarket.Models.AdditionalFeatures", "AdditionalFeatures")
-                        .WithMany("ProductAdditionalFeatures")
-                        .HasForeignKey("AdditionalFeaturesId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("OnlineMarket.Models.ProductFeature", "ProductFeature")
-                        .WithMany("ProductAdditionalFeatures")
-                        .HasForeignKey("ProductFeatureId")
+                    b.HasOne("OnlineMarket.Models.ProductAbstract", "ProductAbstract")
+                        .WithMany()
+                        .HasForeignKey("ProductAbstractId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "User")
@@ -3758,10 +3687,6 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.ProductFeature", b =>
                 {
-                    b.HasOne("OnlineMarket.Models.AdditionalFeatures")
-                        .WithMany("ProductFeature")
-                        .HasForeignKey("AdditionalFeaturesId");
-
                     b.HasOne("OnlineMarket.Models.Color", "Color")
                         .WithMany("ProductFeature")
                         .HasForeignKey("ColorId");
@@ -4003,11 +3928,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasOne("OnlineMarketPlace.Areas.Identity.Data.ApplicationUser", "ApprovedByUser")
                         .WithMany("UserArticleReviewApprovedByUser")
                         .HasForeignKey("ApprovedByUserId");
-
-                    b.HasOne("OnlineMarket.Models.Article", "Article")
-                        .WithMany("UserArticleReview")
-                        .HasForeignKey("ArticleId")
-                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("OnlineMarket.Models.UserArticleReview", "Parent")
                         .WithMany("InverseParent")

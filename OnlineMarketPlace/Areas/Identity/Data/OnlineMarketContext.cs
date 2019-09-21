@@ -17,6 +17,8 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             : base(options)
         {
         }
+        
+        public virtual DbSet<AdditionalFeatures> AdditionalFeatures { get; set; }
         public virtual DbSet<Address> Address { get; set; }
         public virtual DbSet<AdminMenu> AdminMenu { get; set; }
         public virtual DbSet<Article> Article { get; set; }
@@ -79,6 +81,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
         public virtual DbSet<Texture> Texture { get; set; }
         public virtual DbSet<TopSlider> TopSlider { get; set; }
         public virtual DbSet<OnlineMarket.Models.Type> Types { get; set; }
+        public virtual DbSet<UserArticleReview> UserArticleReview { get; set; }
         public virtual DbSet<UserBehaviorTracking> UserBehaviorTracking { get; set; }
         public virtual DbSet<UserCategoryVisit> UserCategoryVisit { get; set; }
         public virtual DbSet<UserFavoriteProduct> UserFavoriteProduct { get; set; }

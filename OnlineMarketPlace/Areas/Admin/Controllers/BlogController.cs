@@ -19,15 +19,17 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         //Inject DataBase--Start
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;
-
+        DbRepository<OnlineMarketContext, UserArticleReview, int> dbUserArticleReview;
         public BlogController
             (
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
-                DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract
+                DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract,
+             DbRepository<OnlineMarketContext, UserArticleReview, int> _dbUserArticleReview
             )
         {
             dbArticle = _dbArticle;
             dbProductAbstract = _dbProductAbstract;
+            dbUserArticleReview = _dbUserArticleReview;
 
         }
         //Inject DataBase--End
@@ -92,8 +94,17 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             return View();
         }
         //Post-End
+        #region ArticleComment
         //Comment-Start
-
+        public IActionResult ShowComment()
+        {
+            var dbViewModel = dbUserArticleReview.GetInclude(e => e.Article);
+            return View(dbViewModel);
+        }
         //Comment-End
+        #endregion
+
+
+
     }
 }

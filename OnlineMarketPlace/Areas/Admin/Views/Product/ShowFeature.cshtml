@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = " لیست ویژگی های محصولات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@model List<AdditionalFeatures>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title"> لیست ویژگی های محصولات</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>عنوان </th>
+                            <th>نام انگلیسی</th>
+                            <th>توضیحات</th>
+                            <th>تاریخ ثبت</th>
+                            <th>وضعیت</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>عنوان </th>
+                            <th>نام انگلیسی</th>
+                            <th>توضیحات</th>
+                            <th>تاریخ ثبت</th>
+                            <th>وضعیت</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                        <tr>
+                            <td>@Counter</td>
+                            <td>@item.Name</td>
+                            <td>@item.LatinName</td>
+                            <td>@item.Description</td>
+                            <td class="farsi-num"> @CustomizeCalendar.GregorianToPersian(item.RegDateTime)</td>
+                            <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
+                            <td>
+                                <a asp-action="EditFeature" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id"
+                                   class="btn btn-info btn-block">ویرایش</a>
+                            </td>
+                            <td>
+                                <a asp-action="DeleteFeature" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id"
+                                   class="btn btn-danger btn-block">حذف</a>
+                            </td>
+                        </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>

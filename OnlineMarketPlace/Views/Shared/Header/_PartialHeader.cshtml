@@ -23,11 +23,7 @@
                         <nav class="main-menu">
                             <ul>
                                 <li>
-                                    <a href="index.html">صفحه اصلی</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="index.html">زیرمنو یک</a></li>
-                                        <li><a href="index-2.html">زیرمنو دو</a></li>
-                                    </ul>
+                                    <a asp-controller="Home" asp-action="Index">صفحه اصلی</a>
                                 </li>
                                 <li>
                                     <a href="blog.html">فروشگاه</a>
@@ -43,7 +39,7 @@
                                         <li><a href="404.html">ارور 404</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="shop.html">کالاهای جدید</a></li>
+                                @*<li><a href="shop.html">کالاهای جدید</a></li>*@
                                 @*<li>
                                         <a href="blog.html">صفحات</a>
                                         <ul class="sub-menu">
@@ -59,7 +55,8 @@
                                         </ul>
                                     </li>*@
                                 <li><a asp-controller="Blog" asp-action="Index">مقالات</a></li>
-                                <li><a href="contact.html">تماس با ما</a></li>
+                                <li><a asp-controller="Home" asp-action="About">درباره ما</a></li>
+                                <li><a asp-controller="Home" asp-action="ContactUs">تماس با ما</a></li>
                             </ul>
                         </nav>
                     </div>

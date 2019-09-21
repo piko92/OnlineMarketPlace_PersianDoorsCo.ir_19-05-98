@@ -154,6 +154,8 @@
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertCategory">افزودن دسته بندی</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowBrand">برند ها</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertBrand">افزودن برند</a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowFeature">ویژگی ها</a></li>
+                                <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertFeature">افزودن ویژگی</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowProduct">لیست محصولات </a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertProduct">افزودن محصول </a></li>
 
@@ -174,7 +176,7 @@
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">پست جدید</a></li>
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">مدیریت پست ها </a></li>
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">مدیریت نظرات </a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowComment">مدیریت نظرات </a></li>
 
                             </ul>
                         </li>
@@ -224,7 +226,7 @@
                         <div class="page-title">
                             <h1>پنل مدیریت <small></small></h1>
                             <ol class="breadcrumb">
-                                <li><a href="#"><i class="fa fa-home"></i></a></li>
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i></a></li>
                                 <li class="active"> @ViewData["Title"]</li>
                             </ol>
                         </div>

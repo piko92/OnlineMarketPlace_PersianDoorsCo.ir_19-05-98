@@ -16,8 +16,11 @@ namespace OnlineMarket.Models
         public string Tags { get; set; }
         public bool Status { get; set; }
         public bool Approved { get; set; }
-        public string ApprovedUserId { get; set; }
-        [ForeignKey("ApprovedUserId")]
+        public string UserId { get; set; }
+        [ForeignKey("UserId")]
         public virtual ApplicationUser User { get; set; }
+        public string ApprovedByUserId { get; set; }
+        [ForeignKey("ApprovedByUserId")]
+        public virtual ApplicationUser ApprovedByUser { get; set; }
     }
 }
