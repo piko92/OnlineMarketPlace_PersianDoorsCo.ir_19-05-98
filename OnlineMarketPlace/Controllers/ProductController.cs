@@ -2,16 +2,80 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using OnlineMarket.Models;
+using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.Repository;
 
 namespace OnlineMarketPlace.Controllers
 {
     //صرفا جهت تست و نمایش قالب ایجاد گردیده
     public class ProductController : Controller
     {
-        public IActionResult Search()
+        #region Inject
+        //Inject DataBase--Start
+        UserManager<ApplicationUser> _userManager;
+        DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProduct;
+        OnlineMarketContext _db;
+        public ProductController
+            (
+                UserManager<ApplicationUser> userManager,
+                DbRepository<OnlineMarketContext, ProductAbstract, int> dbProduct,
+                OnlineMarketContext db
+            )
         {
-            return View();
+            _userManager = userManager;
+            _dbProduct = dbProduct;
+            _db = db;
+        }
+        //Inject DataBase--End
+        #endregion
+        public IActionResult Search(string name)
+        {
+            if (name != null)
+            {
+                var products = _db.ProductAbstract
+                    .Include(x => x.Category)
+                    .Include(x => x.Brand)
+                    .Include(x => x.ProductImage)
+                    .Include(x => x.ProductFeature)
+                    .Where(x =>
+                        x.Name.Contains(name) || x.LatinName.ToLower().Contains(name.ToLower()) ||
+                        x.Category.Name.Contains(name) ||
+                        x.Brand.Name.Contains(name)
+                    ).ToList();
+                return View(products);
+            }
+            else
+            {
+                //********************* need to make STORED PROCEDURE *********************
+                //this is just for test
+                var products = _db.ProductAbstract
+                    .Include(x => x.ProductFeature)
+                    .Include(x => x.ProductImage)
+                    .Include(x => x.Category)
+                    .OrderByDescending(x => x.RegDateTime).Take(15).ToList();
+                return View(products);
+            }
+        }
+
+        public IActionResult _PartialSearch(string name)
+        {
+            if (name != null)
+            {
+                var foundProduct = _db.ProductAbstract
+                    .Include(x => x.Category)
+                    .Include(x => x.Brand)
+                    .Where(x => x.Name.Contains(name) ||
+                        x.LatinName.ToLower().Contains(name.ToLower()) ||
+                        x.Category.Name.Contains(name)
+                    ).ToList();
+                ViewData["foundProduct"] = foundProduct;
+                return View();
+            }
+            return null;
         }
     }
 }

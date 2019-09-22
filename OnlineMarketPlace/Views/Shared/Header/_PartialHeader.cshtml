@@ -12,7 +12,7 @@
                 <div class="col-xl-3 col-lg-2 col-md-4 col-12">
                     <!--Logo Area Start-->
                     <div class="logo-area">
-                        <a href="index.html"><img src="~/shared/main/assets/images/logo.png" alt=""></a>
+                        <a asp-action="Index" asp-controller="Home"><img src="~/images/logo.png" alt="پرشین درب جنوب" title="پرشین درب جنوب"></a>
                     </div>
                     <!--Logo Area End-->
                 </div>
@@ -25,35 +25,21 @@
                                 <li>
                                     <a asp-controller="Home" asp-action="Index">صفحه اصلی</a>
                                 </li>
-                                <li>
-                                    <a href="blog.html">فروشگاه</a>
-                                    <ul class="sub-menu">
-                                        <li><a href="about.html">درباره ما</a></li>
-                                        <li><a href="compare.html">مقایسه کالا</a></li>
-                                        <li><a href="cart.html">سبد خرید</a></li>
-                                        <li><a href="checkout.html">پرداخت</a></li>
-                                        <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                                        <li><a href="my-account.html">حساب کاربری</a></li>
-                                        <li><a href="login-register.html">ورود به حساب</a></li>
-                                        <li><a href="faq.html">سوالات متداول</a></li>
-                                        <li><a href="404.html">ارور 404</a></li>
-                                    </ul>
-                                </li>
-                                @*<li><a href="shop.html">کالاهای جدید</a></li>*@
+                                <li><a asp-controller="Product" asp-action="Search">محصولات</a></li>
                                 @*<li>
-                                        <a href="blog.html">صفحات</a>
-                                        <ul class="sub-menu">
-                                            <li><a href="about.html">درباره ما</a></li>
-                                            <li><a href="compare.html">مقایسه کالا</a></li>
-                                            <li><a href="cart.html">سبد خرید</a></li>
-                                            <li><a href="checkout.html">پرداخت</a></li>
-                                            <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                                            <li><a href="my-account.html">حساب کاربری</a></li>
-                                            <li><a href="login-register.html">ورود به حساب</a></li>
-                                            <li><a href="faq.html">سوالات متداول</a></li>
-                                            <li><a href="404.html">ارور 404</a></li>
-                                        </ul>
-                                    </li>*@
+            <a href="blog.html">فروشگاه</a>
+            <ul class="sub-menu">
+                <li><a href="about.html">درباره ما</a></li>
+                <li><a href="compare.html">مقایسه کالا</a></li>
+                <li><a href="cart.html">سبد خرید</a></li>
+                <li><a href="checkout.html">پرداخت</a></li>
+                <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
+                <li><a href="my-account.html">حساب کاربری</a></li>
+                <li><a href="login-register.html">ورود به حساب</a></li>
+                <li><a href="faq.html">سوالات متداول</a></li>
+                <li><a href="404.html">ارور 404</a></li>
+            </ul>
+        </li>*@
                                 <li><a asp-controller="Blog" asp-action="Index">مقالات</a></li>
                                 <li><a asp-controller="Home" asp-action="About">درباره ما</a></li>
                                 <li><a asp-controller="Home" asp-action="ContactUs">تماس با ما</a></li>
@@ -332,9 +318,12 @@
         <button class="search-close"><i class="fa fa-times"></i></button>
     </div>
     <div class="sidebar-search-input">
-        <form action="#">
+        <form asp-action="Search" asp-controller="Product">
             <div class="form-search">
-                <input id="search" class="input-text" value="" placeholder="مثال: درب نیلکا" type="search">
+                <input list="dtSearch" name="name" id="search" class="input-text" value="" placeholder="مثال: درب نیلکا" type="search">
+                <datalist id="dtSearch">
+                    <!-- partial search goes here -->
+                </datalist>
                 <button>
                     <i class="fa fa-search"></i>
                 </button>
@@ -344,3 +333,15 @@
     </div>
 </div>
 <!-- main-search start -->
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $("#search").keyup(function () {
+        var me = $(this);
+        $.post("/Product/_PartialSearch", { name: me.val() }, function (value) {
+            if (value != null) {
+                $("#dtSearch").html(value);
+            }
+        })
+    })
+</script>

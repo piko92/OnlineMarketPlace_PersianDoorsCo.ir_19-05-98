@@ -1,0 +1,251 @@
+﻿@{
+    Layout = null;
+}
+@model ProductAbstract
+
+@*<link href="~/shared/main/assets/css/plugins/plugins.css" rel="stylesheet" />*@
+<!-- Modal body Strat -->
+<div class="col-xl-12 col-lg-12">
+    <div class="row">
+        <div class="col-lg-8 col-md-6">
+            <!--Product Details Content Start-->
+            <div class="product-details-content">
+                <!--Product Nav Start-->
+                @*<div class="product-nav">
+                        <a href="#"><i class="fa fa-angle-left"></i></a>
+                        <a href="#"><i class="fa fa-angle-right"></i></a>
+                    </div>*@
+                <!--Product Nav End-->
+                <h2>@Model.Name</h2>
+                <div class="single-product-reviews">
+                    <i class="fa fa-star active"></i>
+                    <i class="fa fa-star active"></i>
+                    <i class="fa fa-star active"></i>
+                    <i class="fa fa-star active"></i>
+                    <i class="fa fa-star-o"></i>
+                    <a class="review-link farsi-num" href="#">(تعداد بازدید: 24)</a>
+                </div>
+                <div class="single-product-price">
+                    <span class="price new-price farsi-num">@((int)Model.BasePrice) تومان</span>
+                    @*<span class="regular-price">$77.00</span>*@
+                </div>
+                <div class="product-description">
+                    @{
+                        var desc = Model.ProductDescription.Where(x => x.Status == true).FirstOrDefault();
+                    }
+                    @if (desc != null && desc.DescriptionHtml != null)
+                    {
+                        <p>
+                            @desc.DescriptionHtml
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
+                            از دیرباز برای تقسیم بندی محیط ها و مکان ها از درب های چوبی قدیمی استفاده می شده است. با صنعتی شدن و شهری شدن درب های اتاقی و سرویس مشخصات ویژه خود را پیدا کردند و کم کم سرویس ها به داخل واحد های اداری یا تجاری یا مسکونی وارد شدند. به همین دلیل درب های اتاقی جایگزین درب های فلزی سرویس های بهداشتی شدند. در کنار این موضوع بحث ضد آب بودن یا مقاومت در برابر آب درب سرویس نیز مطرح شد که متریال های مختلفی برای ضد آب کردن درب های اتاقی مورد استفاده قرار گرفت. روکش های PVC به همین منظور برای درب های سرویس مورد استفاده قرار گرفت.
+                        </p>
+                    }
+                </div>
+                <div class="single-product-quantity">
+                    <form class="add-quantity" action="#">
+                        <div class="product-quantity">
+                            <input value="1" type="number">
+                        </div>
+                        <div class="add-to-link">
+                            <button class="btn"><i class="ion-bag"></i>اضافه به سبد خرید</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="wishlist-compare-btn">
+                    <a href="#" class="wishlist-btn">اضافه به علاقه مندی ها</a>
+                    @*<a href="#" class="add-compare">مقایسه محصول</a>*@
+                </div>
+                <div class="product-meta">
+                    <span class="posted-in">
+                        دسته بندی:
+                        @if (Model.Category != null)
+                        {
+                            <a href="#">@Model.Category.Name</a>
+                        }
+
+                    </span>
+                </div>
+                <div class="single-product-sharing">
+                    <h3>به اشتراک گذاری در شبکه های مجازی</h3>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <!--Product Details Content End-->
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <!-- Product Details Left -->
+            <div class="product-details-right">
+                <div class="product-details-images">
+                    @{
+                        var productImages = Model.ProductImage
+                            .Where(x => x.Status == true && x.ImagePath != null)
+                            .OrderByDescending(x => x.IsMainImage).ToList();
+                    }
+                    @if (productImages.Count > 0)
+                    {
+                        foreach (var item in productImages)
+                        {
+                            <div class="lg-image">
+                                <img src="@item.ImagePath.Replace("wwwroot","")" alt="@Model.Name">
+                            </div>
+                        }
+                    }
+                </div>
+                <div class="product-details-thumbs">
+                    @{
+                        var productImagesThumbnail = Model.ProductImage
+                            .Where(x => x.Status == true && x.ImageThumbnailPath != null)
+                            .OrderBy(x => x.IsMainImage).ToList();
+                    }
+                    @if (productImagesThumbnail.Count > 0)
+                    {
+                        foreach (var item in productImagesThumbnail)
+                        {
+                            <div class="sm-image">
+                                <img src="@item.ImageThumbnailPath.Replace("wwwroot","")">
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+            <!--Product Details Left -->
+        </div>
+    </div>
+</div>
+<!-- Modal body End -->
+<script src="~/shared/main/assets/js/vendor/jquery-1.12.4.min.js"></script>
+<script src="~/shared/main/assets/js/plugins/plugins.js"></script>
+<script>
+    $('.product-details-images').each(function () {
+        var $this = $(this);
+        var $thumb = $this.siblings('.product-details-thumbs');
+        $this.slick({
+            arrows: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: false,
+            autoplaySpeed: 5000,
+            dots: false,
+            infinite: true,
+            centerMode: false,
+            centerPadding: 0,
+            asNavFor: $thumb,
+            rtl: true
+        });
+    });
+    $('.product-details-thumbs').each(function () {
+        var $this = $(this);
+        var $details = $this.siblings('.product-details-images');
+        $this.slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: false,
+            autoplaySpeed: 5000,
+            arrows: false,
+            dots: false,
+            infinite: true,
+            focusOnSelect: true,
+            centerMode: true,
+            centerPadding: 0,
+            rtl: true,
+            prevArrow: '<span class="slick-prev"><i class="fa fa-angle-left"></i></span>',
+            nextArrow: '<span class="slick-next"><i class="fa fa-angle-right"></i></span>',
+            asNavFor: $details,
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                    }
+                },
+                {
+                    breakpoint: 600,
+                    settings: {
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                }
+            ]
+
+        });
+    });
+    /* Product Details 2 Images Slider */
+    $('.product-details-images-2').each(function () {
+        var $this = $(this);
+        var $thumb = $this.siblings('.product-details-thumbs-2');
+        $this.slick({
+            arrows: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            autoplay: false,
+            autoplaySpeed: 5000,
+            dots: false,
+            infinite: true,
+            centerMode: false,
+            centerPadding: 0,
+            asNavFor: $thumb,
+        });
+    });
+    $('.product-details-thumbs-2').each(function () {
+        var $this = $(this);
+        var $details = $this.siblings('.product-details-images-2');
+        $this.slick({
+            arrows: false,
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            autoplay: false,
+            autoplaySpeed: 5000,
+            vertical: true,
+            verticalSwiping: true,
+            dots: false,
+            infinite: true,
+            focusOnSelect: true,
+            centerMode: false,
+            centerPadding: 0,
+            prevArrow: '<span class="slick-prev"><i class="fa fa-angle-up"></i></span>',
+            nextArrow: '<span class="slick-next"><i class="fa fa-angle-down"></i></span>',
+            asNavFor: $details,
+            responsive: [
+                {
+                    breakpoint: 1200,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 991,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                },
+                {
+                    breakpoint: 767,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 479,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                }
+            ]
+        });
+    });
+</script>

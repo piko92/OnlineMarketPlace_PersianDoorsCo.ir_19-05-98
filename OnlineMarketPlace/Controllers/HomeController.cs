@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.Models.ViewModels;
@@ -17,20 +18,46 @@ namespace OnlineMarketPlace.Controllers
         //Inject DataBase--Start
         UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
+        OnlineMarketContext _db;
         public HomeController
             (
-                 UserManager<ApplicationUser> _userManager,
-                DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs
+                UserManager<ApplicationUser> _userManager,
+                DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
+                OnlineMarketContext db
             )
         {
-            dbContactUs = _dbContactUs;
             userManager = _userManager;
+            dbContactUs = _dbContactUs;
+            _db = db;
         }
         //Inject DataBase--End
         #endregion
         #region Index
         public IActionResult Index() //Home Page
         {
+            //هشت محصول جدید
+            ViewData["LatestProducts"] = _db.ProductAbstract
+                .Include(x => x.ProductFeature)
+                .Include(x => x.ProductImage)
+                .Include(x => x.Category)
+                .OrderByDescending(x=> x.RegDateTime).Take(8).ToList();
+            return View();
+        }
+        [HttpPost]
+        public IActionResult GetPartialProduct(int Id)
+        {
+            if (Id > 0)
+            {
+                var product = _db.ProductAbstract.Where(x => x.Id == Id && x.Status == true)
+                    .Include(x => x.ProductImage)
+                    .Include(x => x.Category)
+                    .Include(x => x.ProductFeature)
+                    .Include(x => x.ProductDescription).FirstOrDefault();
+                if (product != null)
+                {
+                    return View(product);
+                }
+            }
             return View();
         }
         #endregion

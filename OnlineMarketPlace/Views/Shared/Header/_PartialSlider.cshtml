@@ -3,66 +3,57 @@
     Layout = null;
 }
 
+@inject OnlineMarketContext _db;
+@{ 
+    var sliders = _db.TopSlider.Where(x => x.Status && x.SetForFuture == false).OrderBy(x=> x.Priotity).ToList();
+    var additionalSliders = _db.TopSlider.Where(
+        x =>
+            x.Status == true &&
+            (x.ShowDateTime.Value.Year >= DateTime.Now.Year && x.ShowDateTime.Value.Month >= DateTime.Now.Month && x.ShowDateTime.Value.Day >= DateTime.Now.Day) &&
+            (x.ExpireDateTime.Value.Year <= DateTime.Now.Year && x.ExpireDateTime.Value.Month <= DateTime.Now.Month && x.ExpireDateTime.Value.Day <= DateTime.Now.Day)
+        ).ToList();
+    if (additionalSliders.Count > 0)
+    {
+        sliders.AddRange(additionalSliders);
+    }
+}
 <!--slider section start-->
 <div class="hero-section section position-relative">
     <div class="hero-slider section">
 
         <!--Hero Item start-->
-        <div class="hero-item large-height bg-image" data-bg="/temp_images/slider/slider_1.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
+        @if (sliders.Count > 0)
+        {
+            foreach (var item in sliders)
+            {
+                if (item.ImagePath != null)
+                {
+                    <div class="hero-item large-height bg-image" data-bg="@item.ImagePath.Replace("wwwroot","").Replace("\\","/")">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12">
 
-                        <!--Hero Content start-->
-                        <div class="hero-content-2 margin-top center">
+                                    <!--Hero Content start-->
+                                    <div class="hero-content-2 margin-top center">
 
-                            <h2>طراحی خلاقانه <br> مدرنترین درب های ساختمان</h2>
-                            <a href="shop.html" class="btn">خرید</a>
+                                        <h2>@item.Title <br> @item.Summery</h2>
+                                        @if (item.HasButton)
+                                        {
+                                            <a href="shop.html" class="btn" title="@item.AltName">@item.ButtonContent</a>
+                                        }
 
+                                    </div>
+                                    <!--Hero Content end-->
+
+                                </div>
+                            </div>
                         </div>
-                        <!--Hero Content end-->
-
                     </div>
-                </div>
-            </div>
-        </div>
+                }
+            }
+        }
         <!--Hero Item end-->
-        <!--Hero Item start-->
-        <div class="hero-item large-height bg-image" data-bg="/temp_images/slider/slider_2.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-
-                        <!--Hero Content start-->
-                        <div class="hero-content-2 margin-top center">
-
-                            <h2>انقلابی در صنعت درب سازی <br> تولید شده توسط برترین دستگاه های برش</h2>
-                            <a href="shop.html" class="btn">ادامه</a>
-                        </div>
-                        <!--Hero Content end-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Hero Item end-->
-        <!--Hero Item start-->
-        <div class="hero-item large-height bg-image" data-bg="/temp_images/slider/slider_3.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-
-                        <!--Hero Content start-->
-                        <div class="hero-content-2 margin-top center">
-
-                            <h2>طراحی خلاقانه <br> مدرنترین درب های ساختمان</h2>
-                            <a href="shop.html" class="btn">خرید</a>
-                        </div>
-                        <!--Hero Content end-->
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--Hero Item end-->
+        
     </div>
 </div>
 <!--slider section end-->

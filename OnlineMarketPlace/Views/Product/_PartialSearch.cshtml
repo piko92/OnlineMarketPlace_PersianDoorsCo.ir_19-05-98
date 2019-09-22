@@ -1,0 +1,13 @@
+﻿@{ 
+    Layout = null;
+    var foundProduct = ViewData["foundProduct"] as List<ProductAbstract>;
+}
+
+@if(foundProduct.Count > 0)
+{
+    foreach(var item in foundProduct)
+    {
+        <option value="@item.Name" data-id="@item.Id">@($"{item.Name} - {item.Category.Name}")</option>
+    }
+}
+
