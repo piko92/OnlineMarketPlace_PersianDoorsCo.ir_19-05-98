@@ -355,10 +355,10 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }//end InsertScreenResolutionConfirm
 
-        public IActionResult ListOfSliders()
+        public IActionResult ShowSliders()
         {
-            
-            return View();
+            var model = dbTopSlider.GetInclude(x => x.User).ToList();
+            return View(model);
         }
         #endregion
     }

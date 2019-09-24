@@ -1,9 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "Search";
+    ViewData["Title"] = "لیست محصولات";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
-
+@model List<ProductAbstract>
 <!-- Page Banner Section Start -->
 <div class="page-banner-section section bg-image" data-bg="/temp_images/banner/top_banner.png">
     <div class="container">
@@ -23,10 +23,8 @@
     </div>
 </div>
 <!-- Page Banner Section End -->
-
-
 <!-- Shop Section Start -->
-<div class="shop-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-30  pb-70 pb-lg-50 pb-md-40 pb-sm-20 pb-xs-20">
+<div class="shop-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-30  pb-70 pb-lg-50 pb-md-40 pb-sm-60 pb-xs-50">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -44,18 +42,19 @@
                                             <a data-toggle="tab" href="#list" class=""><i class="fa fa-th-list"></i></a>
                                         </li>
                                     </ul>
-                                    <p class="farsi-num">نمایش محصول 1 تا 18 از 41 محصول</p>
+                                    <p>نمایش محصولات - 1 تا 15</p>
                                 </div>
                                 <!--Toolbar Short Area Start-->
                                 <div class="toolbar-short-area d-md-flex align-items-center">
-                                    <div class="toolbar-shorter rtl-class">
-                                        <label>نمایش بر اساس:</label>
+                                    <div class="toolbar-shorter ">
+                                        <label>مرتب سازی بر اساس:</label>
                                         <select class="wide">
-                                            <option data-display="انتخاب کنید">-</option>
-                                            <option value="Relevance">کالاهای مشابه</option>
-                                            <option value="Name, A to Z">نام محصولات</option>
-                                            <option value="Price, low to high">قیمت کم به زیاد</option>
-                                            <option value="Price, high to low">قیمت  زیاد به کم</option>
+                                            <option data-display="Select">Nothing</option>
+                                            <option value="Relevance">Relevance</option>
+                                            <option value="Name, A to Z">Name, A to Z</option>
+                                            <option value="Name, Z to A">Name, Z to A</option>
+                                            <option value="Price, low to high">Price, low to high</option>
+                                            <option value="Price, high to low">Price, high to low</option>
                                         </select>
                                     </div>
                                 </div>
@@ -65,509 +64,155 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-3 order-lg-2 order-2">
+                            <!-- Single Sidebar Start  -->
+                            <div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">دسته بندی محصولات</h3>
+                                <ul class="sidebar-list">
+                                    <li><a href="#"><i class="fa fa-plus"></i>Accessories <span class="count">(14)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Decor <span class="count">(14)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Furniture <span class="count">(28)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Lighting <span class="count">(14)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Outdoor <span class="count">(14)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Sports <span class="count">(13)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Storage <span class="count">(9)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Toys <span class="count">(9)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>Uncategorized <span class="count">(0)</span></a></li>
+                                </ul>
+                            </div>
+                            <!-- Single Sidebar End  -->
+                            <!-- Single Sidebar Start  -->
+                            <div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">محدوده قیمت</h3>
+                                <div class="sidebar-price">
+                                    <div id="price-range" class="mb-20"></div>
+                                    <button type="button" class="btn">اعمال فیلتر</button>
+                                    <input type="text" id="price-amount" class="price-amount" readonly>
+                                </div>
+                            </div>
+                            <!-- Single Sidebar End  -->
+                            <!-- Single Sidebar Start  -->
+                            <div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">نوع چوب</h3>
+                                <ul class="sidebar-list">
+                                    <li><a href="#"><i class="fa fa-plus"></i>راش <span class="count">(1)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>گردو <span class="count">(1)</span></a></li>
+                                    <li><a href="#"><i class="fa fa-plus"></i>چنار <span class="count">(1)</span></a></li>
+                                </ul>
+                            </div>
+                            <!-- Single Sidebar End  -->
+                            <!-- Single Sidebar Start  -->
+                            @*<div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">Compare Products</h3>
+                                <div class="compare-products-list">
+                                    <ul>
+                                        <li>
+                                            <a href="#" class="title">Cras neque metus</a>
+                                            <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="title">Cras neque metus</a>
+                                            <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
+                                        </li>
+                                    </ul>
+                                    <a href="#" class="clear-btn">Clear all</a>
+                                    <button type="button" class="btn compare-btn">Compare</button>
+                                </div>
+                            </div>*@
+                            <!-- Single Sidebar End  -->
+                            <!-- Single Sidebar Start  -->
+                            <div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">برچسب محصولات</h3>
+                                <ul class="sidebar-tag">
+                                    <li><a href="#">blouse</a></li>
+                                    <li><a href="#">clothes</a></li>
+                                    <li><a href="#">fashion</a></li>
+                                    <li><a href="#">handbag</a></li>
+                                    <li><a href="#">laptop</a></li>
+                                </ul>
+                            </div>
+                            <!-- Single Sidebar End  -->
+                        </div>
+                        <div class="col-lg-9 order-lg-1 order-1">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="shop-product">
                                         <div id="myTabContent-2" class="tab-content">
                                             <div id="grid" class="tab-pane fade active show">
                                                 <div class="product-grid-view">
-                                                    <div class="row rtl-class">
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">20%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/دلفینی.png" class="img-fluid" alt="">
-                                                                    </a>
+                                                    <div class="row">
+                                                        @if (Model.Count > 0)
+                                                        {
+                                                            foreach (var item in Model)
+                                                            {
+                                                                <div class="col-lg-4 col-md-6 col-sm-6">
+                                                                    <!--  Single Grid product Start -->
+                                                                    <div class="single-grid-product mb-40">
+                                                                        <div class="product-image">
+                                                                            <div class="product-label">
+                                                                                @*<span>-21%</span>*@
+                                                                            </div>
+                                                                            <a href="single-product.html">
+                                                                                @try
+                                                                                {
+                                                                                    if (item.ProductImage.Count > 0)
+                                                                                    {
+                                                                                        var mainImage = item.ProductImage.Where(x => x.IsMainImage == true && x.Status == true).FirstOrDefault();
+                                                                                        if (mainImage != null)
+                                                                                        {
+                                                                                            <img src="@mainImage.ImagePath.Replace("wwwroot","")" class="img-fluid" alt="@item.Name">
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                catch (Exception ex)
+                                                                                {
+                                                                                    throw ex;
+                                                                                }
+                                                                                @try
+                                                                                {
+                                                                                    if (item.ProductImage.Count > 0)
+                                                                                    {
+                                                                                        var OneOfTheRestImages = item.ProductImage.Where(x => x.Status == true && x.IsMainImage == false).FirstOrDefault();
+                                                                                        if (OneOfTheRestImages != null)
+                                                                                        {
+                                                                                            <img src="@OneOfTheRestImages.ImagePath.Replace("wwwroot","")" class="img-fluid" alt="@item.Name">
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                catch (Exception ex)
+                                                                                {
+                                                                                    throw ex;
+                                                                                }
+                                                                            </a>
 
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
+                                                                            <div class="product-action">
+                                                                                <ul>
+                                                                                    <li><a href="cart.html" title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a></li>
+                                                                                    <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع کالا"><i class="fa fa-eye"></i></a></li>
+                                                                                    <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="product-content">
+                                                                            <h3 class="title"> <a href="single-product.html">@item.Name</a></h3>
+                                                                            <p class="product-price">
+                                                                                @if (item.BasePrice != null)
+                                                                                {
+                                                                                <span class="discounted-price farsi-num">تومان @((int)item.BasePrice) </span>
+                                                                                    @*<span class="main-price discounted">$230.00</span>*@
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    <span class="discounted-price">تماس بگیرید</span>
+                                                                                    @*<span class="main-price discounted">$230.00</span>*@
+                                                                                }
+                                                                            </p>
+                                                                        </div>
                                                                     </div>
+                                                                    <!--  Single Grid product End -->
                                                                 </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل کادوس - چوب گردو</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1900000</span> <span class="main-price discounted farsi-num">2100000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">10%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/سنتی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل دوقاب شطرنجی - چوب افرا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1500000</span> <span class="main-price discounted farsi-num">1600000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">20%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/نیلکا.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/سه-قاب.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل نیلکا - چوب راش</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1700000</span> <span class="main-price discounted farsi-num">1900000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/ونوس.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/کرکره-ای.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل ونوس - چوب بید</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1700000</span> <span class="main-price discounted farsi-num">1900000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">فروش ویژه</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دلفینی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/دوقاب-شطرنجی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دلفینی - چوب افرا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">جدید</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-موجی-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دوقاب موجی - چوب توسکا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">جدید</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-موجی-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دوقاب موجی - چوب توسکا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span>5%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/سنتی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/ونوس.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح سنتی - چوب چنار</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1100000</span> <span class="main-price discounted farsi-num">1150000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">20%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/دلفینی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل کادوس - چوب گردو</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1900000</span> <span class="main-price discounted farsi-num">2100000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">10%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/سنتی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل دوقاب شطرنجی - چوب افرا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1500000</span> <span class="main-price discounted farsi-num">1600000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">20%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/نیلکا.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/سه-قاب.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل نیلکا - چوب راش</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1700000</span> <span class="main-price discounted farsi-num">1900000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/ونوس.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/کرکره-ای.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل ونوس - چوب بید</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1700000</span> <span class="main-price discounted farsi-num">1900000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">فروش ویژه</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دلفینی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/دوقاب-شطرنجی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دلفینی - چوب افرا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">جدید</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-موجی-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دوقاب موجی - چوب توسکا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">جدید</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دوقاب-موجی-شطرنجی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/P102.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دوقاب موجی - چوب توسکا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span>5%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/سنتی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/ونوس.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح سنتی - چوب چنار</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1100000</span> <span class="main-price discounted farsi-num">1150000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="sale">فروش ویژه</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/دلفینی.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/دوقاب-شطرنجی.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">طرح دلفینی - چوب افرا</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">2100000</span> <span class="main-price discounted farsi-num">2500000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-                                                        <div class="col-lg-4 col-md-6 col-sm-6">
-                                                            <!--  Single Grid product Start -->
-                                                            <div class="single-grid-product mb-40">
-                                                                <div class="product-image">
-                                                                    <div class="product-label">
-                                                                        <span class="farsi-num">20%</span>
-                                                                    </div>
-                                                                    <a href="single-product.html">
-                                                                        <img src="~/temp_images/doors/نیلکا.png" class="img-fluid" alt="">
-                                                                        <img src="~/temp_images/doors/سه-قاب.png" class="img-fluid" alt="">
-                                                                    </a>
-
-                                                                    <div class="product-action">
-                                                                        <ul>
-                                                                            <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                            <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                                            <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                        </ul>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="product-content">
-                                                                    <h3 class="title"> <a href="single-product.html">مدل نیلکا - چوب راش</a></h3>
-                                                                    <p class="product-price"><span class="discounted-price farsi-num">1700000</span> <span class="main-price discounted farsi-num">1900000</span></p>
-                                                                </div>
-                                                            </div>
-                                                            <!--  Single Grid product End -->
-                                                        </div>
-
+                                                            }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
@@ -583,8 +228,8 @@
                                                                             <span class="sale">New</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-3.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-4.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-3.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-4.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -629,8 +274,8 @@
                                                                             <span class="sale">New</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-1.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-2.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-1.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-2.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -675,8 +320,8 @@
                                                                             <span class="sale">New</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-3.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-4.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-3.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-4.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -721,8 +366,8 @@
                                                                             <span class="sale">New</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-5.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-6.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-5.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-6.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -767,8 +412,8 @@
                                                                             <span class="sale">Sale</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-7.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-8.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-7.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-8.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -813,8 +458,8 @@
                                                                             <span>-20%</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-10.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-11.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-10.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-11.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -859,8 +504,8 @@
                                                                             <span>-29%</span>
                                                                         </div>
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-12.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-13.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-12.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-13.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">
@@ -902,8 +547,8 @@
                                                                 <div class="single-grid-product">
                                                                     <div class="product-image">
                                                                         <a href="single-product.html">
-                                                                            <img src="assets/images/product/product-16.jpg" class="img-fluid" alt="">
-                                                                            <img src="assets/images/product/product-15.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-16.jpg" class="img-fluid" alt="">
+                                                                            <img src="~/shared/main/assets/images/product/product-15.jpg" class="img-fluid" alt="">
                                                                         </a>
 
                                                                         <div class="product-action">

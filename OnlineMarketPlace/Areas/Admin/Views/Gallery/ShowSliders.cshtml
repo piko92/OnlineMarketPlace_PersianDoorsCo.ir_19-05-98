@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "ShowSliders";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<TopSlider>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست عکس های اسلایدر</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>عنوان </th>
+                            <th>توضیحات </th>
+                            <th>Call To Action </th>
+                            <th>ایجاد شده توسط </th>
+                            <th>تصویر </th>
+                            <th>فعال </th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>عنوان </th>
+                            <th>توضیحات </th>
+                            <th>Call To Action </th>
+                            <th>ایجاد شده توسط </th>
+                            <th>فعال </th>
+                            <th>تصویر </th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Summery</td>
+                                    <td>@(item.HasButton == true ? "دارد" : "ندارد")</td>
+                                    <td>@item.User.UserName</td>
+                                    <td>
+                                        @if (item.ImagePath != null)
+                                        {
+                                            <img width="120" height="90" src="@item.ImagePath.Replace("wwwroot","")" )" />
+                                        }
+                                        else
+                                        {
+                                            <img width="120" height="120" src="~/images/natural-avatar.jpg" />
+                                        }
+                                    </td>
+                                    <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
+                                    <td>
+                                        <a asp-action="EditPhoto" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeletePhoto" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>
+

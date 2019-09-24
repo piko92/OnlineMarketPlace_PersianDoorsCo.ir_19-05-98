@@ -59,7 +59,8 @@ namespace OnlineMarketPlace.ClassLibraries
                             string contentRootPath, 
                             string folderPath, 
                             ImageFormat format, 
-                            bool nested = false, int entityId = 0)
+                            bool nested = false, int entityId = 0,
+                            int size = 120)
         {
             var url = Path.Combine(contentRootPath, savePath);
             FileStream FS = new FileStream(url, FileMode.Open);
@@ -67,7 +68,7 @@ namespace OnlineMarketPlace.ClassLibraries
             if (FS.Length > 0)
             {
                 Image img = Image.FromStream(FS);
-                Bitmap bmp = new Bitmap(img, 120, 120);
+                Bitmap bmp = new Bitmap(img, size, size);
                 string uploads;
                 if (nested == false)
                 {
@@ -75,7 +76,7 @@ namespace OnlineMarketPlace.ClassLibraries
                 }
                 else
                 {
-                    uploads = Path.Combine(contentRootPath, folderPath, $"{entityId}", "120x120");
+                    uploads = Path.Combine(contentRootPath, folderPath, $"{entityId}", $"{size}x{size}");
                 }
                 bool exists = System.IO.Directory.Exists(uploads);
                 string result = "";
@@ -90,7 +91,7 @@ namespace OnlineMarketPlace.ClassLibraries
                     
                     if (nested == true)
                     {
-                        result = folderPath + $"{entityId}\\120x120\\" + fileName;
+                        result = folderPath + $"{entityId}\\{size}x{size}\\" + fileName;
                     }
                     else
                     {
@@ -112,6 +113,19 @@ namespace OnlineMarketPlace.ClassLibraries
             }
             return false;
         }
+        public static bool DeleteDirectory(string contentRootPath, string imagePath)
+        {
+            var aPath = imagePath.Split("\\");
+            var newAPath = aPath.Take(aPath.Count() - 1).ToArray();
+            var newPath = String.Join("", newAPath);
 
+            var fileName = contentRootPath + "\\" + imagePath;
+            if ((System.IO.Directory.Exists(newPath)))
+            {
+                System.IO.File.Delete(newPath);
+                return true;
+            }
+            return false;
+        }
     }
 }

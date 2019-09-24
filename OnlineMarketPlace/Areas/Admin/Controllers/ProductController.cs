@@ -38,6 +38,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> dbProductAdditionalFeatures;
         DbRepository<OnlineMarketContext, ProductFeature, int> dbProductFeature;
         DbRepository<OnlineMarketContext, ProductImage, int> dbProductImage;
+        DbRepository<OnlineMarketContext, ProductPrice, int> dbProductPrice;
 
         private readonly IHostingEnvironment hostingEnvironment;
         private IConfiguration _configuration;
@@ -53,6 +54,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> _dbProductAdditionalFeatures,
                 DbRepository<OnlineMarketContext, ProductFeature, int> _dbProductFeature,
                 DbRepository<OnlineMarketContext, ProductImage, int> _dbProductImage,
+                DbRepository<OnlineMarketContext, ProductPrice, int> _dbProductPrice,
                 //DBRepositoryEx<OnlineMarketContext, Category, string> _dbCategoryEx,
                 IHostingEnvironment _hostingEnvironment,
                 IConfiguration configuration,
@@ -68,6 +70,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbProductFeature = _dbProductFeature;
             //dbCategoryEx = _dbCategoryEx;
             dbProductImage = _dbProductImage;
+            dbProductPrice = _dbProductPrice;
             _db = db;
 
             hostingEnvironment = _hostingEnvironment;
@@ -532,31 +535,57 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     BrandId = model.BrandI,
                     CategoryId = model.CategoryId,
                     Status = model.Status,
-                    UserId = currentUser.Id
+                    UserId = currentUser.Id,
+                    BasePrice = model.BasePrice
                 };
                 int id = dbProductAbstract.Insert(productAbstract);
 
-                //List<ProductImage> productImages = new List<ProductImage>();
-                foreach (var item in model.img)
+                if (model.MainImage != null)
                 {
                     ProductImage productImage = new ProductImage()
                     {
                         ProductId = id,
                         UserId = currentUser.Id,
                         GrayScale = false,
-                        Compressed = false
+                        Compressed = false,
+                        IsMainImage = true
                     };
 
                     //Insert Image
                     string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
 
-                    string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
+                    string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath,model.MainImage, true, id);
                     string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
 
                     productImage.ImagePath = savePath;
                     productImage.ImageThumbnailPath = thumnailSavePath;
 
                     dbProductImage.Insert(productImage);
+                }
+
+                if (model.img.Count > 0)
+                {
+                    foreach (var item in model.img)
+                    {
+                        ProductImage productImage = new ProductImage()
+                        {
+                            ProductId = id,
+                            UserId = currentUser.Id,
+                            GrayScale = false,
+                            Compressed = false
+                        };
+
+                        //Insert Image
+                        string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
+
+                        string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
+                        string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
+
+                        productImage.ImagePath = savePath;
+                        productImage.ImageThumbnailPath = thumnailSavePath;
+
+                        dbProductImage.Insert(productImage);
+                    }
                 }
 
                 TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
