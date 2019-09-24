@@ -42,7 +42,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         private readonly IHostingEnvironment hostingEnvironment;
         private IConfiguration _configuration;
         string contentRootPath;
-        
+
         public ProductController
             (
                 UserManager<ApplicationUser> _userManager,
@@ -84,9 +84,14 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         #endregion
         #region Category
         //Category--Start
-        public IActionResult ShowCategory()
+        public IActionResult ShowCategory(string notification)
         {
             var dbViewModel = dbCategory.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
             return View(dbViewModel);
         }
         public IActionResult InsertCategory(string notification)
@@ -143,15 +148,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     {
                         category.ParentId = null;
                     }
-
                     //Insert Image
                     string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
                     var savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
-                    
+
                     category.ImagePath = savePath;
                     dbCategory.Insert(category);// Insert
-
-                    TempData["InsertConfirm"] = "دسته بندی با موفقیت ثبت شد";
 
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
                     return RedirectToAction("InsertCategory", new { notification = nvm });
@@ -159,7 +161,107 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertCategory", new { notification = nvm });
+            }
+        }
+        public IActionResult DeleteCategory(int Id)
+        {
+            string nvm;
+            var entity = dbCategory.FindById(Id);
+            if (entity != null)
+            {
+                try
+                {
+                    bool status = dbCategory.DeleteById(Id);
+                    dbCategory.Save();
+                    if (status)
+                    {
+                        if (entity.ImagePath != null)
+                        {
+                            bool imgDel = FileManager.DeleteFile(contentRootPath, entity.ImagePath);
+                        }
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                        return RedirectToAction("ShowCategory", new { notification = nvm });
+                    }
+                }
+                catch (Exception)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                    return RedirectToAction("ShowCategory", new { notification = nvm });
+                }
+
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+            return RedirectToAction("ShowCategory", new { notification = nvm });
+        }
+        public IActionResult EditCategory(int Id)
+        {
+            ViewData["Category"] = dbCategory.FindById(Id);
+            ViewData["dbCategory"] = dbCategory.GetAll();
+            return View();
+        }
+        public async Task<IActionResult> EditCategoryConfirm(CategoryViewModel model)
+        {
+            string nvm;
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                    return RedirectToAction("InsertCategory", new { notification = nvm });
+                }
+                if (model != null)
+                {
+                    var entity = dbCategory.FindById(model.Id);
+
+                    entity.Name = model.Name;
+                    entity.LatinName = model.LatinName;
+                    entity.Description = model.Description;
+                    entity.UserId = currentUser.Id;
+                    entity.AliasName = model.AliasName;
+                    entity.TitleAltName = model.TitleAltName;
+                    entity.OrderedCount = 0;
+                    entity.TotalVisit = 0;
+                    entity.Priority = model.Priority;
+                    entity.Status = model.Status;
+                    entity.ShowInFooter = model.ShowInFooter;
+                    entity.ShowInMenu = model.ShowInMenu;
+
+
+                    var isParentExist = dbCategory.FindById(model.ParentId);
+                    if (isParentExist != null)
+                    {
+                        entity.ParentId = model.ParentId;
+                    }
+                    else
+                    {
+                        entity.ParentId = null;
+                    }
+                    //Insert Image
+                    if (model.Image1 != null)
+                    {
+                        if (entity.ImagePath != null)
+                        {
+                            bool imgDel = FileManager.DeleteFile(contentRootPath, entity.ImagePath);
+                        }
+                        string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
+                        var savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
+                        entity.ImagePath = savePath;
+                    }
+
+
+                    dbCategory.Update(entity);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                    return RedirectToAction("ShowCategory", new { notification = nvm });
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowCategory", new { notification = nvm });
+            }
+            catch (Exception ex)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
@@ -169,28 +271,124 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         #endregion
         #region Brand
         //Brand--Start
-        public IActionResult ShowBrand()
+        public IActionResult ShowBrand(string notification)
         {
-            return View(dbBrand.GetAll());
+            var dbViewModel = dbBrand.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
+            return View(dbViewModel);
         }
-        public IActionResult InsertBrand()
+        public IActionResult InsertBrand(string notification)
         {
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
             return View();
         }
-        public IActionResult InsertBrandConfirm(BrandViewModel model)
+        public async Task<IActionResult> InsertBrandConfirm(BrandViewModel model)
         {
-            if (ModelState.IsValid)
+            string nvm;
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            try
             {
-                Brand brand = new Brand()
+                if (!ModelState.IsValid)
                 {
-                    Name = model.Name,
-                    Description = model.Description
-                };
-                dbBrand.Insert(brand);
-                TempData["InsertConfirm"] = "برند با موفقیت ثبت شد";
-                return RedirectToAction("ShowBrand");
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                    return RedirectToAction("InsertBrand", new { notification = nvm });
+                }
+                if (model != null)
+                {
+                    Brand brand = new Brand()
+                    {
+                        Name = model.Name,
+                        LatinName = model.LatinName,
+                        Description = model.Description,
+                        UserId = currentUser.Id,
+                        Status = model.Status
+                    };
+
+                    dbBrand.Insert(brand);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                    return RedirectToAction("ShowBrand", new { notification = nvm });
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("ShowBrand", new { notification = nvm });
             }
-            return RedirectToAction("InsertBrand");
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertBrand", new { notification = nvm });
+            }
+        }
+        public IActionResult DeleteBrand(int Id)
+        {
+            string nvm;
+            var entity = dbBrand.FindById(Id);
+            if (entity != null)
+            {
+                try
+                {
+                    bool status = dbBrand.DeleteById(Id);
+                    dbBrand.Save();
+                    if (status)
+                    {
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                        return RedirectToAction("ShowBrand", new { notification = nvm });
+                    }
+                }
+                catch (Exception)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                    return RedirectToAction("ShowBrand", new { notification = nvm });
+                }
+
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+            return RedirectToAction("ShowBrand", new { notification = nvm });
+        }
+        public IActionResult EditBrand(int Id)
+        {
+            ViewData["Brand"] = dbBrand.FindById(Id);
+            return View();
+        }
+        public async Task<IActionResult> EditBrandConfirm(BrandViewModel model)
+        {
+            string nvm;
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                    return RedirectToAction("InsertBrand", new { notification = nvm });
+                }
+                if (model != null)
+                {
+                    var entity = dbBrand.FindById(model.Id);
+
+                    entity.Name = model.Name;
+                    entity.LatinName = model.LatinName;
+                    entity.Description = model.Description;
+                    entity.UserId = currentUser.Id;
+                    entity.Status = model.Status;
+
+                    dbBrand.Update(entity);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                    return RedirectToAction("ShowBrand", new { notification = nvm });
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowBrand", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertBrand", new { notification = nvm });
+            }
         }
         //Brand--End
         #endregion
@@ -285,7 +483,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
-                return RedirectToAction("EditFeature", new {Id=model.Id, notification = nvm });
+                return RedirectToAction("EditFeature", new { Id = model.Id, notification = nvm });
             }
 
             try

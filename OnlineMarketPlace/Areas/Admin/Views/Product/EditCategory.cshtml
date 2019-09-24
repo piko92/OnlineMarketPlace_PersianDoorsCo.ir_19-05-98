@@ -1,0 +1,181 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش دسته بندی";
+    var category = ViewData["Category"] as Category;
+    var dbcategory = ViewData["dbCategory"] as List<Category>;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model CategoryViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش دسته بندی </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Product" asp-action="EditCategoryConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden="hidden" value="@category.Id">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">نام دسته بندی<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Name" value="@category.Name" type="text" class="form-control">
+                                <span asp-validation-for="Name"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">نام لاتین</label>
+                            <div class="col-sm-10">
+                                <input asp-for="LatinName" value="@category.LatinName" type="text" class="form-control">
+                                <span asp-validation-for="LatinName"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">توضیحات</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Description" value="@category.Description" type="text" class="form-control">
+                                <span asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">اولویت نمایش</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Priority" value="@category.Priority" type="number" class="form-control">
+                                <span asp-validation-for="Priority"></span>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تصویر  </label>
+                            <div class="col-sm-10">
+                                @if (category.ImagePath != null)
+                                {
+                                    <img id="img1" src="@(category.ImagePath.Replace("wwwroot",""))" class="img-thumbnail" width="150" />
+                                }
+                                else
+                                {
+                                    <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغییر تصویر  </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input id="imgInsert" asp-for="Image1" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تنظیمات نمایش</label>
+                            <div class="col-md-4">
+                                <label for="chkMenu" class="col-sm-6 control-label">نمایش در منو</label>
+                                <div class="col-sm-4">
+                                    <input asp-for="ShowInMenu"
+                                           checked="@category.ShowInMenu"
+                                           type="checkbox" class="checkbox-custom" id="chkMenu">
+                                    <span asp-validation-for="ShowInMenu"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="chkFooter" class="col-sm-6 control-label">نمایش در فوتر</label>
+                                <div class="col-sm-4">
+                                    <input asp-for="ShowInFooter"
+                                           checked="@category.ShowInFooter"
+                                           type="checkbox" class="checkbox-custom" id="chkFooter">
+                                    <span asp-validation-for="ShowInFooter"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">زیر مجموعه دسته بندی<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" asp-for="ParentId">
+                                    @if (dbcategory.Count > 0)
+                                    {
+                                        <option value="-1">-- انتخاب دسته اصلی --</option>
+                                        @foreach (var item in dbcategory)
+                                        {
+                                            if (category.ParentId == item.Id)
+                                            {
+
+                                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="ParentId"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                @if (category.Status)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+
+
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+            <script>
+                $(imgInsert).change(function (e) {
+                    var reader = new FileReader();
+                    //console.log(this.files);
+                    reader.readAsDataURL(this.files[0]);
+                    reader.onloadend = function (e) {
+                        $(img1).attr('src', e.target.result)
+                    }
+                });
+            </script>
+        </div>
+    </div>
+
+</div>
+
+

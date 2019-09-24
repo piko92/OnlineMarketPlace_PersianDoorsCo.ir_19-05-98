@@ -49,10 +49,10 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         public IActionResult Index(string notification)
         {
             ViewData[" userManagerCount"] = userManager.Users.Where(x=>x.Status==true).Count();
-            ViewData[" ProductFeatureCount"] = dbProductFeature.GetAll().Where(x => x.Status = true).Count();
-            ViewData[" CategoryCount"] = dbCategory.GetAll().Where(x => x.Status = true).Count();
-            ViewData[" ContactUsCount"] = dbContactUs.GetAll().Where(x => x.Status = true).Count();
-            ViewData[" ArticleCount"] = dbArticle.GetAll().Where(x => x.Status = true).Count();
+            ViewData[" ProductFeatureCount"] = dbProductFeature.GetAll().Where(x => x.Status == true).Count();
+            ViewData[" CategoryCount"] = dbCategory.GetAll().Where(x => x.Status == true).Count();
+            ViewData[" ContactUsCount"] = dbContactUs.GetAll().Where(x => x.Status == true).Count();
+            ViewData[" ArticleCount"] = dbArticle.GetAll().Where(x => x.Status == true).Count();
             if (notification != null)
             {
                 ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);

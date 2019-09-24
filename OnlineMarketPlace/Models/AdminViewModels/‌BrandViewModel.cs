@@ -13,8 +13,10 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName("نام برند ")]
         public string Name { get; set; }
+        public string LatinName { get; set; }
         [DisplayName("توضیحات")]
         public string Description { get; set; }
+        public bool Status { get; set; }
 
     }
 }

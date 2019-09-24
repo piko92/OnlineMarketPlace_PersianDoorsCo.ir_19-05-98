@@ -21,21 +21,21 @@ namespace OnlineMarketPlace.ClassLibraries
             DateTime dt = new DateTime(persianDate.Year, persianDate.Month, persianDate.Day, pc);
             return dt;
         }
-        static public DateTime GregorianToPersian(DateTime gregorianDate)
+        static public string GregorianToPersian(DateTime gregorianDate)
         {
             string greDate = gregorianDate.ToString();
             DateTime d = DateTime.Parse(greDate);
             var str_dt = $"{pc.GetYear(d)}/{pc.GetMonth(d)}/{pc.GetDayOfMonth(d)}";
-            var dt = DateTime.Parse(str_dt);
-            return dt;
+            //var dt = DateTime.Parse(str_dt);
+            return str_dt;
         }
-        static public DateTime GregorianToPersianDateTime(DateTime gregorianDate)
+        static public string GregorianToPersianDateTime(DateTime gregorianDate)
         {
             string greDate = gregorianDate.ToString();
             DateTime d = DateTime.Parse(greDate);
-            var str_dt = $"{pc.GetYear(d)}/{pc.GetMonth(d)}/{pc.GetDayOfMonth(d)} {pc.GetHour(d)}:{pc.GetMinute(d)}:{pc.GetSecond(d)}";
-            var dt = DateTime.Parse(str_dt);
-            return dt;
+            var str_dt = $"{pc.GetYear(d)}/{pc.GetMonth(d)}/{pc.GetDayOfMonth(d)} - {pc.GetHour(d)}:{pc.GetMinute(d)}:{pc.GetSecond(d)}";
+            //var dt = DateTime.Parse(str_dt);
+            return str_dt;
         }
     }
 }
