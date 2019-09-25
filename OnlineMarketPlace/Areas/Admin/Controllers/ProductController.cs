@@ -513,21 +513,37 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         #endregion
         #region Product
         //Product--Start
-        public IActionResult ShowProduct()
+        public IActionResult ShowProduct(string notification)
         {
-            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage);
+            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage, e => e.ProductFeature);
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
             return View(dbViewModel);
         }
-        public IActionResult InsertProduct()
+        public IActionResult InsertProduct(string notification)
         {
             ViewData["Brand"] = dbBrand.GetAll();
             ViewData["Category"] = dbCategory.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
             return View();
         }
         public async Task<IActionResult> InsertProductConfirm(ProductViewModel model)
         {
+            string nvm;
             var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
-            if (ModelState.IsValid)
+            if (ModelState.IsValid == false)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
+            }
+            try
             {
                 ProductAbstract productAbstract = new ProductAbstract()
                 {
@@ -540,6 +556,16 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 };
                 int id = dbProductAbstract.Insert(productAbstract);
 
+                ProductFeature productFeature = new ProductFeature()
+                {
+                    ProductAbstractId = id,
+                    ProductCode = model.Code,
+                    Status = model.Status,
+                    UserId = currentUser.Id,
+                };
+                dbProductFeature.Insert(productFeature);
+
+                //Insert Main Image - Start
                 if (model.MainImage != null)
                 {
                     ProductImage productImage = new ProductImage()
@@ -551,10 +577,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         IsMainImage = true
                     };
 
-                    //Insert Image
                     string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
 
-                    string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath,model.MainImage, true, id);
+                    string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.MainImage, true, id);
                     string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
 
                     productImage.ImagePath = savePath;
@@ -562,8 +587,9 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
                     dbProductImage.Insert(productImage);
                 }
-
-                if (model.img.Count > 0)
+                //Insert Main Image - End
+                //Insert Other Images -Start
+                if (model.img != null)
                 {
                     foreach (var item in model.img)
                     {
@@ -575,7 +601,6 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                             Compressed = false
                         };
 
-                        //Insert Image
                         string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
 
                         string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
@@ -587,11 +612,16 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         dbProductImage.Insert(productImage);
                     }
                 }
-
-                TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
-                return RedirectToAction("ShowProduct");
+                //Insert Other Images -End
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
             }
-            return RedirectToAction("InsertProduct");
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
+            }
+
         }
         public IActionResult DeleteProduct(int Id)
         {
@@ -630,48 +660,162 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         {
             ViewData["Brand"] = dbBrand.GetAll();
             ViewData["Category"] = dbCategory.GetAll();
-            ViewData["ProductAbstract"] = dbProductAbstract.GetIncludeById(Id, e => e.Brand, e => e.Category, e => e.ProductImage);
-            //var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage);
+            ViewData["ProductAbstract"] = dbProductAbstract.GetIncludeById(Id, e => e.Brand, e => e.Category, e => e.ProductImage, e => e.ProductFeature);
+            //ViewData["ProductFeature"]  = dbProductFeature.GetAll().Where(x => x.ProductAbstractId == Id).FirstOrDefault();
             return View();
         }
-        public IActionResult EditProductConfirm(ProductViewModel model)
+        public async Task<IActionResult> EditProductConfirm(ProductViewModel model)
         {
-            if (ModelState.IsValid)
+            string nvm;
+            int id = model.Id;
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            if (ModelState.IsValid == false)
             {
-                ProductAbstract productAbstract = new ProductAbstract()
-                {
-                    Name = model.Name,
-                    BrandId = model.BrandI,
-                    CategoryId = model.CategoryId,
-                    Status = model.Status,
-
-                };
-                List<ProductImage> productImages = new List<ProductImage>();
-                foreach (var item in model.img)
-                {
-                    byte[] b = new byte[item.Length];
-                    item.OpenReadStream().Read(b, 0, (int)item.Length);
-                    //Thumbnail
-                    MemoryStream mem1 = new MemoryStream(b);
-                    Image img = Image.FromStream(mem1);
-                    Bitmap bmp = new Bitmap(img, 300, 300);
-                    MemoryStream mem2 = new MemoryStream();
-                    bmp.Save(mem2, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    ProductImage productImage = new ProductImage()
-                    {
-                        Image = b,
-                        ImageThumbnail = mem2.ToArray()
-                    };
-
-                    productImages.Add(productImage);
-                }
-                productAbstract.ProductImage = productImages;
-                dbProductAbstract.Insert(productAbstract);
-                TempData["InsertConfirm"] = "محصول با موفقیت ثبت شد";
-                return RedirectToAction("ShowProduct");
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
             }
-            return RedirectToAction("InsertProduct");
+            try
+            {
+                var entityProductAbstract = dbProductAbstract.FindById(model.Id);
+                if (entityProductAbstract != null)
+                {
+                    entityProductAbstract.Name = model.Name;
+                    entityProductAbstract.BrandId = model.BrandI;
+                    entityProductAbstract.CategoryId = model.CategoryId;
+                    entityProductAbstract.Status = model.Status;
+                    entityProductAbstract.UserId = currentUser.Id;
+                    entityProductAbstract.BasePrice = model.BasePrice;
+                }
+                var entityProductFeature = dbProductFeature.GetAll().Where(e => e.ProductAbstractId == id).FirstOrDefault();
+                if (entityProductFeature != null)
+                {
+                    entityProductFeature.ProductAbstractId = id;
+                    entityProductFeature.ProductCode = model.Code;
+                    entityProductFeature.Status = model.Status;
+                    entityProductFeature.UserId = currentUser.Id;
+                }
+
+                //Insert Main Image - Start
+                if (model.MainImage != null)
+                {
+                    var mainImage = entityProductAbstract.ProductImage.Where(e => e.ProductId == id).Where(e => e.IsMainImage == true).FirstOrDefault();
+                    if (mainImage != null)
+                    {
+                        bool status = dbProductImage.DeleteById(mainImage.Id);
+                        if (status)
+                        {
+                            bool imgDel = FileManager.DeleteFile(contentRootPath, mainImage.ImagePath);
+                            ProductImage productImage = new ProductImage()
+                            {
+                                ProductId = id,
+                                UserId = currentUser.Id,
+                                GrayScale = false,
+                                Compressed = false,
+                                IsMainImage = true
+                            };
+                            string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
+                            string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.MainImage, true, id);
+                            string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
+                            productImage.ImagePath = savePath;
+                            productImage.ImageThumbnailPath = thumnailSavePath;
+                            dbProductImage.Insert(productImage);
+                        }
+                    }
+                }
+                //Insert Main Image - End
+                //Insert Other Images -Start
+                if (model.img != null)
+                {
+                    foreach (var item in model.img)
+                    {
+                        ProductImage productImage = new ProductImage()
+                        {
+                            ProductId = id,
+                            UserId = currentUser.Id,
+                            GrayScale = false,
+                            Compressed = false
+                        };
+
+                        string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
+
+                        string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
+                        string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
+
+                        productImage.ImagePath = savePath;
+                        productImage.ImageThumbnailPath = thumnailSavePath;
+
+                        dbProductImage.Insert(productImage);
+                    }
+                }
+                //Insert Other Images -End
+                dbProductAbstract.Update(entityProductAbstract);
+                dbProductFeature.Update(entityProductFeature);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
+
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
+            }
+
         }
+        public string DeleteProductImage(int Id)
+        {
+            var entity = dbProductImage.FindById(Id);
+            if (entity != null)
+            {
+                try
+                {
+                    bool status = dbProductImage.DeleteById(Id);
+                    dbProductImage.Save();
+                    if (status)
+                    {
+                        bool imgDel = FileManager.DeleteFile(contentRootPath, entity.ImagePath);
+                        return "true";
+                    }
+                }
+                catch (Exception)
+                {
+                    return "false";
+                }
+            }
+            return "false";
+        }
+        //Update Count and Price Of Products
+        public IActionResult ShowProductFeature(string notification)
+        {
+            var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage, e => e.ProductFeature);
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
+            return View(dbViewModel);
+        }
+        public string EditProductFeatures(int Id, string basePrice, string count)
+        {
+            var entityProductAbstract = dbProductAbstract.FindById(Id);
+            if (entityProductAbstract != null)
+            {
+                try
+                {
+                    var entityProductFeature = dbProductFeature.GetAll().Where(e => e.ProductAbstractId == Id).FirstOrDefault();
+                    entityProductAbstract.BasePrice = decimal.Parse(basePrice);
+                    entityProductFeature.Count = int.Parse(count);
+                    dbProductAbstract.Update(entityProductAbstract);
+                    dbProductFeature.Update(entityProductFeature);
+                    return "true";
+                }
+                catch (Exception)
+                {
+                    return "false";
+                }
+            }
+            return "false";
+        }
+
         //Product--End
         #endregion
         #region Test

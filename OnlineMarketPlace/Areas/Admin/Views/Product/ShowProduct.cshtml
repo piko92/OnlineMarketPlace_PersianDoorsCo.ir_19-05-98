@@ -52,10 +52,10 @@
                                 <tr>
                                     <td>@Counter</td>
                                     <td>@item.Name</td>
-                                    <td>@item.Name</td>
+                                    <td>@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().ProductCode</td>
                                     <td>@item.Brand.Name</td>
                                     <td>@item.Category.Name</td>
-                                    <td>@item.Name</td>
+                                    <td>@item.BasePrice</td>
                                     <td>
                                         @if (item.ProductImage.FirstOrDefault() != null)
                                         {

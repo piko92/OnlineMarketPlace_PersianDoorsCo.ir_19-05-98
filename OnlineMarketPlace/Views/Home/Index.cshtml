@@ -135,7 +135,7 @@
                                             }
                                             catch (Exception ex)
                                             {
-                                                throw ex;
+                                                //throw ex;
                                             }
                                         </a>
 
@@ -150,7 +150,7 @@
                                     <div class="product-content">
                                         <h3 class="title"> <a href="single-product.html">@($"{item.Name} - {item.Category.Name}")</a></h3>
                                         <p class="product-price">
-                                            <span class="discounted-price farsi-num">@((int)item.BasePrice) تومان</span>
+                                      @*      <span class="discounted-price farsi-num">@((int)item.BasePrice) تومان</span>*@
                                             @*<span class="main-price discounted farsi-num">2100000</span>*@
                                         </p>
                                     </div>

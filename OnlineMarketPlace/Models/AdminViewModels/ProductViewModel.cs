@@ -23,12 +23,12 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         [Required(ErrorMessage = "انتخاب این فیلد الزامیست")]
         [DisplayName("دسته بندی")]
         public int CategoryId { get; set; }
-        
+
         [DisplayName("تصاویر")]
         public List<IFormFile> img { get; set; }
 
-        [Required]
-        [DisplayName("تصویر")]
+        // [Required]
+        [DisplayName("تصویر‌اصلی")]
         public IFormFile MainImage { get; set; } //تصویر اصلی
 
         [DisplayName("وضعیت")]

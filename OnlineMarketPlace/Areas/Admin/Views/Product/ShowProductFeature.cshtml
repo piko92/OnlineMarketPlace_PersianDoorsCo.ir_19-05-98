@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewData["Title"] = "ویژگی های محصولات";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+@model List<ProductAbstract>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویژگی های محصولات</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div id="MainDiv" class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>کد</th>
+                            <th>تعداد موجودی</th>
+                            <th>قیمت</th>
+                            <th>ثبت تغییرات</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>نام </th>
+                            <th>کد</th>
+                            <th>تعداد </th>
+                            <th>قیمت</th>
+                            <th>ثبت تغییرات</th>
+                        </tr>
+                    </tfoot>
+                    <tbody id="mainTbody">
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().ProductCode</td>
+                                    @*<td contenteditable="true">
+                                    @(item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count > 0 ?
+                                                                item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count.ToString()
+                                                                    :
+                                                                   "عدم موجودی "
+                                    )
+
+
+                                </td>*@
+                                    <td id="tdCount">
+                                        <input id="count" style=" width: 100%;" type="text" class="form-control"
+                                               value="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count">
+                                    </td>
+
+
+                                    <td id="tdbasePrice">
+                                        <input id="basePrice" style=" width: 100%;" type="text" class="form-control"
+                                               value="@item.BasePrice">
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-info btn-block" id="btnEdit" MyItemId=@item.Id>
+                                            ثبت تغییرات
+                                        </a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script>
+                $(mainTbody).on('click', '#btnEdit', function () {
+                   // (alert("hi"));
+                    var id = $(this).attr('MyItemId');
+                    var count = $(this).parent().parent().children('#tdCount').children('#count').val();
+                    var basePrice = $(this).parent().parent().children('#tdbasePrice').children('#basePrice').val();
+                    var btn = $(this);
+                    $.post('/admin/Product/EditProductFeatures', { Id: id, basePrice: basePrice, count: count}, function (value) {
+                        if (value == "true") {
+                            alert('تغییرات ثبت شد');
+                        } else {
+                            alert('خطایی رخ داده است');
+                        }
+
+                    })
+                });
+            </script>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>
+
