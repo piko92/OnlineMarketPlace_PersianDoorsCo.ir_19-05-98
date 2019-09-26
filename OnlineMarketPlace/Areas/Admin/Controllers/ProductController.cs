@@ -783,8 +783,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return "false";
         }
-        //Update Count and Price Of Products
-        public IActionResult ShowProductFeature(string notification)
+        //Product--End
+        #endregion
+        #region Product Update Count and Price
+        //Update Count and Price Of Products -Start
+        public IActionResult UpdateProductInfo(string notification)
         {
             var dbViewModel = dbProductAbstract.GetInclude(e => e.Brand, e => e.Category, e => e.ProductImage, e => e.ProductFeature);
             if (notification != null)
@@ -794,7 +797,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return View(dbViewModel);
         }
-        public string EditProductFeatures(int Id, string basePrice, string count)
+        public string EditProductCount(int Id, string basePrice, string count)
         {
             var entityProductAbstract = dbProductAbstract.FindById(Id);
             if (entityProductAbstract != null)
@@ -815,8 +818,81 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return "false";
         }
+        //Update Count and Price Of Products -Start
+        #endregion
+        #region Product Additional Feature
+        public IActionResult ShowProductFeature(string notification)
+        {
+            var dbViewModel = dbProductAbstract.GetInclude(e => e.ProductFeature);
+            ViewData["ProductAdditionalFeatures"] = dbProductAdditionalFeatures.GetAll();
+            ViewData["AdditionalFeatures"] = dbAdditionalFeatures.GetAll();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(dbViewModel);
+            }
+            return View(dbViewModel);
+        }
+        public IActionResult EditProductFeature(int Id)
+        {
+            ViewData["ProductAbstract"] = dbProductAbstract.GetIncludeById(Id, e => e.Brand, e => e.Category, e => e.ProductImage, e => e.ProductFeature);
+            ViewData["AdditionalFeatures"] = dbAdditionalFeatures.GetAll().Where(e => e.Status == true).ToList();
+            var idProductFeature = dbProductAbstract.FindById(Id).ProductFeature.Where(e => e.ProductAbstractId == Id).FirstOrDefault().Id;
+            ViewData["ProductAdditionalFeatures"] = dbProductAdditionalFeatures.GetAll().Where(e => e.ProductFeatureId == idProductFeature).ToList();
+            return View();
+        }
+        public IActionResult EditProductFeatureConfirm(ProductFeatureViewModel model)
+        {
+            string nvm;
+            if (ModelState.IsValid != true)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("ShowProductFeature", new { notification = nvm });
+            }
+            try
+            {
+                var ProductFeature = dbProductFeature.FindById(model.ProductFeatureId);
+                //update
+                var pAdditionalFeatures = dbProductAdditionalFeatures.GetAll().Where(e => e.ProductFeatureId == model.ProductFeatureId);
+                for (int i = 0; i < model.FeatureData.Count; i++)
+                {
+                    var featureData = model.FeatureData[i];
+                    var additionalFeatureId = model.AdditionalFeatureId[i];
+                    var entity = pAdditionalFeatures.Where(e => e.AdditionalFeaturesId == model.AdditionalFeatureId[i]).FirstOrDefault();
+                    if (entity != null)
+                    {
+                        entity.AdditionalFeaturesId = additionalFeatureId;
+                        entity.ProductFeatureId = model.ProductFeatureId;
+                        entity.Value = featureData;
+                        entity.Status = true;
+                        dbProductAdditionalFeatures.Update(entity);
+                    }
+                    else
+                    {
+                        //insert
+                        ProductAdditionalFeatures productAdditionalFeatures = new ProductAdditionalFeatures()
+                        {
+                            AdditionalFeaturesId = additionalFeatureId,
+                            ProductFeatureId = model.ProductFeatureId,
+                            Value = featureData,
+                            Status = true,
+                        };
+                        dbProductAdditionalFeatures.Insert(productAdditionalFeatures);
+                    }
+                }
 
-        //Product--End
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                return RedirectToAction("ShowProductFeature", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowProductFeature", new { notification = nvm });
+            }
+
+        }
+
         #endregion
         #region Test
         //Test--Start

@@ -1,10 +1,8 @@
 ﻿
 @{
-    ViewData["Title"] = "ویژگی های محصولات";
+    ViewData["Title"] = " ویرایش قیمت و موجودی محصولات";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    var ProductAdditionalFeatures = ViewData["ProductAdditionalFeatures"] as List<ProductAdditionalFeatures>;
-    var AdditionalFeatures = ViewData["AdditionalFeatures"] as List<AdditionalFeatures>;
-} 
+}
 
 
 @model List<ProductAbstract>
@@ -13,7 +11,7 @@
         <!-- Start .panel -->
         <div class="panel panel-card ">
             <div class="panel-heading">
-                <h4 class="panel-title"> ویژگی های محصولات</h4>
+                <h4 class="panel-title"> ویرایش قیمت و موجودی محصولات</h4>
                 <div class="panel-actions">
                     <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
                     <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
@@ -26,8 +24,9 @@
                             <th># </th>
                             <th>نام </th>
                             <th>کد</th>
-                            <th>ویژگی ها</th>
-                            <th>ویرایش</th>
+                            <th>تعداد موجودی</th>
+                            <th>قیمت</th>
+                            <th>ثبت تغییرات</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -35,8 +34,9 @@
                             <th># </th>
                             <th>نام </th>
                             <th>کد</th>
-                            <th>ویژگی ها</th>
-                            <th>ویرایش</th>
+                            <th>تعداد </th>
+                            <th>قیمت</th>
+                            <th>ثبت تغییرات</th>
                         </tr>
                     </tfoot>
                     <tbody id="mainTbody">
@@ -49,22 +49,29 @@
                                     <td>@Counter</td>
                                     <td>@item.Name</td>
                                     <td>@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().ProductCode</td>
+                                    @*<td contenteditable="true">
+                                            @(item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count > 0 ?
+                                                                        item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count.ToString()
+                                                                            :
+                                                                           "عدم موجودی "
+                                            )
 
-                                    <td>
-                                        @if (ProductAdditionalFeatures != null)
-                                        {
-                                            foreach (var item2 in ProductAdditionalFeatures.Where(e => e.ProductFeatureId == item.ProductFeature.FirstOrDefault().Id).ToList())
-                                            {
-                                                <b class="btn-primary">@AdditionalFeatures.Where(e => e.Id == item2.AdditionalFeaturesId).FirstOrDefault().Name</b>
-                                                <b>: @item2.Value</b>
-                                                <br />
-                                            }
-                                        }
+
+                                        </td>*@
+                                    <td id="tdCount">
+                                        <input id="count" style=" width: 100%;" type="text" class="form-control"
+                                               value="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count">
                                     </td>
 
+
+                                    <td id="tdbasePrice">
+                                        <input id="basePrice" style=" width: 100%;" type="text" class="form-control"
+                                               value="@item.BasePrice">
+                                    </td>
                                     <td>
-                                        <a asp-action="EditProductFeature" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id"
-                                           class="btn btn-info btn-block">ویرایش</a>
+                                        <a class="btn btn-info btn-block" id="btnEdit" MyItemId=@item.Id>
+                                            ثبت تغییرات
+                                        </a>
                                     </td>
                                 </tr>
                                 Counter++;
@@ -77,12 +84,12 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script>
                 $(mainTbody).on('click', '#btnEdit', function () {
-                    // (alert("hi"));
+                   // (alert("hi"));
                     var id = $(this).attr('MyItemId');
                     var count = $(this).parent().parent().children('#tdCount').children('#count').val();
                     var basePrice = $(this).parent().parent().children('#tdbasePrice').children('#basePrice').val();
                     var btn = $(this);
-                    $.post('/admin/Product/EditProductFeatures', { Id: id, basePrice: basePrice, count: count }, function (value) {
+                    $.post('/admin/Product/EditProductCount', { Id: id, basePrice: basePrice, count: count}, function (value) {
                         if (value == "true") {
                             alert('تغییرات ثبت شد');
                         } else {
