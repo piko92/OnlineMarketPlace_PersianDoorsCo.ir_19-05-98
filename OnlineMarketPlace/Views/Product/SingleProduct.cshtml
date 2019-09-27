@@ -1,0 +1,331 @@
+﻿
+@{
+    ViewData["Title"] = "Product";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var relatedProducts = ViewData["relatedProducts"] as List<ProductAbstract>;
+}
+@model ProductAbstract
+<!-- Page Banner Section Start -->
+<div class="page-banner-section section bg-image" data-bg="/shared/main/assets/images/bg/breadcrumb.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <div class="page-banner text-right">
+                    <h2>@Model.Name</h2>
+                    <ul class="page-breadcrumb rtl-class">
+                        <li><a asp-action="Index" asp-controller="Home">صفحه نخست</a></li>
+                        <li>@Model.Name</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Page Banner Section End -->
+<!-- Single Product Section Start -->
+<div class="single-product-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-25 pb-100 pb-lg-75 pb-md-40 pb-sm-30 pb-xs-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="shop-area">
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <!--Product Details Content Start-->
+                            <div class="product-details-content">
+                                <h2>@Model.Name</h2>
+                                <h6>@Model.LatinName</h6>
+                                <div class="single-product-reviews">
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star active"></i>
+                                    <i class="fa fa-star-o"></i>
+                                    <a class="review-link farsi-num" href="#">(تعداد نظرات کاربران: 26)</a>
+                                </div>
+                                <div class="single-product-price">
+                                    <span class="price new-price local-price farsi-num">@($"{double.Parse(Model.BasePrice.ToString().Split(',')[0])} تومان")</span>
+                                    @*<span class="regular-price">$77.00</span>*@
+                                </div>
+                                <div class="product-description">
+                                    @if (Model.ProductDescription != null)
+                                    {
+                                        if (Model.ProductDescription.Where(x => x.ProductAbstractId == Model.Id).ToList().Count > 0)
+                                        {
+                                            <p>
+                                                @Model.ProductDescription.Where(x => x.Status == true).LastOrDefault().SummaryHtml
+                                            </p>
+                                        }
+                                    }
+                                </div>
+                                <div class="single-product-quantity">
+                                    <form class="add-quantity" action="#">
+                                        <div class="product-quantity">
+                                            <input value="1" type="number" title="تعداد">
+                                        </div>
+                                        <div class="add-to-link">
+                                            <button class="btn"><i class="fa fa-shopping-bag"></i> اضافه به سبد خرید </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="wishlist-compare-btn">
+                                    <a href="#" class="wishlist-btn"> افزودن به علاقه مندی ها </a>
+                                    @*<a href="#" class="add-compare">مقایسه</a>*@
+                                </div>
+                                <div class="product-meta">
+                                    <span class="posted-in">
+                                        دسته بندی:
+                                        <a href="#">@Model.Category.Name</a>
+                                    </span>
+                                </div>
+                                <div class="single-product-sharing">
+                                    <h3>این محصول را به دوستانتان معرفی نمایید</h3>
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--Product Details Content End-->
+                        </div>
+                        <div class="col-md-6 pr-35 pr-lg-15 pr-md-15 pr-sm-15 pr-xs-15">
+                            <!-- Product Details Left -->
+                            <div class="product-details-left">
+                                <div class="product-details-images-2 tabstyle-3">
+                                    @if (Model.ProductImage.Count > 0)
+                                    {
+                                        foreach (var image in Model.ProductImage)
+                                        {
+                                            <div class="lg-image">
+                                                <img src="@(image.ImagePath.Replace("wwwroot",""))" alt="">
+                                                <a href="@(image.ImagePath.Replace("wwwroot",""))" class="popup-img venobox" data-gall="myGallery"><i class="fa fa-expand"></i></a>
+                                            </div>
+                                        }
+                                    }
+
+                                </div>
+                                <div class="product-details-thumbs-2 mt-0 tabstyle-3">
+                                    @if (Model.ProductImage.Count > 0)
+                                    {
+                                        foreach (var image in Model.ProductImage)
+                                        {
+                                            <div class="sm-image"><img src="@(image.ImageThumbnailPath.Replace("wwwroot",""))" alt="product image thumb"></div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <!--Product Details Left -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Single Product Section End -->
+<!--Product Description Review Section Start-->
+<div class="product-description-review-section section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-review-tab section">
+                    <!--Review And Description Tab Menu Start-->
+                    <ul class="nav dec-and-review-menu">
+                        <li>
+                            <a class="active" data-toggle="tab" href="#description">توضیحات</a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#reviews">نظرات</a>
+                        </li>
+                    </ul>
+                    <!--Review And Description Tab Menu End-->
+                    <!--Review And Description Tab Content Start-->
+                    <div class="tab-content product-review-content-tab" id="myTabContent-4">
+                        <div class="tab-pane fade active show" id="description">
+                            <div class="single-product-description">
+
+                                @if (Model.ProductDescription.Where(x => x.ProductAbstractId == Model.Id).ToList().Count > 0)
+                                {
+                                    <p>
+                                        @Model.ProductDescription.Where(x => x.Status == true).LastOrDefault().DescriptionHtml
+                                    </p>
+                                }
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews">
+                            <div class="review-page-comment">
+                                <h2>1 review for Sit voluptatem</h2>
+                                <ul>
+                                    <li>
+                                        <div class="product-comment">
+                                            <img src="~/images/logoB.png" alt="">
+                                            <div class="product-comment-content">
+                                                <div class="product-reviews">
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star"></i>
+                                                    <i class="fa fa-star-o"></i>
+                                                </div>
+                                                <p class="meta">
+                                                    <strong>admin</strong> - <span>November 22, 2018</span>
+                                                    <div class="description">
+                                                <p>Good Product</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="review-form-wrapper">
+                                <div class="review-form">
+                                    <span class="comment-reply-title">Add a review </span>
+                                    <form action="#">
+                                        <p class="comment-notes">
+                                            <span id="email-notes">Your email address will not be published.</span>
+                                            Required fields are marked
+                                            <span class="required">*</span>
+                                        </p>
+                                        <div class="comment-form-rating">
+                                            <label>Your rating</label>
+                                            <div class="rating">
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                                <i class="fa fa-star-o"></i>
+                                            </div>
+                                        </div>
+                                        <div class="input-element">
+                                            <div class="comment-form-comment">
+                                                <label>Comment</label>
+                                                <textarea name="message" cols="40" rows="8"></textarea>
+                                            </div>
+                                            <div class="review-comment-form-author">
+                                                <label>Name </label>
+                                                <input required="required" type="text">
+                                            </div>
+                                            <div class="review-comment-form-email">
+                                                <label>Email </label>
+                                                <input required="required" type="text">
+                                            </div>
+                                            <div class="comment-submit">
+                                                <button type="submit" class="form-button">Submit</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Review And Description Tab Content End-->
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+<!--Product Description Review Section Start-->
+<!--Product section start-->
+<div class="product-section section pt-100 pt-lg-80 pt-md-70 pt-sm-60 pt-xs-50 pb-55 pb-lg-35 pb-md-25 pb-sm-15 pb-xs-5">
+    <div class="container">
+
+        <div class="row">
+            <div class="col">
+                <div class="section-title text-center mb-50 mb-xs-20">
+                    <h2>کالاهای مشابه</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row product-slider">
+            @if (relatedProducts.Count > 0)
+            {
+                foreach (var item in relatedProducts)
+                {
+                    <div class="col">
+                        <!--  Single Grid product Start -->
+                        <div class="single-grid-product mb-40">
+                            <div class="product-image">
+                                <div class="product-label">
+                                    @*<span>-20%</span>*@
+                                </div>
+                                <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">
+                                    @if (item.ProductImage.Count > 0)
+                                    {
+                                        var mainImage = item.ProductImage.Where(x => x.IsMainImage == true && x.Status == true).FirstOrDefault();
+                                        var OneOfTheRestImages = item.ProductImage.Where(x => x.Status == true && x.IsMainImage == false).FirstOrDefault();
+                                        if (OneOfTheRestImages != null)
+                                        {
+                                            <img src="@(mainImage.ImageThumbnailPath.Replace("wwwroot",""))" class="img-fluid" alt="">
+                                            <img src="@(OneOfTheRestImages.ImageThumbnailPath.Replace("wwwroot",""))" class="img-fluid" alt="">
+                                        }
+                                    }
+                                </a>
+
+                                <div class="product-action">
+                                    <ul>
+                                        <li><a href="cart.html" title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a></li>
+                                        <li><a href="#quick-view-modal-container" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
+                                        <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="product-content">
+                                <h3 class="title"> <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">@item.Name</a></h3>
+                                <p class="product-price">
+                                    <span class="discounted-price local-price farsi-num">@($"{double.Parse(Model.BasePrice.ToString().Split(',')[0])} تومان ")</span> 
+                                    @*<span class="main-price discounted ">$220.00</span>*@
+                                </p>
+                            </div>
+                        </div>
+                        <!--  Single Grid product End -->
+                    </div>
+                }
+            }
+
+        </div>
+
+    </div>
+</div>
+
+<!-- Modal Area Strat -->
+<div class="modal fade quick-view-modal-container" id="quick-view-modal-container" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- partial goes here -->
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- Modal Area End -->
+<!--Product section end-->
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //Localize Prices
+        $(".local-price").each(function () {
+            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+        })
+    })
+    $(function () {
+        $("a#btnQuick").click(function () {
+            $.post("/Home/GetPartialProduct", { Id: $(this).data("id") }, function (value) {
+                $(".modal-body").html(value);
+            });
+
+        })
+    })
+</script>

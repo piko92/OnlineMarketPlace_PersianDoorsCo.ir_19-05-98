@@ -152,7 +152,7 @@
                                                                             <div class="product-label">
                                                                                 @*<span>-21%</span>*@
                                                                             </div>
-                                                                            <a href="single-product.html">
+                                                                            <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">
                                                                                 @try
                                                                                 {
                                                                                     if (item.ProductImage.Count > 0)
@@ -194,7 +194,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="product-content">
-                                                                            <h3 class="title"> <a href="single-product.html">@item.Name</a></h3>
+                                                                            <h3 class="title"> <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">@item.Name</a></h3>
                                                                             <p class="product-price">
                                                                                 @if (item.BasePrice != null)
                                                                                 {

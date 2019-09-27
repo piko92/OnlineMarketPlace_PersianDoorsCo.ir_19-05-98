@@ -14,7 +14,59 @@ namespace OnlineMarketPlace.ClassLibraries
 {
     public class FileManager
     {
+        public static string SaveImageInDirectoryResizing(
+                string contentRootPath,
+                string folderPath,
+                IFormFile FormFile,
+                ImageFormat format,
+                bool nested = false,
+                int entityId = 0,
+                int maxSize = 1000
+            )
+        {
+            string uploads;
+            if (nested == false)
+            {
+                uploads = Path.Combine(contentRootPath, folderPath);
+            }
+            else
+            {
+                uploads = Path.Combine(contentRootPath, folderPath, $"{entityId}");
+            }
+            bool exists = System.IO.Directory.Exists(uploads);
+            string result = "";
+            if (!exists)
+            {
+                System.IO.Directory.CreateDirectory(uploads);
+            }
+            var file = FormFile;
 
+
+            if (file.Length > 0)
+            {
+                var fs = file.OpenReadStream();
+                var newDimensions = AspectRatioResizing(fs, maxSize);
+                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+                Bitmap bitmap = new Bitmap(image, newDimensions.Item1, newDimensions.Item2);
+
+                var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                {
+                    //await file.CopyToAsync(fileStream);
+                    bitmap.Save(fileStream, format);
+                    if (nested == true)
+                    {
+                        result = folderPath + $"{entityId}\\" + fileName;
+                    }
+                    else
+                    {
+                        result = folderPath + fileName;
+                    }
+                }
+            }
+
+            return result;
+        }
         public static async Task<string> SaveImageInDirectory(string contentRootPath, string folderPath, IFormFile FormFile, bool nested = false, int entityId = 0)
         {
             string uploads;
@@ -43,6 +95,61 @@ namespace OnlineMarketPlace.ClassLibraries
                     if (nested == true)
                     {
                         result = folderPath + $"{entityId}\\" + fileName;
+                    }
+                    else
+                    {
+                        result = folderPath + fileName;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static string ImageThumbnail(
+                string contentRootPath,
+                string folderPath,
+                IFormFile FormFile,
+                ImageFormat format,
+                bool nested = false, int entityId = 0,
+                int sizeW = 120,
+                int sizeH = 120
+            )
+        {
+            var file = FormFile;
+            string uploads, result = "";
+
+            if (file.Length > 0)
+            {
+
+                if (nested == false)
+                {
+                    uploads = Path.Combine(contentRootPath, folderPath);
+                }
+                else
+                {
+                    uploads = Path.Combine(contentRootPath, folderPath, $"{entityId}", $"{sizeW}x{sizeH}");
+                }
+                bool exists = System.IO.Directory.Exists(uploads);
+
+                if (!exists)
+                {
+                    System.IO.Directory.CreateDirectory(uploads);
+                }
+
+                var fs = file.OpenReadStream();
+
+                System.Drawing.Image image = System.Drawing.Image.FromStream(fs);
+                Bitmap bitmap = new Bitmap(image, sizeW, sizeH);
+
+                var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                {
+                    //await file.CopyToAsync(fileStream);
+                    bitmap.Save(fileStream, format);
+                    if (nested == true)
+                    {
+                        result = folderPath + $"{entityId}\\{sizeW}x{sizeH}\\" + fileName;
                     }
                     else
                     {
@@ -126,6 +233,39 @@ namespace OnlineMarketPlace.ClassLibraries
                 return true;
             }
             return false;
+        }
+
+        /// <summary>
+        /// به کمک این تابع میتوان به نسبت طول و عرض تصویر اندازه آنرا تغییر داد
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <returns>int newWidth, int newHeight</returns>
+        private static (int, int) AspectRatioResizing(Stream fileStream, int sizeLimit)
+        {
+            System.Drawing.Image image = System.Drawing.Image.FromStream(fileStream);
+            double intWidth = image.Width;
+            double intHeight = image.Height;
+            image.Dispose();
+
+            double newWidth = intWidth;
+            double newHeight = intHeight;
+
+            if (intWidth > sizeLimit || intHeight > sizeLimit)
+            {
+                double aspectRatio = intWidth / intHeight;
+
+                if (intWidth >= intHeight)
+                {
+                    newHeight = intHeight - ((intWidth - sizeLimit) / aspectRatio);
+                    newWidth = sizeLimit;
+                }
+                else if (intWidth < intHeight)
+                {
+                    newWidth = intWidth - ((intHeight - sizeLimit) / aspectRatio);
+                    newHeight = sizeLimit;
+                }
+            }
+            return ((int)newWidth, (int)newHeight);
         }
     }
 }
