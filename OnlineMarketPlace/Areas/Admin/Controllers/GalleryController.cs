@@ -315,7 +315,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
                 return RedirectToAction("InsertSliderImage", new { notification = nvm });
             }
-            catch(Exception ex)
+            catch(Exception )
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("InsertSliderImage", new { notification = nvm });
@@ -349,7 +349,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 }
                 return Json(null);
             }
-            catch(Exception ex)
+            catch(Exception)
             {
                 return Json(null);
             }

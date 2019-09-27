@@ -11,7 +11,7 @@ namespace OnlineMarketPlace.Controllers
 {
     public class BlogController : Controller
     {
-        #region Injext
+        #region Inject
         //Inject DataBase--Start
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;

@@ -164,7 +164,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
@@ -264,7 +264,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("ShowCategory", new { notification = nvm });
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
@@ -486,7 +486,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             if (!ModelState.IsValid)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
-                return RedirectToAction("EditFeature", new { Id = model.Id, notification = nvm });
+                return RedirectToAction("EditFeature", new { model.Id, notification = nvm });
             }
 
             try
@@ -506,7 +506,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             catch (Exception)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
-                return RedirectToAction("EditFeature", new { Id = model.Id, notification = nvm });
+                return RedirectToAction("EditFeature", new { model.Id, notification = nvm });
             }
         }
         //Feature--End
