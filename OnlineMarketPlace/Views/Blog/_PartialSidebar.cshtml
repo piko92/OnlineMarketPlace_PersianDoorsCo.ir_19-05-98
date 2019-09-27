@@ -8,10 +8,11 @@
 <div dir="rtl">
     <div class="common-sidebar-widget">
         <h3 class="sidebar-title text-right">آخرین پست ها</h3>
-        @for (int i = 0; i < 3; i++)
+        @if (dbArticle != null)
         {
-            if (dbArticle[i] != null)
+            @for (int i = 0; i < dbArticle.Count; i++)
             {
+
                 <div class="sidebar-blog">
                     <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
                         <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
@@ -25,9 +26,11 @@
                         <span>تاریخ 1398/06/15</span>
                     </div>
                 </div>
-            }
 
+
+            }
         }
+
     </div>
     <!-- Single Sidebar End  -->
     <!-- Single Sidebar Start  -->

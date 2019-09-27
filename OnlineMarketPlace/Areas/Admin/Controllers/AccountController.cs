@@ -266,7 +266,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                                             _db.UserImage.Add(userImage);
                                             _db.SaveChanges();
                                         }
-                                        catch (Exception ex)
+                                        catch (Exception)
                                         {
                                             nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert_Image, contentRootPath);
                                             return RedirectToAction("Signup", new { notification = nvm });
@@ -293,7 +293,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     }
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("Signup", new { notification = nvm });
@@ -491,7 +491,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("UserList", new { notification = nvm });
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("UserList", new { notification = nvm });
@@ -581,7 +581,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Remove, contentRootPath);
                 return Json(nvm);
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 //failed operation
                 nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Operation, contentRootPath);

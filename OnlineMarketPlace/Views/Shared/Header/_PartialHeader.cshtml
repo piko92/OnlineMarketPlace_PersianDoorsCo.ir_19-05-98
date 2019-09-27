@@ -27,19 +27,19 @@
                                 </li>
                                 <li><a asp-controller="Product" asp-action="Search">محصولات</a></li>
                                 @*<li>
-            <a href="blog.html">فروشگاه</a>
-            <ul class="sub-menu">
-                <li><a href="about.html">درباره ما</a></li>
-                <li><a href="compare.html">مقایسه کالا</a></li>
-                <li><a href="cart.html">سبد خرید</a></li>
-                <li><a href="checkout.html">پرداخت</a></li>
-                <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                <li><a href="my-account.html">حساب کاربری</a></li>
-                <li><a href="login-register.html">ورود به حساب</a></li>
-                <li><a href="faq.html">سوالات متداول</a></li>
-                <li><a href="404.html">ارور 404</a></li>
-            </ul>
-        </li>*@
+                                        <a href="blog.html">فروشگاه</a>
+                                        <ul class="sub-menu">
+                                            <li><a href="about.html">درباره ما</a></li>
+                                            <li><a href="compare.html">مقایسه کالا</a></li>
+                                            <li><a href="cart.html">سبد خرید</a></li>
+                                            <li><a href="checkout.html">پرداخت</a></li>
+                                            <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
+                                            <li><a href="my-account.html">حساب کاربری</a></li>
+                                            <li><a href="login-register.html">ورود به حساب</a></li>
+                                            <li><a href="faq.html">سوالات متداول</a></li>
+                                            <li><a href="404.html">ارور 404</a></li>
+                                        </ul>
+                                    </li>*@
                                 <li><a asp-controller="Blog" asp-action="Index">مقالات</a></li>
                                 <li><a asp-controller="Home" asp-action="About">درباره ما</a></li>
                                 <li><a asp-controller="Home" asp-action="ContactUs">تماس با ما</a></li>
@@ -57,25 +57,6 @@
                                 <a href="#"><i class="flaticon-user"></i></a>
                                 <!--Crunccy dropdown-->
                                 <ul class="currency-dropdown">
-                                    <!--Language Currency Start-->
-                                    @*<li>
-                                            <a href="#">language</a>
-                                            <ul>
-                                                <li class="active"><a href="#"><img src="~/shared/main/assets/images/icons/en-gb.png" alt="">English</a></li>
-                                                <li><a href="#"><img src="~/shared/main/assets/images/icons/de-de.png" alt="">French</a></li>
-                                            </ul>
-                                        </li>*@
-                                    <!--Language Currency End-->
-                                    <!--USD Currency Start-->
-                                    @*<li>
-                                            <a href="#">Currency</a>
-                                            <ul>
-                                                <li><a href="#"> € Euro</a></li>
-                                                <li><a href="#"> $ US Dollar</a></li>
-                                            </ul>
-                                        </li>*@
-                                    <!--USD Currency End-->
-                                    <!--Account Currency Start-->
                                     <li>
                                         <a href="my-account.html" class="rtl-class">حساب کاربری من</a>
                                         <ul class="rtl-class">
@@ -91,48 +72,8 @@
                                 <!--Crunccy dropdown-->
                             </li>
                             <li class="mini-cart">
-                                <a href="#"><i class="flaticon-shopping-cart"></i> <span class="mini-cart-total farsi-num"> 30,000,000 (2)</span></a>
                                 <!--Mini Cart Dropdown Start-->
-                                <div class="header-cart">
-                                    <ul class="cart-items">
-                                        <li class="single-cart-item">
-                                            <div class="cart-img">
-                                                <a href="cart.html"><img src="~/temp_images/cart/cart1.jpg" alt=""></a>
-                                            </div>
-                                            <div class="cart-content">
-                                                <h5 class="product-name farsi-num"><a href="single-product.html">درب مدل ققنوس</a></h5>
-                                                <span class="product-quantity farsi-num">1 ×</span>
-                                                <span class="product-price farsi-num">2780000</span>
-                                            </div>
-                                            <div class="cart-item-remove">
-                                                <a title="حذف از سبد" href="#"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </li>
-                                        <li class="single-cart-item">
-                                            <div class="cart-img">
-                                                <a href="cart.html"><img src="~/temp_images/cart/cart2.jpg" alt=""></a>
-                                            </div>
-                                            <div class="cart-content">
-                                                <h5 class="product-name farsi-num"><a href="single-product.html">درب مدل نیلکا</a></h5>
-                                                <span class="product-quantity farsi-num">1 ×</span>
-                                                <span class="product-price farsi-num">2300000</span>
-                                            </div>
-                                            <div class="cart-item-remove">
-                                                <a title="حذف از سبد" href="#"><i class="fa fa-trash"></i></a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="cart-total rtl-class">
-                                        <h5 class="farsi-num">جمع :<span class="float-left farsi-num">3900000</span></h5>
-                                        <h5 class="farsi-num">مالیات (-2.00) :<span class="float-left farsi-num"> 7000000</span></h5>
-                                        <h5 class="farsi-num">ارزش افزوده (20%) : <span class="float-left farsi-num">0.00</span></h5>
-                                        <h5>جمع کل : <span class="float-left farsi-num">46790000</span></h5>
-                                    </div>
-                                    <div class="cart-btn">
-                                        <a href="cart.html">سبد خرید</a>
-                                        <a href="checkout.html">پرداخت</a>
-                                    </div>
-                                </div>
+                                @await Html.PartialAsync("~/Views/Shared/Header/_PartialMiniCart.cshtml")
                                 <!--Mini Cart Dropdown End-->
                             </li>
                         </ul>

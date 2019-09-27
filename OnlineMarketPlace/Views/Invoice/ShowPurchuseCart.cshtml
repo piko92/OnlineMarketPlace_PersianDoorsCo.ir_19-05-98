@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewData["Title"] = "سبد خرید";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model List<InvoiceProduct>
+<div dir="rtl" class="cart-section section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12">
+                <!-- Cart Table -->
+                <div class="cart-table table-responsive mb-30">
+                    <h2 class="text-right">سبد خرید</h2>
+                    <br />
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="pro-thumbnail">تصویر</th>
+                                <th class="pro-title">نام محصول</th>
+                                <th class="pro-price">قیمت</th>
+                                <th class="pro-quantity">تعداد</th>
+                                <th class="pro-subtotal">جمع کل</th>
+                                <th class="pro-remove">حذف از سبد</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="pro-thumbnail"><a href="#"><img src="assets/images/product/product-5.jpg" alt="Product"></a></td>
+                                    <td class="pro-title">
+                                        <a href="#">
+                                            @item.ProductFeature.ProductAbstract.Name
+                                        </a>
+                                    </td>
+                                    <td class="pro-price">
+                                        <span>@item.ProductFeature.ProductAbstract.BasePrice</span>
+                                    </td>
+                                    <td class="pro-quantity">
+                                        <div class="pro-qty"><button class="dec qtybtn">-</button><input type="number" value="1"><button class="inc qtybtn">+</button></div>
+                                    </td>
+                                    <td class="pro-subtotal"><span>$25.00</span></td>
+                                    <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                <br />
+                <div dir="ltr" class="row">
+
+                    <div class="col-lg-6 col-12 mb-5">
+                        <div class="calculate-shipping">
+                            <h4 class="text-right">انتخاب آدرس</h4>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Cart Summary -->
+                    <div class="col-lg-6 col-12 mb-30 d-flex">
+                        <div class="cart-summary">
+                            <div class=" cart-summary-wrap text-right">
+                                <h4>خلاصه سبد خرید</h4>
+                                <p>
+                                    هزینه سفارش:
+                                    250000
+                                </p>
+                                <p>
+                                    هزینه ارسال:
+                                    20000
+                                </p>
+                                <h2>
+                                    هزینه کل:
+                                    350000
+                                </h2>
+                            </div>
+                            <div class="cart-summary-button">
+                                <button class="btn">بازگشت</button>
+                                <button class="btn">پرداخت</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

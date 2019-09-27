@@ -149,7 +149,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
                 var serilizedModel = JsonConvert.DeserializeObject<List<NotificationViewModel>>(file);
                 return serilizedModel;
             }
-            catch(Exception ex)
+            catch(Exception )
             {
                 List<NotificationViewModel> notificationHandlers = null;
                 return notificationHandlers;

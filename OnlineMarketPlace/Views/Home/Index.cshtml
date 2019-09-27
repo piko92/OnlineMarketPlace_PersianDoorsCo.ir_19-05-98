@@ -133,7 +133,7 @@
                                                     }
                                                 }
                                             }
-                                            catch (Exception ex)
+                                            catch (Exception)
                                             {
                                                 //throw ex;
                                             }
@@ -141,7 +141,11 @@
 
                                         <div class="product-action">
                                             <ul>
-                                                <li><a href="cart.html" title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a></li>
+                                                <li>
+                                                    <a asp-controller="Invoice" asp-action="AddToCart"
+                                                       asp-route-productFeatureId="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Id"
+                                                       title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
+                                                </li>
                                                 <li><a href="#quick-view-modal-container" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
                                                 <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                             </ul>
@@ -150,7 +154,7 @@
                                     <div class="product-content">
                                         <h3 class="title"> <a href="single-product.html">@($"{item.Name} - {item.Category.Name}")</a></h3>
                                         <p class="product-price">
-                                      @*      <span class="discounted-price farsi-num">@((int)item.BasePrice) تومان</span>*@
+                                            @*      <span class="discounted-price farsi-num">@((int)item.BasePrice) تومان</span>*@
                                             @*<span class="main-price discounted farsi-num">2100000</span>*@
                                         </p>
                                     </div>

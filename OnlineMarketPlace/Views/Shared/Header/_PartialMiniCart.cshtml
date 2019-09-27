@@ -1,0 +1,40 @@
+﻿<a asp-controller="Invoice" asp-action="ShowPurchuseCart">
+    <i class="flaticon-shopping-cart"></i>
+    <span class="mini-cart-total farsi-num">
+        30,000,000 (2)
+    </span>
+</a>
+<!--Mini Cart Dropdown Start-->
+<div class="header-cart">
+    <ul class="cart-items">
+        <li class="single-cart-item">
+            <div class="cart-img">
+                <a href="cart.html"><img src="~/temp_images/cart/cart1.jpg" alt=""></a>
+            </div>
+            <div class="cart-content">
+                <h5 class="product-name farsi-num"><a href="single-product.html">درب مدل ققنوس</a></h5>
+                <span class="product-quantity farsi-num">1 ×</span>
+                <span class="product-price farsi-num">2780000</span>
+            </div>
+            <div class="cart-item-remove">
+                <a title="حذف از سبد" href="#">
+                    <i class="fa fa-trash">
+                    </i>
+                </a>
+            </div>
+        </li>
+
+    </ul>
+    <div class="cart-total rtl-class">
+        <h5 class="farsi-num">جمع :<span class="float-left farsi-num">3900000</span></h5>
+        <h5 class="farsi-num">مالیات (-2.00) :<span class="float-left farsi-num"> 7000000</span></h5>
+        <h5 class="farsi-num">ارزش افزوده (20%) : <span class="float-left farsi-num">0.00</span></h5>
+        <h5>جمع کل : <span class="float-left farsi-num">46790000</span></h5>
+    </div>
+    <div class="cart-btn">
+        <a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a>
+        <a asp-controller="Invoice" asp-action="ShowPurchuseCart">پرداخت</a>
+    </div>
+</div>
+
+<!--Mini Cart Dropdown End-->
