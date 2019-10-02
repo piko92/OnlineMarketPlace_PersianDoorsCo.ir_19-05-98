@@ -54,13 +54,21 @@
                         <ul>
                             <li><a class="header-search-toggle" href="#"><i class="flaticon-magnifying-glass"></i></a></li>
                             <li class="currency-menu">
-                                <a href="#"><i class="flaticon-user"></i></a>
+                                <a href="#"><i class="flaticon-user" style=@(User.Identity.IsAuthenticated ? "color:lawngreen":"color:black")></i></a>
                                 <!--Crunccy dropdown-->
                                 <ul class="currency-dropdown">
                                     <li>
                                         <a href="my-account.html" class="rtl-class">حساب کاربری من</a>
                                         <ul class="rtl-class">
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                            <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
+                                            }
+                                            else
+                                            {
                                             <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
+                                            <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
+                                            }
                                             <li><a href="checkout.html">پرداخت ها</a></li>
                                             <li><a href="my-account.html">پروفایل شخصی</a></li>
                                             <li><a href="cart.html">سبد خرید</a></li>

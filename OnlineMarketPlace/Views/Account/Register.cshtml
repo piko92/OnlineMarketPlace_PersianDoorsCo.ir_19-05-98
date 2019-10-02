@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "ثبت نام";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model RegisterViewModel
+<div dir="rtl" class="text-right login-register-section section pt-90 pt-lg-70 pt-md-60 pt-sm-55 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="customer-login-register">
+
+                    <div class="text-right register-form">
+                        <div class="text-center form-register-title">
+                            <h2>ثبت نام</h2>
+                        </div>
+                        <hr />
+                        <form asp-controller="Account" asp-action="RegisterConfirm">
+                            <div class="form-fild">
+                                <p><label asp-for="Email"> </label></p>
+                                <input asp-for="Email" value="" type="text">
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                            <div class="form-fild">
+                                <p><label asp-for="Password"></label></p>
+                                <input asp-for="Password" value="" type="password">
+                                <span asp-validation-for="Password"></span>
+                            </div>
+                            <div class="form-fild">
+                                <p><label asp-for="PasswordConfirm"></label></p>
+                                <input asp-for="PasswordConfirm" value="" type="password">
+                                <span asp-validation-for="PasswordConfirm"></span>
+                            </div>
+                            <div class="register-submit mt-4">
+                                <button type="submit" class="btn btn-block ">ثبت نام</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>

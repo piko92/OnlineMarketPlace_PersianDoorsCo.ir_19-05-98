@@ -17,6 +17,7 @@ namespace OnlineMarketPlace.Controllers
 {
     public class AccountController : Controller
     {
+        #region Inject
         UserManager<ApplicationUser> _userManager;
         SignInManager<ApplicationUser> _signInManager;
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
@@ -34,65 +35,56 @@ namespace OnlineMarketPlace.Controllers
             contentRootPath = _hostingEnvironment.ContentRootPath;//returns the root path of the website
 
         }//end AccountController(Constructor)
+        #endregion
+        #region Register
+        public IActionResult Register() => View();
+        #endregion
 
-        //public IActionResult Register() => View();
-        //public async Task<IActionResult> RegisterConfirm(RegisterViewModel model)
-        //{
-        //    if (model != null)
-        //    {
-        //        ApplicationUser NewUser = new ApplicationUser()
-        //        {
-        //            Email = model.Email,
-        //            UserName = model.Email
-        //        };
-        //        var status = await _userManager.CreateAsync(NewUser, model.Password);
-        //        if (status.Succeeded)
-        //        {
-        //            TempData["message"] = messages.Find(x => x.Title == "RegisterSuccess").Content;
-        //        }
-        //        return RedirectToAction("Index", "Home");
-        //    }
-        //    TempData["message"] = messages.Find(x => x.Title == "NotCompletedFields").Content;
-        //    return RedirectToAction("Register");
-        //}//end RegisterConfirm
+        public async Task<IActionResult> RegisterConfirm(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ApplicationUser NewUser = new ApplicationUser()
+                {
+                    Email = model.Email,
+                    UserName = model.Email
+                };
+                var status = await _userManager.CreateAsync(NewUser, model.Password);
+                if (status.Succeeded)
+                {
+                    return RedirectToAction("Login");
+                }
+            }
+            return RedirectToAction("Register");
+        }
 
-        //public ViewResult Login() => View();
-        //public async Task<IActionResult> LoginConfirm(LoginViewModel model)
-        //{
-        //    if (!ModelState.IsValid)
-        //    {
-        //        return RedirectToAction("Login");
-        //    }
-        //    else
-        //    {
-        //        var foundUser = await _userManager.FindByNameAsync(model.UserName);
-        //        if (foundUser != null)
-        //        {
-        //            var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
-        //            if (status.Succeeded)
-        //            {
-        //                TempData["message"] = messages.Find(x => x.Title == "LoginSuccess").Content;
-        //                return RedirectToAction("Index", "Home");
-        //            }
-        //            else
-        //            {
-        //                TempData["message"] = messages.Find(x => x.Title == "LoginWrongValues").Content;
-        //                return RedirectToAction("Login");
-        //            }
-        //        }
-        //        TempData["message"] = messages.Find(x => x.Title == "UserNotFound").Content;
-        //        return RedirectToAction("Login");
-        //    }
-        //    TempData["message"] = messages.Find(x => x.Title == "LoginEmptyValues").Content;
-        //    return RedirectToAction("Login");
+        #region Login
+        public IActionResult Login() => View();
 
-        //}//end LoginConfirm
-
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await _signInManager.SignOutAsync();
-        //    return RedirectToAction("Index", "Home");
-        //}
-
+        public async Task<IActionResult> LoginConfirm(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Login");
+            }
+            var foundUser = await _userManager.FindByNameAsync(model.UserName);
+            if (foundUser != null)
+            {
+                var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
+                if (status.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+            }
+            return RedirectToAction("Login");
+        }
+        #endregion
+        #region LogOut
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
     }//end AccountController
 }

@@ -1,7 +1,15 @@
 ﻿<a asp-controller="Invoice" asp-action="ShowPurchuseCart">
-    <i class="flaticon-shopping-cart"></i>
-    <span class="mini-cart-total farsi-num">
-        30,000,000 (2)
+    <i class="flaticon-shopping-cart" ></i>
+    <span class="mini-cart-total farsi-num" >
+        @if (User.Identity.IsAuthenticated)
+        {
+            <b>30,000,000(2)</b>
+        }
+        else
+        {
+
+        }
+
     </span>
 </a>
 <!--Mini Cart Dropdown Start-->
@@ -28,7 +36,7 @@
     <div class="cart-total rtl-class">
         <h5 class="farsi-num">جمع :<span class="float-left farsi-num">3900000</span></h5>
         <h5 class="farsi-num">مالیات (-2.00) :<span class="float-left farsi-num"> 7000000</span></h5>
-        <h5 class="farsi-num">ارزش افزوده (20%) : <span class="float-left farsi-num">0.00</span></h5>
+        <h5 class="farsi-num">ارزش افزوده (20%) : if<span class="float-left farsi-num">0.00</span></h5>
         <h5>جمع کل : <span class="float-left farsi-num">46790000</span></h5>
     </div>
     <div class="cart-btn">
