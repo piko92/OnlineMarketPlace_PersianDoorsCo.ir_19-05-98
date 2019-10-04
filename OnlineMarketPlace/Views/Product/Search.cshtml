@@ -103,22 +103,22 @@
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
                             @*<div class="common-sidebar-widget">
-                                <h3 class="sidebar-title">Compare Products</h3>
-                                <div class="compare-products-list">
-                                    <ul>
-                                        <li>
-                                            <a href="#" class="title">Cras neque metus</a>
-                                            <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
-                                        </li>
-                                        <li>
-                                            <a href="#" class="title">Cras neque metus</a>
-                                            <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
-                                        </li>
-                                    </ul>
-                                    <a href="#" class="clear-btn">Clear all</a>
-                                    <button type="button" class="btn compare-btn">Compare</button>
-                                </div>
-                            </div>*@
+                                    <h3 class="sidebar-title">Compare Products</h3>
+                                    <div class="compare-products-list">
+                                        <ul>
+                                            <li>
+                                                <a href="#" class="title">Cras neque metus</a>
+                                                <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#" class="title">Cras neque metus</a>
+                                                <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
+                                            </li>
+                                        </ul>
+                                        <a href="#" class="clear-btn">Clear all</a>
+                                        <button type="button" class="btn compare-btn">Compare</button>
+                                    </div>
+                                </div>*@
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
                             <div class="common-sidebar-widget">
@@ -181,13 +181,17 @@
                                                                                 }
                                                                                 catch (Exception)
                                                                                 {
-                                                                                  //  throw ex;
+                                                                                    //  throw ex;
                                                                                 }
                                                                             </a>
 
                                                                             <div class="product-action">
                                                                                 <ul>
-                                                                                    <li><a href="cart.html" title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a></li>
+                                                                                    <li>
+                                                                                        <a asp-controller="Invoice" asp-action="AddToCart"
+                                                                                           asp-route-productFeatureId="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Id"
+                                                                                           title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
+                                                                                    </li>
                                                                                     <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع کالا"><i class="fa fa-eye"></i></a></li>
                                                                                     <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                                                                 </ul>
@@ -198,7 +202,7 @@
                                                                             <p class="product-price">
                                                                                 @if (item.BasePrice != null)
                                                                                 {
-                                                                                <span class="discounted-price farsi-num">تومان @((int)item.BasePrice) </span>
+                                                                                    <span class="discounted-price farsi-num">تومان @((int)item.BasePrice) </span>
                                                                                     @*<span class="main-price discounted">$230.00</span>*@
                                                                                 }
                                                                                 else

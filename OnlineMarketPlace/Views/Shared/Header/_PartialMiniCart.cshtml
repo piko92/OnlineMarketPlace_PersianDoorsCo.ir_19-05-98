@@ -1,48 +1,97 @@
-﻿<a asp-controller="Invoice" asp-action="ShowPurchuseCart">
-    <i class="flaticon-shopping-cart" ></i>
-    <span class="mini-cart-total farsi-num" >
-        @if (User.Identity.IsAuthenticated)
+﻿@inject OnlineMarketContext db;
+@inject UserManager<ApplicationUser> userManager;
+@{
+    bool status = false;
+    int sum = 0;
+    List<InvoiceProduct> dbViewModel = null;
+    if (User.Identity.IsAuthenticated)
+    {
+        var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+        var invoiceUser = db.Invoice.Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false);
+        if (invoiceUser != null)
         {
-            <b>30,000,000(2)</b>
+            status = true;
+            var d = db.InvoiceProduct.Where(e => e.InvoiceId == invoiceUser.FirstOrDefault().Id);
+            sum = (int)d.Sum(e => e.Count * e.ProductFeature.ProductAbstract.BasePrice).Value;
+            dbViewModel = db.InvoiceProduct.Include(e => e.ProductFeature).
+                Include(e => e.ProductFeature.ProductAbstract).
+                Include(e => e.ProductFeature.ProductAbstract.ProductImage).
+                Include(e => e.Invoice).Where(e => e.InvoiceId == invoiceUser.FirstOrDefault().Id).ToList();
         }
-        else
-        {
+    }
+}
 
-        }
+@if (User.Identity.IsAuthenticated && sum>0)
+{
+    <a asp-controller="Invoice" asp-action="ShowPurchuseCart">
+        <i class="flaticon-shopping-cart"></i>
+        <span class="mini-cart-total farsi-num">
+            <b id="MiniCartSum">@sum</b>
+        </span>
+    </a>
 
-    </span>
-</a>
-<!--Mini Cart Dropdown Start-->
-<div class="header-cart">
-    <ul class="cart-items">
-        <li class="single-cart-item">
-            <div class="cart-img">
-                <a href="cart.html"><img src="~/temp_images/cart/cart1.jpg" alt=""></a>
-            </div>
-            <div class="cart-content">
-                <h5 class="product-name farsi-num"><a href="single-product.html">درب مدل ققنوس</a></h5>
-                <span class="product-quantity farsi-num">1 ×</span>
-                <span class="product-price farsi-num">2780000</span>
-            </div>
-            <div class="cart-item-remove">
-                <a title="حذف از سبد" href="#">
-                    <i class="fa fa-trash">
-                    </i>
-                </a>
-            </div>
-        </li>
 
-    </ul>
-    <div class="cart-total rtl-class">
-        <h5 class="farsi-num">جمع :<span class="float-left farsi-num">3900000</span></h5>
-        <h5 class="farsi-num">مالیات (-2.00) :<span class="float-left farsi-num"> 7000000</span></h5>
-        <h5 class="farsi-num">ارزش افزوده (20%) : if<span class="float-left farsi-num">0.00</span></h5>
-        <h5>جمع کل : <span class="float-left farsi-num">46790000</span></h5>
+
+    <!--Mini Cart Dropdown Start-->
+    <div id="divCartMain" class="header-cart">
+        <ul class="cart-items">
+            @if (dbViewModel != null)
+            {
+                foreach (var item in dbViewModel)
+                {
+                    <li class="single-cart-item">
+                        <div class="cart-img">
+                            <a href="cart.html"><img src="~/temp_images/cart/cart1.jpg" alt=""></a>
+                        </div>
+
+                        <div class="cart-content">
+                            <h5 class="product-name farsi-num"><a href="single-product.html">@item.ProductFeature.ProductAbstract.Name</a></h5>
+                            <span class="product-quantity farsi-num">@item.Count ×</span>
+                            <span class="product-price farsi-num">@((int)item.ProductFeature.ProductAbstract.BasePrice)</span>
+                        </div>
+                        <div class="cart-item-remove">
+                            <a title="حذف از سبد" id="btnCartRemove" invoiceProductId="@item.Id">
+                                <i class="fa fa-trash">
+                                </i>
+                            </a>
+                        </div>
+                    </li>
+
+                }
+            }
+        </ul>
+        <div class="cart-total rtl-class">
+            <h5>جمع کل : <span class="float-left farsi-num">@sum</span></h5>
+        </div>
+        <div class="cart-btn">
+            <a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a>
+            <a asp-controller="Invoice" asp-action="ShowPurchuseCart">پرداخت</a>
+        </div>
     </div>
-    <div class="cart-btn">
-        <a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a>
-        <a asp-controller="Invoice" asp-action="ShowPurchuseCart">پرداخت</a>
-    </div>
-</div>
 
-<!--Mini Cart Dropdown End-->
+    <!--Mini Cart Dropdown End-->
+}
+else
+{
+    <a asp-controller="Invoice" asp-action="ShowPurchuseCart">
+        <i class="flaticon-shopping-cart"></i>
+    </a>
+}
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    //$('#btnCartRemove').click(function () {
+    //    alert('hi');
+    //})
+    $('#divCartMain').on('click', '#btnCartRemove', function () {
+        var btn = $(this);
+        var id = $(this).attr('invoiceProductId');
+        $.post('/Invoice/RemoveFromCart', { InvoiceProductId: id }, function (value) {
+            if (value.status == true) {
+                location.reload();
+            } else {
+                alert('خطایی رخ داده است');
+            }
+
+        })
+    });
+</script>

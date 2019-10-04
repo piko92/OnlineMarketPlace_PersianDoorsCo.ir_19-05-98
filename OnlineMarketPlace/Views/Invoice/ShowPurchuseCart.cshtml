@@ -7,87 +7,176 @@
 <div dir="rtl" class="cart-section section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
     <div class="container">
         <div class="row">
-
             <div class="col-12">
                 <!-- Cart Table -->
-                <div class="cart-table table-responsive mb-30">
+                <div id="divMain" class="cart-table mb-30">
                     <h2 class="text-right">سبد خرید</h2>
                     <br />
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="pro-thumbnail">تصویر</th>
-                                <th class="pro-title">نام محصول</th>
-                                <th class="pro-price">قیمت</th>
-                                <th class="pro-quantity">تعداد</th>
-                                <th class="pro-subtotal">جمع کل</th>
-                                <th class="pro-remove">حذف از سبد</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
+                    @if (Model.Count > 0)
+                    {
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <td class="pro-thumbnail"><a href="#"><img src="assets/images/product/product-5.jpg" alt="Product"></a></td>
-                                    <td class="pro-title">
-                                        <a href="#">
-                                            @item.ProductFeature.ProductAbstract.Name
-                                        </a>
-                                    </td>
-                                    <td class="pro-price">
-                                        <span>@item.ProductFeature.ProductAbstract.BasePrice</span>
-                                    </td>
-                                    <td class="pro-quantity">
-                                        <div class="pro-qty"><button class="dec qtybtn">-</button><input type="number" value="1"><button class="inc qtybtn">+</button></div>
-                                    </td>
-                                    <td class="pro-subtotal"><span>$25.00</span></td>
-                                    <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
+                                    <th class="pro-thumbnail">تصویر</th>
+                                    <th class="pro-title">نام محصول</th>
+                                    <th class="pro-price">قیمت (ریال)</th>
+                                    <th class="pro-quantity">تعداد</th>
+                                    <th class="pro-remove">حذف از سبد</th>
                                 </tr>
-                            }
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="tblRow">
+                                        <td class="pro-thumbnail">
+                                            <a href="#">
+                                                @if (item.ProductFeature.ProductAbstract.ProductImage != null)
+                                                {
+                                                    var _MainImage = item.ProductFeature.ProductAbstract.ProductImage.Where(x => x.IsMainImage == true);
+                                                    <img width="100" height="100" src="@(_MainImage.FirstOrDefault().ImageThumbnailPath.Replace("wwwroot",""))" />
 
-                        </tbody>
-                    </table>
-                </div>
-                <br />
-                <div dir="ltr" class="row">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/images/box.png" alt="Product">
 
-                    <div class="col-lg-6 col-12 mb-5">
-                        <div class="calculate-shipping">
-                            <h4 class="text-right">انتخاب آدرس</h4>
+                                                }
+                                            </a>
+                                        </td>
+                                        <td class="pro-title">
+                                            <a href="#">
+                                                @item.ProductFeature.ProductAbstract.Name
+                                            </a>
+                                        </td>
+                                        <td class="pro-price">
+                                            <span>@((int)item.ProductFeature.ProductAbstract.BasePrice)</span>
+                                        </td>
+                                        <td class="pro-quantity">
+                                            <div class="pro-qty">
+                                                <button id="btnIncCount" invoiceProductId="@item.Id" class="dec qtybtn">-</button>
+                                                <input type="text" value="@item.Count">
+                                                <button id="btnDecCount" invoiceProductId="@item.Id" class="inc qtybtn">+</button>
+                                            </div>
+                                        </td>
+                                        <td class="pro-remove" id="btnRemove" invoiceProductId="@item.Id"><a href="#"><i class="fa fa-trash-o "></i></a></td>
+                                    </tr>
+                                }
+
+
+                            </tbody>
+                        </table>
+                        <br />
+                        <div dir="ltr" class="row">
+
+                            <div class="col-lg-6 col-12 mb-5">
+                                <div class="calculate-shipping">
+                                    <h4 class="text-right">انتخاب آدرس</h4>
+
+                                </div>
+                            </div>
+                            <!-- Cart Summary -->
+                            <div class="col-lg-6 col-12 mb-30 d-flex">
+                                <div class="cart-summary">
+                                    <div class=" cart-summary-wrap text-right">
+                                        <h4>خلاصه سبد خرید</h4>
+                                        <p>
+                                            :هزینه سفارش
+                                            <div class="text-left">
+                                                <label>ریال </label>
+                                                <label id="divInvoicePrice">
+                                                    @ViewData["totalprice"]
+                                                </label>
+                                            </div>
+
+                                        </p>
+                                        <hr />
+                                        <p>
+                                            :هزینه سفارش
+                                            <div class="text-left">
+                                                <label>ریال </label>
+                                                <label id="divTotalPrice">
+                                                    @ViewData["totalprice"]
+                                                </label>
+                                            </div>
+                                        </p>
+                                    </div>
+                                    <div class="cart-summary-button">
+                                        <button class="btn">بازگشت</button>
+                                        <button class="btn">پرداخت</button>
+                                    </div>
+                                </div>
+                            </div>
 
                         </div>
+                    }
+                    else
+                    {
+                        <div>
+                            <h3 class="text-center">محصولی به سبد اضافه نشده است</h3>
 
-                    </div>
-
-                    <!-- Cart Summary -->
-                    <div class="col-lg-6 col-12 mb-30 d-flex">
-                        <div class="cart-summary">
-                            <div class=" cart-summary-wrap text-right">
-                                <h4>خلاصه سبد خرید</h4>
-                                <p>
-                                    هزینه سفارش:
-                                    250000
-                                </p>
-                                <p>
-                                    هزینه ارسال:
-                                    20000
-                                </p>
-                                <h2>
-                                    هزینه کل:
-                                    350000
-                                </h2>
-                            </div>
-                            <div class="cart-summary-button">
-                                <button class="btn">بازگشت</button>
-                                <button class="btn">پرداخت</button>
-                            </div>
                         </div>
-                    </div>
-
+                    }
                 </div>
-
             </div>
-
         </div>
     </div>
 </div>
+<script>
+    $('.qtybtn').on('click', function () {
+        var $button = $(this);
+        var id = $button.attr('invoiceProductId');
+        var oldValue = $button.parent().find('input').val();
+        if ($button.hasClass('inc')) {
+            $.post('/Invoice/IncrementCount', { InvoiceProductId: id }, function (value) {
+                if (value.status == true) {
+                    var newVal = parseFloat(oldValue) + 1;
+                    $button.parent().find('input').val(newVal);
+                    $('#divInvoicePrice').html(value.totalprice);
+                    $('#divTotalPrice').html(value.totalprice);
+                    $('#MiniCartSum').html(value.totalprice);
+                    //alert(value.totalprice);
+                } else {
+                    alert('خطایی رخ داده است');
+                }
+
+            })
+
+        } else {
+            // Don't allow decrementing below zero
+            if (oldValue > 1) {
+                $.post('/Invoice/DecrementCount', { InvoiceProductId: id }, function (value) {
+                    if (value.status == true) {
+                        var newVal = parseFloat(oldValue) - 1;
+                        $button.parent().find('input').val(newVal);
+                        $('#divInvoicePrice').html(value.totalprice);
+                        $('#divTotalPrice').html(value.totalprice);
+                        $('#MiniCartSum').html(value.totalprice);
+
+                        //alert(value.totalprice);
+                    } else {
+                        alert('خطایی رخ داده است');
+                    }
+                })
+            } else {
+                newVal = 1;
+            }
+        }
+    });
+    $('#divMain').on('click', '#btnRemove', function () {
+        var btn = $(this);
+        var id = $(this).attr('invoiceProductId');
+        $.post('/Invoice/RemoveFromCart', { InvoiceProductId: id }, function (value) {
+            if (value.status == true) {
+                btn.parents('tr').remove();
+                $('#divInvoicePrice').html(value.totalprice);
+                $('#divTotalPrice').html(value.totalprice);
+                $('#MiniCartSum').html(value.totalprice);
+
+            } else {
+                alert('خطایی رخ داده است');
+            }
+
+        })
+    });
+
+</script>

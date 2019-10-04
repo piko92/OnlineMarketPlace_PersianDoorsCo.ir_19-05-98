@@ -46,7 +46,7 @@ namespace OnlineMarketPlace.Controllers
         }
         //Index--End
         #endregion
-        #region Show Purchuse Cart
+        #region Purchuse Cart
         //Purchuse Cart--Start
         public int InitializeCart(Invoice invoiceUser, ApplicationUser currentUser)
         {
@@ -75,14 +75,13 @@ namespace OnlineMarketPlace.Controllers
         {
             if (User.Identity.Name == null)
             {
-                //Need User Login
-                return Json("Login");
-                // return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
             var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
             var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
             int cartId = InitializeCart(invoiceUser, currentUser);
-            var dbViewModel = dbInvoiceProduct.GetInclude(e => e.ProductFeature, e => e.ProductFeature.ProductAbstract, e=>e.Invoice).Where(e => e.InvoiceId == cartId).ToList();
+            var dbViewModel = dbInvoiceProduct.GetInclude(e => e.ProductFeature, e => e.ProductFeature.ProductAbstract, e => e.ProductFeature.ProductAbstract.ProductImage, e => e.Invoice).Where(e => e.InvoiceId == cartId).ToList();
+            ViewData["totalprice"] = TotalInvoicePrice(cartId);
             return View(dbViewModel);
         }
 
@@ -91,9 +90,7 @@ namespace OnlineMarketPlace.Controllers
             var productFeature = dbProductFeature.FindById(productFeatureId);
             if (User.Identity.Name == null)
             {
-                //Need User Login
-                return Json("Login");
-                // return RedirectToAction("Login", "Account");
+                return RedirectToAction("Login", "Account");
             }
             var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
             var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
@@ -113,7 +110,88 @@ namespace OnlineMarketPlace.Controllers
             dbInvoiceProduct.Insert(invoiceProduct);
             return RedirectToAction("ShowPurchuseCart");
         }
-        //Purchuse Cart--Start
+        //Purchuse Cart--End
+        #endregion
+        #region Count & Price
+        public int TotalInvoicePrice(int InvoiceId)
+        {
+            int sum = 0;
+            var entity = dbInvoice.FindById(InvoiceId);
+            if (entity != null)
+            {
+                var d = dbInvoiceProduct.GetInclude(e => e.ProductFeature.ProductAbstract).Where(e => e.InvoiceId == InvoiceId);
+                sum =(int) d.Sum(e => e.Count * e.ProductFeature.ProductAbstract.BasePrice).Value;
+
+            }
+            return (sum);
+        }
+        public IActionResult IncrementCount(int InvoiceProductId)
+        {
+            var entity = dbInvoiceProduct.FindById(InvoiceProductId);
+            var id = entity.InvoiceId.GetValueOrDefault();
+            decimal totalPrice = TotalInvoicePrice(id);
+            if (entity != null)
+            {
+                entity.Count++;
+                try
+                {
+                    dbInvoiceProduct.Update(entity);
+                    totalPrice = TotalInvoicePrice(id);
+                    return Json(new { status = true, totalprice = totalPrice });
+                }
+                catch (Exception)
+                {
+                   
+                }
+            }
+            return Json(new { status = false, totalprice = totalPrice });
+        }
+        public IActionResult DecrementCount(int InvoiceProductId)
+        {
+            var entity = dbInvoiceProduct.FindById(InvoiceProductId);
+            var id = entity.InvoiceId.GetValueOrDefault();
+            decimal totalPrice = TotalInvoicePrice(id);
+            if (entity != null)
+            {
+                if (entity.Count>1)
+                {
+                    entity.Count--;
+                }
+                try
+                {
+                    dbInvoiceProduct.Update(entity);
+                    totalPrice = TotalInvoicePrice(id);
+                    return Json(new { status = true, totalprice = totalPrice });
+                }
+                catch (Exception)
+                {
+
+                }
+            }
+            return Json(new { status = false, totalprice = totalPrice });
+        }
+        #endregion
+        #region Remove From Cart
+        public IActionResult RemoveFromCart(int InvoiceProductId)
+        {
+            var entity = dbInvoiceProduct.FindById(InvoiceProductId);
+            if (entity != null)
+            {
+                try
+                {
+                    dbInvoiceProduct.DeleteById(InvoiceProductId);
+                    var id = entity.InvoiceId.GetValueOrDefault();
+                    decimal totalPrice = TotalInvoicePrice(id);
+                    return Json(new { status = true, totalprice = totalPrice });
+
+                }
+                catch (Exception)
+                {
+                    return Json(new { status = false, totalprice = 0 });
+                }
+            }
+            return Json(new { status = false, totalprice = 0 });
+        }
         #endregion
     }
 }
