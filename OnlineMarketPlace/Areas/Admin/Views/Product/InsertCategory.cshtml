@@ -72,9 +72,9 @@
                             <label class="col-sm-2 control-label">زیر مجموعه دسته بندی<span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <select class="form-control m-b" asp-for="ParentId">
+                                    <option value="-1">-- انتخاب دسته اصلی --</option>
                                     @if (category.Count > 0)
                                     {
-                                        <option value="-1">-- انتخاب دسته اصلی --</option>
                                         @foreach (var item in category)
                                         {
                                             <option value="@item.Id">@item.Name</option>

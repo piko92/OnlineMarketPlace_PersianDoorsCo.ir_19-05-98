@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewData["Title"] = "سبدهای خرید پرداخت نشده";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+@model List<Invoice>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست سبدهای خرید پرداخت نشده</h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th># </th>
+                            <th>نام کاربر </th>
+                            <th>تعداد اقلام موجود در سبد</th>
+                            <th>جمع فاکتور</th>
+                            <th>وضعیت</th>
+                            <th>مشاهده جزییات</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th># </th>
+                            <th>نام کاربر </th>
+                            <th>تعداد اقلام موجود در سبد</th>
+                            <th>جمع فاکتور</th>
+                            <th>وضعیت</th>
+                            <th>مشاهده جزییات</th>
+                            <th>ویرایش</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Customer.UserName</td>
+                                    <td>@item.InvoiceProduct.Count()</td>
+                                    <td>@((int)item.CalculatedPrice)</td>
+                                    <td>@item.Status</td>
+                                    <td>
+                                        <a asp-action="ShowPurchuseCartDetails" asp-controller="Invoice" asp-area="Admin" asp-route-Id="@item.Id"
+                                           class="btn btn-success btn-block">مشاهده جزییات</a>
+                                    </td>
+
+                                    <td>
+                                        <a asp-action="EditPurchuseCartStatus" asp-controller="Invoice" asp-area="Admin" asp-route-Id="@item.Id"
+                                           class="btn btn-info btn-block">ویرایش وضعیت</a>
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeletePurchuseCart" asp-controller="Invoice" asp-area="Admin" asp-route-Id="@item.Id"
+                                           class="btn btn-danger btn-block">حذف</a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>
+
+

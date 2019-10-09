@@ -59,6 +59,7 @@ namespace OnlineMarketPlace.Controllers
                     RegDateTime = DateTime.Now,
                     IsPaid = false,
                     Status = true,
+                    Approved = false,
                     Sent = false,
                     Delivered = false
                 };
@@ -108,59 +109,69 @@ namespace OnlineMarketPlace.Controllers
                 Status = true,
             };
             dbInvoiceProduct.Insert(invoiceProduct);
+            //Update CalculatedPrice
+            var totalprice = TotalInvoicePrice(cartId);
+
             return RedirectToAction("ShowPurchuseCart");
         }
         //Purchuse Cart--End
         #endregion
         #region Count & Price
-        public int TotalInvoicePrice(int InvoiceId)
+        public async Task<int> TotalInvoicePrice(int InvoiceId)
         {
             int sum = 0;
             var entity = dbInvoice.FindById(InvoiceId);
             if (entity != null)
             {
                 var d = dbInvoiceProduct.GetInclude(e => e.ProductFeature.ProductAbstract).Where(e => e.InvoiceId == InvoiceId);
-                sum =(int) d.Sum(e => e.Count * e.ProductFeature.ProductAbstract.BasePrice).Value;
+                sum = (int)d.Sum(e => e.Count * e.ProductFeature.ProductAbstract.BasePrice).Value;
 
             }
+            //Update CalculatedPrice
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+            int cartId = InitializeCart(invoiceUser, currentUser);
+            var entityInvoice = dbInvoice.FindById(cartId);
+            entityInvoice.CalculatedPrice = sum;
+            dbInvoice.Update(entityInvoice);
             return (sum);
         }
-        public IActionResult IncrementCount(int InvoiceProductId)
+        public async Task<IActionResult> IncrementCount(int InvoiceProductId)
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice = TotalInvoicePrice(id);
+            decimal totalPrice =await TotalInvoicePrice(id);
             if (entity != null)
             {
                 entity.Count++;
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice = TotalInvoicePrice(id);
+                    totalPrice = await TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
                 {
-                   
+
                 }
             }
             return Json(new { status = false, totalprice = totalPrice });
         }
-        public IActionResult DecrementCount(int InvoiceProductId)
+        public async Task<IActionResult> DecrementCount(int InvoiceProductId)
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice = TotalInvoicePrice(id);
+            decimal totalPrice = await TotalInvoicePrice(id);
             if (entity != null)
             {
-                if (entity.Count>1)
+                if (entity.Count > 1)
                 {
                     entity.Count--;
                 }
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice = TotalInvoicePrice(id);
+                    totalPrice = await TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
@@ -172,7 +183,7 @@ namespace OnlineMarketPlace.Controllers
         }
         #endregion
         #region Remove From Cart
-        public IActionResult RemoveFromCart(int InvoiceProductId)
+        public async Task<IActionResult> RemoveFromCart(int InvoiceProductId)
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             if (entity != null)
@@ -181,7 +192,7 @@ namespace OnlineMarketPlace.Controllers
                 {
                     dbInvoiceProduct.DeleteById(InvoiceProductId);
                     var id = entity.InvoiceId.GetValueOrDefault();
-                    decimal totalPrice = TotalInvoicePrice(id);
+                    decimal totalPrice =await TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
 
                 }
@@ -191,6 +202,47 @@ namespace OnlineMarketPlace.Controllers
                 }
             }
             return Json(new { status = false, totalprice = 0 });
+        }
+        #endregion
+        #region Payment
+        public async Task<IActionResult> PaymentInitialize()
+        {
+            string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
+            int totalPrice = 0;
+            //var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
+            //SandBox==Test ZarinPal
+            var payment = new ZarinpalSandbox.Payment(totalPrice);
+            string description = "";
+            string backUrl = "https://localhost:44305/Invoice/PaymentVerify";
+            string CustomerEmail = "adsff@gmail.com";
+            string CustomerPhoneNumber = "09171112525";
+            var result = await payment.PaymentRequest(description,backUrl,CustomerEmail,CustomerPhoneNumber);
+            if (result.Status == 100)
+            {
+                //return Redirect("https://zarinpal.com/pg/startpay/"+result.Authority);
+                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Authority);
+            }
+            return Json("No");
+        }
+        public async Task<IActionResult> PaymentVerify()
+        {
+            if (HttpContext.Request.Query["Status"] != "" &&
+                HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
+                HttpContext.Request.Query["Authority"] != ""
+                )
+            {
+                string autority = HttpContext.Request.Query["Authority"].ToString();
+                //string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
+                //var payment = new Zarinpal.Payment(YourMerchantId, 10000);
+                //SandBox==Test ZarinPal
+                var payment = new ZarinpalSandbox.Payment(10000);
+                var result = await payment.Verification(autority);
+                if (result.Status==100)
+                {
+                    return View();
+                }
+            }
+            return Json("Error");
         }
         #endregion
     }

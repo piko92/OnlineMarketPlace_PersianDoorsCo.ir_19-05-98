@@ -264,7 +264,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("ShowCategory", new { notification = nvm });
             }
-            catch (Exception )
+            catch (Exception)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("InsertCategory", new { notification = nvm });
@@ -625,36 +625,37 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult DeleteProduct(int Id)
         {
-            var entity = dbProductAbstract.FindById(Id);
-            if (entity != null)
+            string nvm;
+            try
             {
-                //...
-                //rest of the codes...
-                //-----------------------------
-                //delete related image files:
-                var thisEntityFiles = _db.ProductImage.Where(x => x.ProductId == entity.Id).ToList();
-                if (thisEntityFiles.Count > 0)
+                var entity = dbProductAbstract.FindById(Id);
+                if (entity != null)
                 {
-                    foreach (var item in thisEntityFiles)
+                    var ProductImageFiles = _db.ProductImage.Where(x => x.ProductId == entity.Id).ToList();
+                    var ProductAbstractDeleted = dbProductAbstract.DeleteById(Id);
+                    if (true)
                     {
-                        bool imgDel = FileManager.DeleteFile(contentRootPath, item.ImagePath);
-                        bool thumbnailImgDel = FileManager.DeleteFile(contentRootPath, item.ImageThumbnailPath);
+                        if (ProductImageFiles.Count > 0)
+                        {
+                            foreach (var item in ProductImageFiles)
+                            {
+                                //delete related image files:
+                                bool imgDel = FileManager.DeleteFile(contentRootPath, item.ImagePath);
+                                bool thumbnailImgDel = FileManager.DeleteFile(contentRootPath, item.ImageThumbnailPath);
+                            }
+                            bool dirDel = FileManager.DeleteDirectory(contentRootPath, ProductImageFiles.FirstOrDefault().ImagePath);
+                        }
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                        return RedirectToAction("ShowProduct", new { notification = nvm });
                     }
                 }
-                //حذف "دسته ای" در ریپازیتوری موجود نبود
-                _db.ProductImage.RemoveRange(thisEntityFiles);
-                _db.SaveChanges();
             }
-            var entityDeleted = dbProductAbstract.DeleteById(Id);
-            if (entityDeleted)
+            catch (Exception)
             {
 
             }
-            else
-            {
-
-            }
-            return RedirectToAction("ShowProduct");
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+            return RedirectToAction("ShowProduct", new { notification = nvm });
         }
         public IActionResult EditProduct(int Id)
         {

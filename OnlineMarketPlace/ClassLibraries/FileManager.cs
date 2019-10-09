@@ -100,9 +100,11 @@ namespace OnlineMarketPlace.ClassLibraries
                     {
                         result = folderPath + fileName;
                     }
+                   
                 }
             }
-
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             return result;
         }
 
@@ -204,7 +206,10 @@ namespace OnlineMarketPlace.ClassLibraries
                     {
                         result = folderPath + fileName;
                     }
+                   
                 }
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
                 return result;
             }
             return null;
@@ -213,8 +218,11 @@ namespace OnlineMarketPlace.ClassLibraries
         public static bool DeleteFile(string contentRootPath, string imagePath)
         {
             var fileName = contentRootPath + "\\" + imagePath;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             if ((System.IO.File.Exists(fileName)))
             {
+
                 System.IO.File.Delete(fileName);
                 return true;
             }
@@ -222,14 +230,16 @@ namespace OnlineMarketPlace.ClassLibraries
         }
         public static bool DeleteDirectory(string contentRootPath, string imagePath)
         {
-            var aPath = imagePath.Split("\\");
-            var newAPath = aPath.Take(aPath.Count() - 1).ToArray();
-            var newPath = String.Join("", newAPath);
-
+            //var aPath = imagePath.Split("\\");
+            //var newAPath = aPath.Take(aPath.Count() - 1).ToArray();
+            //var newPath = String.Join("", newAPath);
             var fileName = contentRootPath + "\\" + imagePath;
+            var newPath = Path.GetDirectoryName(fileName);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             if ((System.IO.Directory.Exists(newPath)))
             {
-                System.IO.File.Delete(newPath);
+                System.IO.Directory.Delete(newPath,true);
                 return true;
             }
             return false;
