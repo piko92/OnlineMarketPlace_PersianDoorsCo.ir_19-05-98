@@ -34,7 +34,7 @@
   },
   //====== Errors ======
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در ثبت رکورد",
     "Text": "عملیات ثبت رکورد با خطا مواجه گردید.",
     "ColorCode": "#ef5350",
@@ -42,7 +42,7 @@
     "Subject": "Failed_Insert"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در ویرایش رکورد",
     "Text": "عملیات ویرایش رکورد با خطا مواجه گردید.",
     "ColorCode": "#ef5350",
@@ -50,7 +50,7 @@
     "Subject": "Failed_Update"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در حذف رکورد",
     "Text": "عملیات حذف رکورد با خطا مواجه گردید.",
     "ColorCode": "#ef5350",
@@ -58,7 +58,7 @@
     "Subject": "Failed_Remove"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در انجام عملیات",
     "Text": "عملیات درخواستی با خطا مواجه گردید.",
     "ColorCode": "#ef5350",
@@ -66,7 +66,7 @@
     "Subject": "Failed_Operation"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در ورود",
     "Text": "ورود شما به پروفایل کاربری با خطا مواجه گردید.",
     "ColorCode": "#ef5350",
@@ -74,7 +74,7 @@
     "Subject": "Failed_Login"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "اطلاعات ورودی نادرست",
     "Text": "داده های ورودی نادرست و یا ناقص وارد گردیده اند.",
     "ColorCode": "#ef5350",
@@ -82,7 +82,7 @@
     "Subject": "Wrong_Values"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "نیازمند ورود",
     "Text": "ابتدا بایستی به پروفایل کاربری خود وارد شوید.",
     "ColorCode": "#ef5350",
@@ -90,7 +90,7 @@
     "Subject": "Require_Login"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "خطا در ثبت تصویر",
     "Text": "خطا در ثبت تصویر بارگذاری شده.",
     "ColorCode": "#ef5350",
@@ -98,7 +98,7 @@
     "Subject": "Failed_Insert_Image"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "رکورد ناموجود",
     "Text": "رکورد درخواستی جهت حذف و یا ویرایش موجود نمیباشد.",
     "ColorCode": "#ef5350",
@@ -106,7 +106,7 @@
     "Subject": "Record_Not_Exist"
   },
   {
-    "Status": true,
+    "Status": false,
     "Heading": "عدم دسترسی",
     "Text": "شما دسترسی به مشاهده و یا ایجاد تغییرات در این بخش را ندارید.",
     "ColorCode": "#ef5350",

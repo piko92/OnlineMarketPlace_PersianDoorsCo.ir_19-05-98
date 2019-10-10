@@ -24,6 +24,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, Category, int> dbCategory;
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
+        DbRepository<OnlineMarketContext, Invoice, int> dbInvoice;
         private readonly IHostingEnvironment hostingEnvironment;
         string contentRootPath;
         public HomeController
@@ -33,7 +34,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, Category, int> _dbCategory,
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
-               IHostingEnvironment _hostingEnvironment
+                DbRepository<OnlineMarketContext, Invoice, int> _dbInvoice,
+                IHostingEnvironment _hostingEnvironment
             )
         {
             userManager = _userManager;
@@ -41,6 +43,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbCategory = _dbCategory;
             dbContactUs = _dbContactUs;
             dbArticle = _dbArticle;
+            dbInvoice = _dbInvoice;
             hostingEnvironment = _hostingEnvironment;
             contentRootPath = hostingEnvironment.ContentRootPath;
         }
@@ -48,11 +51,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         #endregion
         public IActionResult Index(string notification)
         {
-            ViewData[" userManagerCount"] = userManager.Users.Where(x=>x.Status==true).Count();
+            ViewData[" userManagerCount"] = userManager.Users.Where(x => x.Status == true).Count();
             ViewData[" ProductFeatureCount"] = dbProductFeature.GetAll().Where(x => x.Status == true).Count();
             ViewData[" CategoryCount"] = dbCategory.GetAll().Where(x => x.Status == true).Count();
             ViewData[" ContactUsCount"] = dbContactUs.GetAll().Where(x => x.Status == true).Count();
             ViewData[" ArticleCount"] = dbArticle.GetAll().Where(x => x.Status == true).Count();
+            ViewData[" PaidInvoiceCount"] = dbInvoice.GetAll().Where(x => x.IsPaid == true).Count();
             if (notification != null)
             {
                 ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);

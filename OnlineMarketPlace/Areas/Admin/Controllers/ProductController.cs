@@ -187,18 +187,18 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                             bool imgDel = FileManager.DeleteFile(contentRootPath, entity.ImagePath);
                         }
                         nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
-                        return RedirectToAction("ShowCategory", new { notification = nvm });
+                        return Json(nvm);
                     }
                 }
                 catch (Exception)
                 {
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
-                    return RedirectToAction("ShowCategory", new { notification = nvm });
+                    return Json(nvm);
                 }
 
             }
             nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
-            return RedirectToAction("ShowCategory", new { notification = nvm });
+            return Json(nvm);
         }
         public IActionResult EditCategory(int Id)
         {
@@ -341,18 +341,19 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     if (status)
                     {
                         nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
-                        return RedirectToAction("ShowBrand", new { notification = nvm });
+                        return Json(nvm);
                     }
                 }
                 catch (Exception)
                 {
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
-                    return RedirectToAction("ShowBrand", new { notification = nvm });
+                    return Json(nvm);
                 }
 
             }
             nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
             return RedirectToAction("ShowBrand", new { notification = nvm });
+
         }
         public IActionResult EditBrand(int Id)
         {
@@ -453,15 +454,23 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult DeleteFeature(int Id)
         {
-            var status = dbAdditionalFeatures.DeleteById(Id);
             string nvm;
-            if (status)
+            try
             {
-                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
-                return RedirectToAction("ShowFeature", new { notification = nvm });
+                var status = dbAdditionalFeatures.DeleteById(Id);
+                if (status)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                    return Json(nvm);
+                }
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                return Json(nvm);
             }
             nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
-            return RedirectToAction("ShowFeature", new { notification = nvm });
+            return Json(nvm);
 
         }
         public IActionResult EditFeature(int Id, string notification)
@@ -646,7 +655,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                             bool dirDel = FileManager.DeleteDirectory(contentRootPath, ProductImageFiles.FirstOrDefault().ImagePath);
                         }
                         nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
-                        return RedirectToAction("ShowProduct", new { notification = nvm });
+                        return Json(nvm);
                     }
                 }
             }
@@ -655,7 +664,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
             }
             nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
-            return RedirectToAction("ShowProduct", new { notification = nvm });
+            return Json(nvm);
+
         }
         public IActionResult EditProduct(int Id)
         {

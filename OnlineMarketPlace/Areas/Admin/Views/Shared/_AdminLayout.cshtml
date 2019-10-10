@@ -3,7 +3,7 @@
 }
 @inject UserManager<ApplicationUser> _userManager
 @inject OnlineMarketContext _db;
-
+@{ApplicationUser user = null; }
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 
@@ -73,7 +73,7 @@
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
 
@@ -129,7 +129,12 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a href="#"><i class="fa fa-user"></i>پروفایل کاربری</a></li>
+                                    <li>
+                                        <a asp-action="EditUser" asp-controller="Account" asp-area="Admin" asp-route-UserId=@user.Id>
+                                            <i class="fa fa-user">
+                                            </i>پروفایل کاربری
+                                        </a>
+                                    </li>
                                     <li>
                                         <a asp-action="SendEmail" asp-controller="Tools" asp-area="Admin">
                                             <i class="fa fa-envelope"></i>ارسال ایمیل

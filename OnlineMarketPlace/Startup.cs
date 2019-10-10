@@ -34,7 +34,7 @@ namespace OnlineMarketPlace
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-               
+
             //Add Repository Services
             services.AddTransient(typeof(DbRepository<,,>));
 
@@ -46,7 +46,13 @@ namespace OnlineMarketPlace
                     {
                         x.Response.Redirect("/Admin/Account/Signin");
                         return Task.CompletedTask;
+                    },
+                    OnRedirectToAccessDenied = x =>
+                    {
+                        x.Response.Redirect("/Admin/Account/Signin");
+                        return Task.CompletedTask;
                     }
+
                 };
             });
         }
