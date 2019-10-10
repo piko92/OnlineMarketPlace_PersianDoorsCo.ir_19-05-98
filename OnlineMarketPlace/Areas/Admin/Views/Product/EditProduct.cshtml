@@ -219,17 +219,16 @@
                     }
                 });
                 $(divProductImage).on('click', '#btnRemoveImg', function () {
-                    // (alert("hi"));
                     var id = $(this).attr('ImgId');
                     var btn = $(this);
                     $.post('/admin/Product/DeleteProductImage', { Id: id }, function (value) {
                         if (value=="true")
                         {
-                            btn.parent().parent().remove();
-                            alert('عکس با موفقیت حذف گردید');
+                            swal("حذف گردید!", "عکس با موفقیت حذف گردید", "success");
+                            btn.parent().parent().fadeOut();
                         } else
                         {
-                            alert('خطایی رخ داده است');
+                            swal("خطا!", "خطایی رخ داده است", "warning");
                         }
                         
                     })

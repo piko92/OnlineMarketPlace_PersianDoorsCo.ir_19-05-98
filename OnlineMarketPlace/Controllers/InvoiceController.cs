@@ -208,11 +208,11 @@ namespace OnlineMarketPlace.Controllers
         public async Task<IActionResult> PaymentInitialize()
         {
             string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
-            int totalPrice = 0;
+            int totalPrice = 10000;
             //var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
             //SandBox==Test ZarinPal
             var payment = new ZarinpalSandbox.Payment(totalPrice);
-            string description = "";
+            string description = "توضیحات";
             string backUrl = "https://localhost:44305/Invoice/PaymentVerify";
             string CustomerEmail = "adsff@gmail.com";
             string CustomerPhoneNumber = "09171112525";

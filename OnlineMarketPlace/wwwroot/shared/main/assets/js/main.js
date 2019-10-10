@@ -8,14 +8,17 @@ var windows = $(window);
 /*--
     Menu Sticky
 -----------------------------------*/
-var sticky = $('.header-sticky');
+    var sticky = $('.header-sticky');
+    var Imgsticky = $('.imglogo');
 
 windows.on('scroll', function() {
     var scroll = windows.scrollTop();
     if (scroll < 300) {
         sticky.removeClass('is-sticky');
+        Imgsticky.removeClass('is-sticky');
     }else{
         sticky.addClass('is-sticky');
+        Imgsticky.addClass('is-sticky');
     }
 });
     

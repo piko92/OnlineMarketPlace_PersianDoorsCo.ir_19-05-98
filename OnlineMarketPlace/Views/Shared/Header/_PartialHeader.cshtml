@@ -12,7 +12,9 @@
                 <div class="col-xl-3 col-lg-2 col-md-4 col-12">
                     <!--Logo Area Start-->
                     <div class="logo-area">
-                        <a asp-action="Index" asp-controller="Home"><img src="~/images/logo.png" alt="پرشین درب جنوب" title="پرشین درب جنوب"></a>
+                        <a asp-action="Index" asp-controller="Home">
+                            <img src="~/images/logo.png" class="imglogo" alt="پرشین درب جنوب" title="پرشین درب جنوب">
+                        </a>
                     </div>
                     <!--Logo Area End-->
                 </div>
@@ -62,12 +64,12 @@
                                         <ul class="rtl-class">
                                             @if (User.Identity.IsAuthenticated)
                                             {
-                                            <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
+                                                <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
                                             }
                                             else
                                             {
-                                            <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
-                                            <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
+                                                <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
+                                                <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
                                             }
                                             <li><a href="checkout.html">پرداخت ها</a></li>
                                             <li><a href="my-account.html">پروفایل شخصی</a></li>

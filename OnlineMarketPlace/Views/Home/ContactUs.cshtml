@@ -4,12 +4,19 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @model ContactUsViewModel
+
+@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml",
+    new PageBannerViewModel {
+        Title = "ارتباط با ما",
+        PageName = "تماس با ما",
+
+    })
 <div class="conact-section section pt-85 pt-lg-65 pt-md-55 pt-sm-45 pt-xs-35  pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50" dir="rtl">
     <div class="container">
         <div class="row text-right border p-3">
             <div class="col-12">
                 <div class="contact-form-wrap">
-                    <h3 class="contact-title">ارتباط با ما</h3>
+                    <h3 class="contact-title">فرم تماس با ما</h3>
                     <form asp-controller="Home" asp-action="InsertContactUsConfirm" id="Form1" method="post">
                         <div class="row">
                             <div class="col-lg-5">
@@ -56,6 +63,7 @@
 
     </div>
 </div>
+@await Html.PartialAsync("~/Views/Shared/Footer/_PartialNewsletter.cshtml")
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>

@@ -89,33 +89,6 @@
             <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
             <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
             <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
-            <script>
-                $(imgInsert).change(function (e) {
-                    var reader = new FileReader();
-                    //console.log(this.files);
-                    reader.readAsDataURL(this.files[0]);
-                    reader.onloadend = function (e) {
-                        $(img1).attr('src', e.target.result)
-                    }
-                });
-                $(divProductImage).on('click', '#btnRemoveImg', function () {
-                    // (alert("hi"));
-                    var id = $(this).attr('ImgId');
-                    var btn = $(this);
-                    $.post('/admin/Product/DeleteProductImage', { Id: id }, function (value) {
-                        if (value == "true") {
-                            btn.parent().parent().remove();
-                            alert('عکس با موفقیت حذف گردید');
-                        } else {
-                            alert('خطایی رخ داده است');
-                        }
-
-                    })
-                });
-                $("#btnCancel").click(function () {
-                    $("#form1")[0].reset();
-                })
-            </script>
             <!-- End .Form -->
         </div>
     </div>
