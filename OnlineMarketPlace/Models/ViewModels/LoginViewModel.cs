@@ -10,7 +10,7 @@ namespace OnlineMarketPlace.Models.ViewModels
     public class LoginViewModel
     {
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
-        [DisplayName("ایمیل")]
+        [DisplayName("نام کاربری")]
         public string UserName { get; set; }
         [DisplayName("پسورد")]
         public string Password { get; set; }

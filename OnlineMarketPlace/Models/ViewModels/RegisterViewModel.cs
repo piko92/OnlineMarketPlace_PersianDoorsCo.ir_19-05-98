@@ -10,8 +10,11 @@ namespace OnlineMarketPlace.Models.ViewModels
     public class RegisterViewModel
     {
         [DisplayName("ایمیل")]
-        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public string Email { get; set; }
+
+        [DisplayName("نام کاربری")]
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
+        public string UserName { get; set; }
 
         //[Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         //public string UserName { get; set; }

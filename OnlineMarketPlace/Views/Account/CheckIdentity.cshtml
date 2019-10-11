@@ -1,10 +1,9 @@
 ﻿
 @{
-    ViewData["Title"] = "ورود";
+    ViewData["Title"] = "CheckIdentity";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
-    // Layout = null;
 }
-@model LoginViewModel
+
 <div dir="rtl" class="text-right login-register-section section pt-90 pt-lg-70 pt-md-60 pt-sm-55 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
     <div class="container">
         <div class="row">
@@ -12,34 +11,24 @@
                 <div class="customer-login-register">
                     <div class="text-right login-form">
                         <div class="text-center form-login-title">
-                            <h2>ورود</h2>
+                            <h2>ثبت کد تایید</h2>
                         </div>
                         <hr />
-                        <form asp-controller="Account" asp-action="LoginConfirm">
+                        <form asp-controller="Account" asp-action="ConfirmIdentity">
                             <div class="form-fild">
-                                <p><label asp-for="UserName"> </label></p>
-                                <input asp-for="UserName" value="" type="text">
-                                <span asp-validation-for="UserName"></span>
-                            </div>
-                            <div class="form-fild">
-                                <p><label asp-for="Password"></label></p>
-                                <input asp-for="Password" value="" type="password">
-                                <span asp-validation-for="Password"></span>
+                                <p><label> </label></p>
+                                <input name="token" value="" type="text" placeholder="ثبت کد تایید 6 رقمی">
                             </div>
                             <div class="login-submit mt-4">
-                                <label>
-                                    <input class="checkbox" asp-for="RememberMe" value="true" type="checkbox">
-                                    <span>مرا به خاطر بسپار</span>
-                                </label>
-                                <button type="submit" class="btn btn-block ">ورود</button>
+                                <button type="submit" class="btn btn-block ">ثبت</button>
                             </div>
                             <hr />
                             <div class="lost-password">
                                 <a href="#">پسورد خود را فراموش کرده اید؟</a>
                             </div>
-                            <div class="">
-                                <a asp-controller="Account" asp-action="Register">ثبت نام نکرده اید؟</a>
-                            </div>
+                            @*<div class="">
+                                <a asp-controller="Account" asp-action="ConfirmIdentity">ثبت نام نکرده اید؟</a>
+                            </div>*@
                         </form>
                     </div>
                 </div>
@@ -51,3 +40,4 @@
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
 <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+
