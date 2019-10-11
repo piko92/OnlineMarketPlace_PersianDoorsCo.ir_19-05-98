@@ -1,0 +1,170 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش وضعیت سبد خرید";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var purchuseCart = ViewData["PurchuseCart"] as Invoice;
+}
+
+
+@model EditPurchuseCartStatusViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش وضعیت سبد خرید </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Invoice" asp-action="EditPurchuseCartStatusConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden="hidden" value="@purchuseCart.Id">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">خریدار</label>
+                            <div class="col-sm-3">
+                                <input readonly="readonly" value=@purchuseCart.Customer.UserName class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">شماره سبد خرید</label>
+                            <div class="col-sm-3 ">
+                                <input readonly="readonly" value=@purchuseCart.Id class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تاریخ خرید</label>
+                            <div class="col-sm-3 ">
+                                <input readonly="readonly" 
+                                       value= @CustomizeCalendar.GregorianToPersian(purchuseCart.RegDateTime.Value) class="form-control">
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت پرداخت </label>
+                            <div class="col-sm-10">
+                                @if (purchuseCart.IsPaid)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="IsPaid" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">پرداخت شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="IsPaid" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">پرداخت نشده</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="IsPaid" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">پرداخت شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="IsPaid" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">پرداخت نشده</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت تایید </label>
+                            <div class="col-sm-10">
+                                @if (purchuseCart.Approved)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Approved" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">تایید شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Approved" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">تایید نشده</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Approved" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">تایید شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Approved" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">تایید نشده</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت ارسال </label>
+                            <div class="col-sm-10">
+                                @if (purchuseCart.Sent)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Sent" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">ارسال شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Sent" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">ارسال نشده</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Sent" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">ارسال شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Sent" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">ارسال نشده</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت دریافت </label>
+                            <div class="col-sm-10">
+                                @if (purchuseCart.Delivered)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Delivered" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">دریافت شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Delivered" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">دریافت نشده</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Delivered" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">دریافت شده</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Delivered" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">دریافت نشده</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+           
+        </div>
+    </div>
+
+</div>
+
+

@@ -1,0 +1,83 @@
+﻿
+@{
+    ViewData["Title"] = "جزییات سبد خرید";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+@model List<InvoiceProduct>
+<div class="row">
+    <div class="col-md-6">
+        <h3>
+            اطلاعات سبد خرید (شماره : @Model.FirstOrDefault().Invoice.Id):
+        </h3>
+        <div class="order-view-box">
+            <table class="table  table-condensed  table-hover">
+                <thead>
+                    <tr>
+                        <th>اطلاعات سبد </th>
+                        <th>مقادیر </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>نام کاربر:</td>
+                        <td>
+                            @Model.FirstOrDefault().Invoice.Customer.UserName
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>تعداد اقلام موجود در سبد:</td>
+                        <td>
+                            @Model.Count()
+                        </td>
+                    </tr>
+                    <tr></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <h3>
+            اقلام موجود در سبد خرید:
+        </h3>
+        <div class="order-view-box">
+            <table class="table profile-detail table-condensed table-hover user-details">
+                <thead>
+                    <tr>
+                        <th># </th>
+                        <th>نام کالا  </th>
+                        <th>کد کالا  </th>
+                        <th>قیمت </th>
+                        <th>تعداد سفارش  </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int Counter = 1; }
+                    @foreach (var item in @Model)
+                    {
+                        <tr>
+                            <td>@Counter</td>
+                            <td>@item.ProductFeature.ProductAbstract.Name</td>
+                            <td>@item.ProductFeature.ProductCode</td>
+                            <td>@((int)item.ProductFeature.ProductAbstract.BasePrice)</td>
+                            <td>@item.Count </td>
+
+                        </tr>
+                        Counter++;
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+
+    <div class="col-md-2">
+        <a onclick="goBack()" class="btn btn-info">بازگشت</a>
+    </div>
+    <br />
+</div>

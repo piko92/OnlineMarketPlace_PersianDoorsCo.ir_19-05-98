@@ -4,25 +4,15 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @model List<ProductAbstract>
-<!-- Page Banner Section Start -->
-<div class="page-banner-section section bg-image" data-bg="/temp_images/banner/top_banner.png">
-    <div class="container">
-        <div class="row">
-            <div class="col">
+@*@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml", "لیست محصولات");*@
+@*@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml", "لیست محصولات");*@
+@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml",
+    new PageBannerViewModel {
+        Title = "لیست محصولات",
+        PageName = "فروشگاه",
 
-                <div class="page-banner text-right">
-                    <h2>لیست محصولات</h2>
-                    <ul class="page-breadcrumb rtl-class">
-                        <li><a href="index.html">صفحه اصلی</a></li>
-                        <li>فروشگاه</li>
-                    </ul>
-                </div>
+    })
 
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Page Banner Section End -->
 <!-- Shop Section Start -->
 <div class="shop-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-30  pb-70 pb-lg-50 pb-md-40 pb-sm-60 pb-xs-50">
     <div class="container">

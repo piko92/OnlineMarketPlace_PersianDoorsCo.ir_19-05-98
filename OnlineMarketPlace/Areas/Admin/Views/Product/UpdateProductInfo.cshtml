@@ -66,7 +66,7 @@
 
                                     <td id="tdbasePrice">
                                         <input id="basePrice" style=" width: 100%;" type="text" class="form-control"
-                                               value="@item.BasePrice">
+                                               value="@((int)item.BasePrice)">
                                     </td>
                                     <td>
                                         <a class="btn btn-info btn-block" id="btnEdit" MyItemId=@item.Id>
@@ -84,16 +84,16 @@
             <script src="~/lib/jquery/dist/jquery.js"></script>
             <script>
                 $(mainTbody).on('click', '#btnEdit', function () {
-                   // (alert("hi"));
+                   
                     var id = $(this).attr('MyItemId');
                     var count = $(this).parent().parent().children('#tdCount').children('#count').val();
                     var basePrice = $(this).parent().parent().children('#tdbasePrice').children('#basePrice').val();
                     var btn = $(this);
                     $.post('/admin/Product/EditProductCount', { Id: id, basePrice: basePrice, count: count}, function (value) {
                         if (value == "true") {
-                            alert('تغییرات ثبت شد');
+                            swal("تغییرات ثبت شد!","" , "success");
                         } else {
-                            alert('خطایی رخ داده است');
+                            swal("خطا در ثبت تغییرات!", "", "warning");
                         }
 
                     })

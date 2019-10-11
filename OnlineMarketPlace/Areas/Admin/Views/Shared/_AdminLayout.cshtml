@@ -3,7 +3,7 @@
 }
 @inject UserManager<ApplicationUser> _userManager
 @inject OnlineMarketContext _db;
-
+@{ApplicationUser user = null; }
 <!DOCTYPE html>
 <html lang="en" dir="rtl">
 
@@ -48,13 +48,15 @@
     <nav class="navbar navbar-default yamm navbar-fixed-top">
         <div class="container-fluid">
             <button type="button" class="navbar-minimalize minimalize-styl-2  pull-left "><i class="fa fa-bars"></i></button>
-            <span class="search-icon"><i class="fa fa-search"></i></span>
-            <div class="search" style="display: none;">
-                <form role="form">
-                    <input type="text" class="form-control" autocomplete="off" placeholder="Write something and press enter">
-                    <span class="search-close"><i class="fa fa-times"></i></span>
-                </form>
-            </div>
+            <!--Search Start-->
+            @*<span class="search-icon"><i class="fa fa-search"></i></span>
+                <div class="search" style="display: none;">
+                        <form role="form">
+                            <input type="text" class="form-control" autocomplete="off" placeholder="عبارتی را بنویسید و دکمه اینتر را فشار دهید">
+                            <span class="search-close"><i class="fa fa-times"></i></span>
+                        </form>
+                    </div>*@
+            <!--Search End-->
             @* نوار منو بالا *@
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -73,7 +75,7 @@
                 </ul>
                 @if (User.Identity.IsAuthenticated)
                 {
-                    var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                    user = await _userManager.FindByNameAsync(User.Identity.Name);
                     if (user != null)
                     {
 
@@ -129,7 +131,12 @@
                                     </span>
                                 </a>
                                 <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                                    <li><a href="#"><i class="fa fa-user"></i>پروفایل کاربری</a></li>
+                                    <li>
+                                        <a asp-action="EditUser" asp-controller="Account" asp-area="Admin" asp-route-UserId=@user.Id>
+                                            <i class="fa fa-user">
+                                            </i>پروفایل کاربری
+                                        </a>
+                                    </li>
                                     <li>
                                         <a asp-action="SendEmail" asp-controller="Tools" asp-area="Admin">
                                             <i class="fa fa-envelope"></i>ارسال ایمیل
@@ -192,7 +199,8 @@
                         <li>
                             <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">سفارشات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">لیست سفارشات</a></li>
+                                <li><a asp-area="Admin" asp-controller="Invoice" asp-action="ShowPaidPurchuseCart">سفارشات پرداخت شده</a></li>
+                                <li><a asp-area="Admin" asp-controller="Invoice" asp-action="ShowNotPaidPurchuseCart">سفارشات پرداخت نشده</a></li>
                             </ul>
                         </li>
                         <li>
@@ -319,6 +327,8 @@
     <script src="~/AdminLayout/sweetalert/sweetalert.min.js"></script>
     <script src="~/AdminLayout/sweetalert/jquery.sweet-alert.custom.js"></script>
 
+    <!-- Site-Js  -->
+    <script src="~/AdminLayout/Site/site.js"></script>
 
     @if (nvm != null)
     {

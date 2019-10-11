@@ -55,7 +55,7 @@
                                     <td>@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().ProductCode</td>
                                     <td>@item.Brand.Name</td>
                                     <td>@item.Category.Name</td>
-                                    <td>@item.BasePrice</td>
+                                    <td>@((int)item.BasePrice)</td>
                                     <td>
                                         @if (item.ProductImage.FirstOrDefault() != null)
                                         {
@@ -81,7 +81,7 @@
                                         <a asp-action="EditProduct" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
                                     </td>
                                     <td>
-                                        <a asp-action="DeleteProduct" asp-controller="Product" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
+                                        <a class="btn btn-danger btn-block" id="btnDelete" dataId="@item.Id">حذف</a>
                                     </td>
                                 </tr>
                                 Counter++;
@@ -95,3 +95,38 @@
         <!-- End .panel -->
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    $('.panel-body').on('click', "#btnDelete", function () {
+        var dataId = $(this).attr("dataId");
+        var thisElement = $(this);
+        swal({
+            title: "آیا از حذف این آیتم اطمینان دارید؟",
+            text: "پس از تایید، بازیابی این آیتم امکان پذیر نمی باشد.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "بله، حذف شود",
+            cancelButtonText: "خیر، منصرف شدم",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.post("/Admin/Product/DeleteProduct", { Id: dataId }, function (value) {
+                    var result = JSON.parse(value)
+                    if (result['Status'] == true) {
+                        swal("حذف گردید!", result['Text'], "success");
+                        thisElement.parent().parent().fadeOut();
+                    } else {
+                        swal("حذف ناموفق", result['Text'], "warning");
+                    }
+                }, 'json')
+
+            } else {
+                swal("انصراف از حذف", "این آیتم همچنان در لیست شما باقی می ماند :)", "error");
+            }
+        });
+    })
+
+</script>

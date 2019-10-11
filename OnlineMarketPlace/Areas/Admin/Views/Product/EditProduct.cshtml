@@ -88,7 +88,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">قیمت <span class="red-color">*</span></label>
                             <div class="col-sm-10">
-                                <input asp-for="BasePrice" type="text" value=@ProductAbstract.BasePrice class="form-control">
+                                <input asp-for="BasePrice" type="text" value=@((int)ProductAbstract.BasePrice) class="form-control">
                                 <span asp-validation-for="BasePrice"></span>
                             </div>
                         </div>
@@ -219,17 +219,16 @@
                     }
                 });
                 $(divProductImage).on('click', '#btnRemoveImg', function () {
-                    // (alert("hi"));
                     var id = $(this).attr('ImgId');
                     var btn = $(this);
                     $.post('/admin/Product/DeleteProductImage', { Id: id }, function (value) {
                         if (value=="true")
                         {
-                            btn.parent().parent().remove();
-                            alert('عکس با موفقیت حذف گردید');
+                            swal("حذف گردید!", "عکس با موفقیت حذف گردید", "success");
+                            btn.parent().parent().fadeOut();
                         } else
                         {
-                            alert('خطایی رخ داده است');
+                            swal("خطا!", "خطایی رخ داده است", "warning");
                         }
                         
                     })

@@ -74,24 +74,6 @@
                     </tbody>
                 </table>
             </div>
-            <script src="~/lib/jquery/dist/jquery.js"></script>
-            <script>
-                $(mainTbody).on('click', '#btnEdit', function () {
-                    // (alert("hi"));
-                    var id = $(this).attr('MyItemId');
-                    var count = $(this).parent().parent().children('#tdCount').children('#count').val();
-                    var basePrice = $(this).parent().parent().children('#tdbasePrice').children('#basePrice').val();
-                    var btn = $(this);
-                    $.post('/admin/Product/EditProductFeatures', { Id: id, basePrice: basePrice, count: count }, function (value) {
-                        if (value == "true") {
-                            alert('تغییرات ثبت شد');
-                        } else {
-                            alert('خطایی رخ داده است');
-                        }
-
-                    })
-                });
-            </script>
         </div>
         <!-- End .panel -->
     </div>

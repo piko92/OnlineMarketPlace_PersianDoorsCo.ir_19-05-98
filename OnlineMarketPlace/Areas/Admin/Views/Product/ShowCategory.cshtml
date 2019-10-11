@@ -49,30 +49,30 @@
                             int Counter = 1;
                             @foreach (var item in Model)
                             {
-                        <tr>
-                            <td>@Counter</td>
-                            <td>@item.Name</td>
-                            <td>@item.LatinName</td>
-                            <td>@item.Description</td>
-                            <td>@item.Priority</td>
-                            <td>
-                                @if (item.ImagePath != null)
-                                {
-                                    <img src="@(item.ImagePath.Replace("wwwroot",""))" class="img-thumbnail" width="80" />
-                                }
-                                else
-                                {
-                                    <img src="~/images/box.png" class="img-thumbnail" width="80" />
-                                }
-                            </td>
-                            <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
-                            <td>
-                                <a asp-action="EditCategory" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
-                            </td>
-                            <td>
-                                <a asp-action="DeleteCategory" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
-                            </td>
-                        </tr>
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.LatinName</td>
+                                    <td>@item.Description</td>
+                                    <td>@item.Priority</td>
+                                    <td>
+                                        @if (item.ImagePath != null)
+                                        {
+                                            <img src="@(item.ImagePath.Replace("wwwroot",""))" class="img-thumbnail" width="80" />
+                                        }
+                                        else
+                                        {
+                                            <img src="~/images/box.png" class="img-thumbnail" width="80" />
+                                        }
+                                    </td>
+                                    <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
+                                    <td>
+                                        <a asp-action="EditCategory" asp-controller="Product" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-block" id="btnDelete" dataId="@item.Id">حذف</a>
+                                    </td>
+                                </tr>
                                 Counter++;
                             }
                         }
@@ -84,4 +84,38 @@
         <!-- End .panel -->
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
 
+    $('.panel-body').on('click', "#btnDelete", function () {
+        var dataId = $(this).attr("dataId");
+        var thisElement = $(this);
+        swal({
+            title: "آیا از حذف این آیتم اطمینان دارید؟",
+            text: "پس از تایید، بازیابی این آیتم امکان پذیر نمی باشد.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "بله، حذف شود",
+            cancelButtonText: "خیر، منصرف شدم",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.post("/Admin/Product/DeleteCategory", { Id: dataId }, function (value) {
+                    var result = JSON.parse(value)
+                    if (result['Status'] == true) {
+                        swal("حذف گردید!", result['Text'], "success");
+                        thisElement.parent().parent().fadeOut();
+                    } else {
+                        swal("حذف ناموفق", result['Text'], "warning");
+                    }
+                }, 'json')
+
+            } else {
+                swal("انصراف از حذف", "این آیتم همچنان در لیست شما باقی می ماند :)", "error");
+            }
+        });
+    })
+
+</script>

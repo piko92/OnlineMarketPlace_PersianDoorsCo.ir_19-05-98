@@ -111,7 +111,7 @@ namespace OnlineMarketPlace.Controllers
                 }
                 return RedirectToAction("Search");
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return RedirectToAction("Search");
             }
