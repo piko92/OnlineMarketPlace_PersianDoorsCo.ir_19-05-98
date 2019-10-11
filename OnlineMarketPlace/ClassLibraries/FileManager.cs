@@ -100,7 +100,7 @@ namespace OnlineMarketPlace.ClassLibraries
                     {
                         result = folderPath + fileName;
                     }
-                   
+
                 }
             }
             GC.Collect();

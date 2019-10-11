@@ -552,6 +552,14 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
                 return RedirectToAction("ShowProduct", new { notification = nvm });
             }
+            //Check Unique Product Code -- Start
+            var IsCodeExist = dbProductFeature.GetAll().Where(e => e.ProductCode == model.Code).FirstOrDefault();
+            if (IsCodeExist != null)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.DuplicatedValue, contentRootPath);
+                return RedirectToAction("ShowProduct", new { notification = nvm });
+            }
+            //Check Unique Product Code -- End
             try
             {
                 ProductAbstract productAbstract = new ProductAbstract()
@@ -784,6 +792,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     if (status)
                     {
                         bool imgDel = FileManager.DeleteFile(contentRootPath, entity.ImagePath);
+                        bool Thumbnail = FileManager.DeleteFile(contentRootPath, entity.ImageThumbnailPath);
                         return "true";
                     }
                 }
