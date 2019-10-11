@@ -62,17 +62,18 @@
                                         <ul class="rtl-class">
                                             @if (User.Identity.IsAuthenticated)
                                             {
-                                            <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
+                                                <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
+                                                <li><a asp-controller="Account" asp-action="UserPanel">پروفایل شخصی</a></li>
+                                                <li><a href="checkout.html">پرداخت ها</a></li>
+                                                <li><a href="cart.html">سبد خرید</a></li>
+                                                <li><a href="wishlist.html">لیست علاقه مندی ها</a></li>
                                             }
                                             else
                                             {
-                                            <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
-                                            <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
+                                                <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
+                                                <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
                                             }
-                                            <li><a href="checkout.html">پرداخت ها</a></li>
-                                            <li><a href="my-account.html">پروفایل شخصی</a></li>
-                                            <li><a href="cart.html">سبد خرید</a></li>
-                                            <li><a href="wishlist.html">لیست علاقه مندی ها</a></li>
+
                                         </ul>
                                     </li>
                                     <!--Account Currency End-->

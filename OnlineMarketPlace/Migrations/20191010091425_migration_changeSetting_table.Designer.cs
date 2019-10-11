@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20191010091425_migration_changeSetting_table")]
+    partial class migration_changeSetting_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1065,48 +1067,6 @@ namespace OnlineMarketPlace.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Currency");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            LatinName = "Rial",
-                            Name = "ریال",
-                            Status = true,
-                            Symbol = "ريال"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            LatinName = "Toman",
-                            Name = "تومان",
-                            Status = true,
-                            Symbol = "تومان"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            LatinName = "Dollar",
-                            Name = "دلار",
-                            Status = true,
-                            Symbol = "$"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            LatinName = "Euro",
-                            Name = "یورو",
-                            Status = true,
-                            Symbol = "€"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            LatinName = "Yuan",
-                            Name = "یوان",
-                            Status = true,
-                            Symbol = "¥"
-                        });
                 });
 
             modelBuilder.Entity("OnlineMarket.Models.Field", b =>

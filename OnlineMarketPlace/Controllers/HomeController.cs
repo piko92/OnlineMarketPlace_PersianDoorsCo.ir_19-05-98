@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries.Authentication;
 using OnlineMarketPlace.Models.ViewModels;
 using OnlineMarketPlace.Repository;
 
@@ -18,6 +19,7 @@ namespace OnlineMarketPlace.Controllers
         //Inject DataBase--Start
         UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
+        PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
         OnlineMarketContext _db;
         public HomeController
             (
@@ -109,5 +111,11 @@ namespace OnlineMarketPlace.Controllers
         public ViewResult PageNotFound() => View(); //Independant layout
         #endregion
 
+
+        public async Task<IActionResult> Test()
+        {
+            
+            return View();
+        }
     }
 }

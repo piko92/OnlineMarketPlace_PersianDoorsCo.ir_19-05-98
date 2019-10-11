@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +33,18 @@ namespace OnlineMarketPlace
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<IdentityOptions>(option =>
+            {
+                option.Password.RequiredLength = 6;
+                option.Password.RequireUppercase = false;
+                option.Password.RequireLowercase = false;
+                option.Password.RequiredUniqueChars = 0;
+                option.Password.RequireNonAlphanumeric = false;
+                option.Password.RequireDigit = false;
+            });
+
+            // Add Session services. 
+            services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(5));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
                
@@ -76,6 +89,9 @@ namespace OnlineMarketPlace
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseAuthentication();
+
+            // configures Session middleware 
+            app.UseSession();
 
             //app.UseDefaultImage(defaultImagePath: Configuration.GetSection("defaultImagePath").Value);
             //app.UseMvcWithDefaultRoute();

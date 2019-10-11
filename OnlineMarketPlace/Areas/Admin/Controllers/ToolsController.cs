@@ -24,13 +24,16 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         IHostingEnvironment env = null;
 
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
+        DbRepository<OnlineMarketContext, Setting, int> dbSetting;
         public ToolsController
             (
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
+                DbRepository<OnlineMarketContext, Setting, int> _dbSetting,
                 IHostingEnvironment env
             )
         {
             dbContactUs = _dbContactUs;
+            dbSetting = _dbSetting;
             this.env = env;
         }
         //Inject DataBase--End
@@ -116,6 +119,45 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }
         //Email-End
+        #endregion
+        #region Setting
+        [Authorize(Roles = "Admin")]
+        public IActionResult Setting()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditSetting(Setting model)
+        {
+            if (model != null)
+            {
+                var isNotEmpty = dbSetting.GetAll();
+                if (isNotEmpty.Count == 0)
+                {
+                    dbSetting.Insert(model);
+                    return RedirectToAction("Setting");
+                }
+
+                var foundSetting = dbSetting.FindById(model.Id);
+                if (foundSetting != null)
+                {
+                    foundSetting.AdminEmail = model.AdminEmail;
+                    foundSetting.AdminEmailPassword = model.AdminEmailPassword;
+                    foundSetting.EmailServiceProvider = model.EmailServiceProvider;
+                    foundSetting.EmailProtocol = model.EmailProtocol;
+                    foundSetting.EmailPort = model.EmailPort;
+                    foundSetting.SMSApiAddress = model.SMSApiAddress;
+                    foundSetting.SMSApiNumber = model.SMSApiNumber;
+                    foundSetting.SMSUsername = model.SMSUsername;
+                    foundSetting.BaseCurrencyId = model.BaseCurrencyId;
+
+                    var status = dbSetting.Update(foundSetting);
+                    return RedirectToAction("Setting");
+                }
+            }
+            return RedirectToAction("Setting");
+        }
         #endregion
     }
 }

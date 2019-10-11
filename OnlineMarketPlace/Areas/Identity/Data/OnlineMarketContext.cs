@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries.DataSeed;
 
 namespace OnlineMarketPlace.Areas.Identity.Data
 {
@@ -494,6 +495,8 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             {
                 entity.Property(p => p.Status).HasDefaultValue(true);
             });
+
+            builder.Seed();
         }
     }
 }

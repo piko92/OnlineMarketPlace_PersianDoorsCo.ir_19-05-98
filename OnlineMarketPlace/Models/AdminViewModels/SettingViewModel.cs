@@ -1,12 +1,11 @@
-﻿using OnlineMarketPlace.Areas.Identity.Data;
-using OnlineMarketPlace.Repository;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace OnlineMarket.Models
+namespace OnlineMarketPlace.Models.AdminViewModels
 {
-    public partial class Setting : IEntity<int>
+    public class SettingViewModel
     {
         public int Id { get; set; }
         public string UserId { get; set; }
@@ -24,8 +23,5 @@ namespace OnlineMarket.Models
         public string SMSPassword { get; set; }
         public string SMSApiAddress { get; set; }
         public string SMSApiNumber { get; set; }
-
-        [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
     }
 }
