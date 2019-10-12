@@ -3,19 +3,21 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20191012175822_GeneralPage_Change")]
+    partial class GeneralPage_Change
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -185,8 +187,6 @@ namespace OnlineMarketPlace.Migrations
                     b.Property<string>("PostalCode");
 
                     b.Property<int?>("ProvinceId");
-
-                    b.Property<string>("RecieverFullName");
 
                     b.Property<DateTime?>("RegDateTime")
                         .ValueGeneratedOnAdd()
@@ -746,7 +746,9 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.City", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CallingCode");
 
@@ -872,7 +874,9 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.Country", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CallingCode");
 
@@ -2223,7 +2227,9 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.Province", b =>
                 {
-                    b.Property<int>("Id");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int?>("CallingCode");
 
@@ -3316,29 +3322,6 @@ namespace OnlineMarketPlace.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
-                });
-
-            modelBuilder.Entity("OnlineMarketPlace.Models.Tokens", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("RegDateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValueSql("getdate()");
-
-                    b.Property<string>("Token");
-
-                    b.Property<bool>("Used")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(false);
-
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

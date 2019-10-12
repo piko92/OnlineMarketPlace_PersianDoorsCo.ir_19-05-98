@@ -67,28 +67,11 @@
                         </table>
                         <br />
                         <div dir="ltr" class="row">
-
-                            <div class="col-lg-6 col-12 mb-5">
-                                <div class="calculate-shipping">
-                                    <h4 class="text-right">انتخاب آدرس</h4>
-
-                                </div>
-                            </div>
                             <!-- Cart Summary -->
                             <div class="col-lg-6 col-12 mb-30 d-flex">
                                 <div class="cart-summary">
                                     <div class=" cart-summary-wrap text-right">
                                         <h4>خلاصه سبد خرید</h4>
-                                        <p>
-                                            :هزینه سفارش
-                                            <div class="text-left">
-                                                <label>ریال </label>
-                                                <label id="divInvoicePrice">
-                                                    @ViewData["totalprice"]
-                                                </label>
-                                            </div>
-
-                                        </p>
                                         <hr />
                                         <p>
                                             :هزینه سفارش
@@ -100,13 +83,17 @@
                                             </div>
                                         </p>
                                     </div>
-                                    <div class="cart-summary-button">
-                                        <button class="btn">بازگشت</button>
-                                        <button class="btn">پرداخت</button>
+                                    <div class="cart-summary-button col-lg-6">
+                                        <a class="btn btn-block" asp-controller="Invoice" asp-action="PaymentInitialize">پرداخت</a>
                                     </div>
                                 </div>
                             </div>
+                            @*<div class="col-lg-6 col-12 mb-5">
+                                    <div class="calculate-shipping">
+                                        <h4 class="text-right">انتخاب آدرس</h4>
 
+                                    </div>
+                                </div>*@
                         </div>
                     }
                     else
@@ -122,6 +109,7 @@
     </div>
 </div>
 <script>
+
     $('.qtybtn').on('click', function () {
         var $button = $(this);
         var id = $button.attr('invoiceProductId');

@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "مقالات";
     var dbArticle = ViewData["Article"] as List<Article>;
+    var dbCategory = ViewData["Category"] as List<Category>;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @model List<Article>
@@ -19,7 +20,7 @@
         <div class="row">
             <div class="col-lg-3 order-lg-2 order-2">
                 <!-- Single Sidebar Start  -->
-                @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle)
+                @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle, new ViewDataDictionary(ViewData) { { "dbCategory", dbCategory } })
                 <!-- Single Sidebar End  -->
             </div>
             <div class="col-lg-9 order-lg-1 order-1">
@@ -38,9 +39,9 @@
                                 </div>
                                 <div class="content">
                                     <ul class="meta  ">
-                                        <li>1398/06/11 تاریخ</li>
-                                        <li><a href="#">25 پسندیدن</a></li>
-                                        <li><a href="#">28 بازدید</a></li>
+                                        <li class="farsi-num">16 مهر, 1398</li>
+                                        @*<li><a href="#">25 پسندیدن</a></li>
+                                            <li><a href="#">28 بازدید</a></li>*@
                                     </ul>
                                     <h3 class="title  text-right">
                                         <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">

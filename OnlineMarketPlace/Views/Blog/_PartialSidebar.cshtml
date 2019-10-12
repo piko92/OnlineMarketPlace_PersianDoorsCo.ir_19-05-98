@@ -1,6 +1,7 @@
 ﻿
 @{
     var dbArticle = ViewData["Article"] as List<Article>;
+    var dbCategory = ViewData["Category"] as List<Category>;
     Layout = null;
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
@@ -12,21 +13,19 @@
         {
             @for (int i = 0; i < dbArticle.Count; i++)
             {
-
-                <div class="sidebar-blog">
-                    <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
-                        <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
-                    </a>
+                <div class="sidebar-blog rtl-class">
                     <div class="content">
                         <h5>
                             <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id">
                                 @dbArticle[i].Title
                             </a>
                         </h5>
-                        <span>تاریخ 1398/06/15</span>
+                        <h6 >تاریخ 1398/07/15</h6>
                     </div>
+                    <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
+                        <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
+                    </a>
                 </div>
-
 
             }
         }
@@ -34,35 +33,34 @@
     </div>
     <!-- Single Sidebar End  -->
     <!-- Single Sidebar Start  -->
-    <div class="common-sidebar-widget text-right">
-        <h3 class="sidebar-title "> آخرین نظرات</h3>
-        <div class="sidebar-blog">
-            <div class="content">
-                <p>فاطمه:</p>
-                <a href="#">سایت خوبی است</a>
+    @*<div class="common-sidebar-widget text-right">
+            <h3 class="sidebar-title "> آخرین نظرات</h3>
+            <div class="sidebar-blog">
+                <div class="content">
+                    <p>فاطمه:</p>
+                    <a href="#">سایت خوبی است</a>
+                </div>
             </div>
-        </div>
-    </div>
+        </div>*@
     <!-- Single Sidebar End  -->
     <!-- Single Sidebar Start  -->
     <div class="common-sidebar-widget text-right">
         <h3 class="sidebar-title">دسته بندی ها</h3>
         <ul class="sidebar-list">
-            @foreach (var item in dbArticle)
+            @foreach (var item in dbCategory)
             {
-                <li><a href="#"><i class="ion-plus"></i>Accessories <span class="count">(14)</span></a></li>
+                <li><a href="#"><i class="ion-plus"></i>@item.Name <span class="count"></span></a></li>
             }
         </ul>
     </div>
     <!-- Single Sidebar End  -->
-    <!-- Single Sidebar Start  -->
-    <div class="common-sidebar-widget text-right">
-        <h3 class="sidebar-title bb-0">تگ ها</h3>
-        <ul class="sidebar-tag">
-            @foreach (var item in dbArticle)
+    @*<div class="common-sidebar-widget text-right">
+            <h3 class="sidebar-title bb-0">تگ ها</h3>
+            @foreach (var item in dbCategory)
             {
-                <li><a href="#">Painting</a></li>
+                <ul class="sidebar-tag">
+                    <li><a href="#">@item.Name</a></li>
+                </ul>
             }
-        </ul>
-    </div>
+        </div>*@
 </div>

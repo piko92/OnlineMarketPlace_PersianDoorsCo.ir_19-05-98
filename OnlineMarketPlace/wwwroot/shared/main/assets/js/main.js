@@ -10,19 +10,18 @@ var windows = $(window);
 -----------------------------------*/
     var sticky = $('.header-sticky');
     var Imgsticky = $('.imglogo');
-   
 
     windows.on('scroll', function () {
     var scroll = windows.scrollTop();
     if (scroll < 300) {
         sticky.removeClass('is-sticky');
        // Imgsticky.removeClass('is-sticky');
-        Imgsticky.attr('src', '~/../images/logo.png');
+        Imgsticky.attr('src', '/images/logo.png');
 
     }else{
         sticky.addClass('is-sticky');
        // Imgsticky.addClass('is-sticky');
-        Imgsticky.attr('src', '~/../images/logoB.png');
+        Imgsticky.attr('src', '/images/logoB.png');
    }
 });
     

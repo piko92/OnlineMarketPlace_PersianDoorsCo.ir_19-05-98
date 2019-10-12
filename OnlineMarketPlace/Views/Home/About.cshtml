@@ -10,6 +10,10 @@
         PageName = "درباره ما"
 
     })
+@model GeneralPage
+@if (Model != null)
+{
+
 
 <!--About Us Area Start-->
 <div class="about-us-area section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45 pb-70 pb-lg-50 pb-md-60 pb-sm-60 pb-xs-50">
@@ -19,18 +23,23 @@
                 <!--About Us Image Start-->
                 <div class="about-us-img-wrapper mb-30 mb-xs-15">
                     <div class="about-us-image img-full">
-                        <a href="#"><img src="assets/images/blog/blog-6.jpg" alt=""></a>
+                        <a href="#"><img alt="" width="500" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}") ></a>
                     </div>
                 </div>
                 <!--About Us Image End-->
             </div>
             <div class="col-lg-6 col-12 ">
                 <!--About Us Content Start-->
-                <div class="about-us-content pl-30 pl-md-0 pl-sm-0 pl-xs-0 text-right">
-                    <span>خلاصه ای از ما</span>
-                    <h2>شرکت صنعت چوب تیرازیس</h2>
-                    <p>شرکت صنعت چوب تیرازیس با بیش از یک دهه تأسیس و با تکیه بر نیروهای متخصص و دستگاه های پیشرفته صنعتی و استانداردهای روز دنیا اقدام به تولید درب های ضد سرقت و درب های اتاقی با ظرافت و کیفیت بسیار بالا نموده است</p>
-                    <p>شرکت صنعت چوب تیرازیس با بیش از یک دهه تأسیس و با تکیه بر نیروهای متخصص و دستگاه های پیشرفته صنعتی و استانداردهای روز دنیا اقدام به تولید درب های ضد سرقت و درب های اتاقی با ظرافت و کیفیت بسیار بالا نموده است</p>
+                <div class="rtl-class about-us-content pl-30 pl-md-0 pl-sm-0 pl-xs-0 text-right">
+                    @{
+                        string[] lines = Model.ContentHtml.Split('\n');
+                    }
+                    <span>@Model.Summary</span>
+                    <h2></h2>
+                    @foreach (var item in lines)
+                    {
+                        <p class="text-justify ">@item</p>
+                    }
                 </div>
                 <!--About Us Content End-->
             </div>
@@ -38,5 +47,5 @@
     </div>
 </div>
 <!--About Us Area End-->
-
+}
 @await Html.PartialAsync("~/Views/Shared/Footer/_PartialNewsletter.cshtml")

@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-lg-3 order-lg-2 order-2">
                 <!-- Single Sidebar Start  -->
-                <div class="common-sidebar-widget">
+                @*<div class="common-sidebar-widget">
                     <h3 class="sidebar-title">Search</h3>
                     <div class="sidebar-search">
                         <form action="#">
@@ -19,7 +19,7 @@
                             <button><i class="fa fa-search"></i></button>
                         </form>
                     </div>
-                </div>
+                </div>*@
                 <!-- Single Sidebar End  -->
                 @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle);
                 <!-- Single Sidebar End  -->
@@ -43,9 +43,8 @@
                             </div>
                             <div class="content">
                                 <ul class="meta">
-                                    <li>1398/06/11 تاریخ</li>
-                                    <li><a href="#">25 پسندیدن</a></li>
-                                    <li><a href="#">28 بازدید</a></li>
+                                    <li class="farsi-num">16 مهر, 1398</li>
+                                    
                                 </ul>
                                 <h2 class="title text-right">@Model.Title</h2>
                                 <div class="desc mb-30" dir="rtl">
@@ -64,7 +63,7 @@
                     </div>
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20 ">
                         <!-- Start Comment -->
-                        <div class="comments-wrapper">
+                        @*<div class="comments-wrapper">
                             <div class="inner">
                                 <h3 class="text-right">نظرات</h3>
                                 <div class="commnent-list-wrap mt-25">
@@ -88,7 +87,7 @@
                                     <!-- End Single Comment -->
                                 </div>
                             </div>
-                        </div>
+                        </div>*@
                         <!-- End Comment -->
                     </div>
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20">

@@ -16,16 +16,20 @@ namespace OnlineMarketPlace.Controllers
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, ProductAbstract, int> dbProductAbstract;
         DbRepository<OnlineMarketContext, UserArticleReview, int> dbUserArticleReview;
+        DbRepository<OnlineMarketContext, Category, int> dbCategory;
         public BlogController
             (
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
                 DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProductAbstract,
-                DbRepository<OnlineMarketContext, UserArticleReview, int> _dbUserArticleReview
+                DbRepository<OnlineMarketContext, UserArticleReview, int> _dbUserArticleReview,
+                 DbRepository<OnlineMarketContext, Category, int> _dbCategory
+
             )
         {
             dbArticle = _dbArticle;
             dbProductAbstract = _dbProductAbstract;
             dbUserArticleReview = _dbUserArticleReview;
+            dbCategory = _dbCategory;
         }
         //Inject DataBase--End
         #endregion
@@ -33,12 +37,14 @@ namespace OnlineMarketPlace.Controllers
         public IActionResult Index()
         {
             ViewData["Article"] = dbArticle.GetAll();
+            ViewData["Category"] = dbCategory.GetAll();
             var dbViewModel=  dbArticle.GetAll();
             return View(dbViewModel);
         }
         public IActionResult ShowArticle(int Id)
         {
             ViewData["Article"]= dbArticle.GetAll();
+            ViewData["Category"] = dbCategory.GetAll();
             var dbViewModel = dbArticle.FindById(Id);
             return View(dbViewModel);
         }
