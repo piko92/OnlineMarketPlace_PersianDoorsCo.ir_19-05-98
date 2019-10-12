@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.Authentication;
 using OnlineMarketPlace.ClassLibraries.MessageHandler;
 using OnlineMarketPlace.Models.ViewModels;
@@ -157,10 +158,22 @@ namespace OnlineMarketPlace.Controllers
         }
 
         [Authorize]
-        public IActionResult EditProfile(string Id)
+        public async Task<IActionResult> EditProfile(EditUserViewModel model)
         {
+            var selectedUser = await _userManager.FindByIdAsync(model.Id);
+            if (selectedUser != null)
+            {
+                selectedUser.FirstName = model.Firstname;
+                selectedUser.LastName = model.Lastname;
+                selectedUser.NationalCode = model.Nationalcode;
+                selectedUser.PhoneNumber = model.Phonenumber;
+                //var dob = CustomizeCalendar.PersianToGregorian(model.Dateofbirth_Year, model.Dateofbirth_Month, model.Dateofbirth_Day);
+                //selectedUser.DateOfBirth = dob;
+                selectedUser.Email = model.Email;
 
-            return View();
+                await _userManager.UpdateAsync(selectedUser);
+            }
+            return RedirectToAction("UserPanel");
         }
 
         #endregion
