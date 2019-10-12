@@ -15,20 +15,17 @@
                 <div class="footer-widget col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-40 mb-xs-35">
                     <h4 class="title"><span class="text">ساعات فعالیت شرکت</span></h4>
                     <p class="mb-15">شنبه تا چهارشنبه از ساعت 8 صبح الی 8 شب</p>
-                    <p class="mb-15">پنجضنبه از ساعت 8 صبح تا 1/30 ظهر</p>
-                    <p class="mb-15">جمعه تعطیل</p>
-                    <h4 class="opeaning-title">تمامی تعطیلات رسمی کارگاه تعطیل میباشد</h4>
+                    <p class="mb-15">پنجشنبه از ساعت 8 صبح تا 1:30 ظهر</p>
                 </div>
                 <!--Footer Widget end-->
                 <!--Footer Widget start-->
                 <div class="footer-widget col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-40 mb-xs-35">
                     <h4 class="title"><span class="text">دسترسی سریع</span></h4>
                     <ul class="ft-menu">
-                        <li><a href="#">پروفایل کاربری</a></li>
-                        <li><a href="#">لیست علاقه مندی ها</a></li>
-                        <li><a href="#">پیگیری سفارش</a></li>
-                        <li><a href="#">قوانین و مقررات</a></li>
-                        <li><a href="#">اطلاعات حمل و نصب کالا</a></li>
+                        <li><a asp-controller="Account" asp-action="Profile">پروفایل کاربری</a></li>
+                        <li><a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a></li>
+                        <li><a asp-controller="Account" asp-action="Profile">پیگیری سفارش</a></li>
+                        <li><a asp-controller="Home" asp-action="About">قوانین و مقررات</a></li>
                     </ul>
                 </div>
                 <!--Footer Widget end-->
@@ -36,18 +33,26 @@
                 <div class="footer-widget col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-40 mb-xs-35">
                     <h4 class="title"><span class="text">اطلاعات</span></h4>
                     <ul class="ft-menu">
-                        <li><a href="#">درباره ما</a></li>
-                        <li><a href="#">راهنمای خرید</a></li>
-                        <li><a href="#">اطلاعات مرتبط با تحویل کالا</a></li>
-                        <li><a href="#">فروشگاه ما</a></li>
+                        <li><a asp-controller="Home" asp-action="About">درباره ما</a></li>
+                        <li><a asp-controller="Home" asp-action="ContactUs">تماس با کارشناسان ما</a></li>
+                        <li><a asp-controller="Product" asp-action="Search">فروشگاه پرشین درب</a></li>
+                        <li><a asp-controller="Blog" asp-action="Index">مقالات</a></li>
                     </ul>
                 </div>
                 <!--Footer Widget end-->
                 <!--Footer Widget start-->
                 <div class="footer-widget text-lg-right text-left col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12 mb-40 mb-xs-35 rtl-class">
-                    <h2>آدرس: شهرک بزرگ صنعتی شیراز - بلوار ابتکار - واحد 112</h2>
-                    <p class="contact-text">info@persiandoorsco.ir</p>
-                    <p class="contact-text">+989177001112</p>
+                    <h4 class="title"><span class="text">ارتباط با ما</span></h4>
+                    <ul class="ft-menu">
+                        <li><a href="#">آدرس:</a></li>
+                        <li><a href="#">شهرک بزرگ صنعتی شیراز، بلوار ابتکار، واحد 112 </a></li>
+                        <li><a href="#">پست الکترونیک:</a></li>
+                        <li><a class="text-left">Info@PersianDoorsCo.ir</a></li>
+                        <li><a href="#"> تلفن های تماس:</a></li>
+                        <li><a class="text-left">07137742667</a></li>
+                        <li><a class="text-left">07137742687</a></li>
+
+                    </ul>
                 </div>
                 <!--Footer Widget end-->
             </div>

@@ -1,0 +1,51 @@
+﻿
+@{
+    Layout = null;
+}
+@model List<Article>
+<!--Blog section start-->
+<div class="blog-section section pt-65 pt-lg-45 pt-md-35 pt-sm-20 pt-xs-15 pb-65 pb-lg-45 pb-md-35 pb-sm-25 pb-xs-15">
+    @if (Model.Count > 0)
+    {
+        <div class="container">
+            <div class="row mb-50 mb-xs-20">
+                <div class="col">
+                    <div class="section-title text-center">
+                        <h2>وبلاگ و مقالات </h2>
+                        <span>پست های اخیر وبلاگ</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="blog col-lg-4 col-md-6">
+                        <div class="blog-inner mb-30">
+                            <div class="blog-media">
+                                <a href="blog-details.html" class="image">
+                                    @if (item.MainImage != null)
+                                    {
+                                        <img width="330" height="230" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(item.MainImage)}")>
+                                    }
+                                </a>
+                            </div>
+                            <div class="content">
+                                <ul class="meta rtl-class">
+                                    <li class="farsi-num">26 اردیبهشت, 1397</li>
+                                </ul>
+                                <h3 class="title rtl-class">
+                                    <a href="blog-details.html">
+                                        @item.Title
+                                    </a>
+                                </h3>
+                                <a class="read-more" asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">ادامه مطلب</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+<!--Blog section end-->

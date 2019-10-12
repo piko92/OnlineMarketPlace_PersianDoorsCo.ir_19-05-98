@@ -22,6 +22,7 @@ namespace OnlineMarketPlace.Controllers
         UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
+        DbRepository<OnlineMarketContext, Article, int> dbArticle;
         OnlineMarketContext _db;
 
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
@@ -31,12 +32,13 @@ namespace OnlineMarketPlace.Controllers
             (
                 UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
-                OnlineMarketContext db,
-                IHostingEnvironment hostingEnvironment
+                DbRepository<OnlineMarketContext, Article, int> _dbArticle,
+                OnlineMarketContext db
             )
         {
             userManager = _userManager;
             dbContactUs = _dbContactUs;
+            dbArticle = _dbArticle;
             _db = db;
 
             _hostingEnvironment = hostingEnvironment;
@@ -48,17 +50,18 @@ namespace OnlineMarketPlace.Controllers
         public IActionResult Index() //Home Page
         {
             //هشت محصول جدید
-            List<ProductAbstract> LatestProducts = new List<ProductAbstract>();
-            if (_db.ProductAbstract.Count() > 0)
-            {
-                LatestProducts = _db.ProductAbstract
-                 .Include(x => x.ProductFeature)
-                 .Include(x => x.ProductImage)
-                 .Include(x => x.Category)
-                 .OrderByDescending(x => x.RegDateTime).Take(8).ToList();
-            }
-            
-            ViewData["LatestProducts"] = LatestProducts;
+            ViewData["LatestProducts"] = _db.ProductAbstract
+                .Include(x => x.ProductFeature)
+                .Include(x => x.ProductImage)
+                .Include(x => x.Category)
+                .OrderByDescending(x => x.RegDateTime).Take(8).ToList();
+            //سه مقاله جدید
+            ViewData["LatestArticle"] = dbArticle.GetAll()
+                .Where(e => e.Status == true)
+                .OrderByDescending(x => x.WrittenDateTime)
+                .Take(3).ToList();
+
+
             return View();
         }
         [HttpPost]
@@ -130,9 +133,7 @@ namespace OnlineMarketPlace.Controllers
 
         public async Task<IActionResult> Test()
         {
-            
-            var r = ReadExcelFiles.Read(contentRootPath + @"\wwwroot\data-seeds\Province_iran.xlsx");
-            
+
             return View();
         }
     }

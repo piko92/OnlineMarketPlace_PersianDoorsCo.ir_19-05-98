@@ -107,7 +107,7 @@
                             <div class="col-6 col-md-6">
                                 <div class="header-logo">
                                     <a href="index.html">
-                                        <img src="~/images/logo.png" class="img-fluid" alt="">
+                                        <img height="100" width="100" src="~/images/logo.png" class="img-fluid" alt="">
                                     </a>
                                 </div>
                             </div>
@@ -117,7 +117,7 @@
                                         <ul class="icon-list justify-content-end">
                                             <li>
                                                 <div class="header-cart-icon">
-                                                    <a href="cart.html"><i class="flaticon-shopping-cart"></i></a>
+                                                    <a asp-controller="Invoice" asp-action="ShowPurchuseCart"><i class="flaticon-shopping-cart"></i></a>
                                                 </div>
                                             </li>
                                             <li>
@@ -153,109 +153,76 @@
     <div class="offcanvas-wrapper">
 
         <div class="offcanvas-inner-content">
-            <div class="offcanvas-mobile-search-area">
-                <form action="#">
-                    <input class="rtl-class" type="search" placeholder="جستجو ...">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
-            </div>
+            @*<div class="offcanvas-mobile-search-area">
+                    <form action="#">
+                        <input class="rtl-class" type="search" placeholder="جستجو ...">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>*@
             <nav class="offcanvas-navigation">
                 <ul class="rtl-class">
                     <li class="menu-item-has-children">
-                        <a href="#">صفحه اصلی</a>
-                        <ul class="submenu2 farsi-num">
-                            <li><a href="index.html">زیر منو 1</a></li>
-                            <li><a href="index-2.html">زیر منو 2</a></li>
-                        </ul>
+                        <a asp-controller="Home" asp-action="Index">صفحه اصلی</a>
                     </li>
                     <li class="menu-item-has-children">
-                        <a href="#">فروشگاه</a>
-                        <ul class="submenu2">
-                            <li class="menu-item-has-children">
-                                <a href="#">زیر مجموعه</a>
-                                <ul class="submenu2">
-                                    <li><a href="about.html">درباره ما</a></li>
-                                    <li><a href="compare.html">مقایسه کالا</a></li>
-                                    <li><a href="cart.html">سبد خرید</a></li>
-                                    <li><a href="checkout.html">پرداخت</a></li>
-                                    <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                                    <li><a href="my-account.html">حساب کاربری</a></li>
-                                    <li><a href="login-register.html">ورود به حساب</a></li>
-                                    <li><a href="faq.html">سوالات متداول</a></li>
-                                    <li><a href="404.html">ارور 404</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="shop.html">جدیدترین محصولات</a></li>
-                    <li class="menu-item-has-children">
-                        <a href="#">صفحات</a>
-                        <ul class="submenu2">
-                            <li><a href="about.html">درباره ما</a></li>
-                            <li><a href="compare.html">مقایسه کالا</a></li>
-                            <li><a href="cart.html">سبد خرید</a></li>
-                            <li><a href="checkout.html">پرداخت</a></li>
-                            <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
-                            <li><a href="my-account.html">حساب کاربری</a></li>
-                            <li><a href="login-register.html">ورود به حساب</a></li>
-                            <li><a href="faq.html">سوالات متداول</a></li>
-                            <li><a href="404.html">ارور 404</a></li>
-                        </ul>
+                        <a asp-controller="Product" asp-action="Search">فروشگاه</a>
                     </li>
                     <li class="menu-item-has-children">
-                        <a href="contact.html">تماس با ما</a>
+                        <a asp-controller="Blog" asp-action="Index">مقالات</a>
                     </li>
+                    <li class="menu-item-has-children">
+                        <a asp-controller="Home" asp-action="About">درباره ما</a>
+                    </li>
+                    <li class="menu-item-has-children">
+                        <a asp-controller="Home" asp-action="ContactUs">تماس با ما</a>
+                    </li>
+                    @*<li><a href="shop.html">جدیدترین محصولات</a></li>
+                        <li class="menu-item-has-children">
+                            <a href="#">صفحات</a>
+                            <ul class="submenu2">
+                                <li><a href="about.html">درباره ما</a></li>
+                                <li><a href="compare.html">مقایسه کالا</a></li>
+                                <li><a href="cart.html">سبد خرید</a></li>
+                                <li><a href="checkout.html">پرداخت</a></li>
+                                <li><a href="wishlist.html">کالاهای مورد علاقه</a></li>
+                                <li><a href="my-account.html">حساب کاربری</a></li>
+                                <li><a href="login-register.html">ورود به حساب</a></li>
+                                <li><a href="faq.html">سوالات متداول</a></li>
+                                <li><a href="404.html">ارور 404</a></li>
+                            </ul>
+                        </li>*@
 
                 </ul>
             </nav>
 
             <div class="offcanvas-settings">
                 <nav class="offcanvas-navigation">
-                    <ul>
+                    <ul class="rtl-class">
                         <li class="menu-item-has-children">
                             <a href="#">حساب کاربری </a>
                             <ul class="submenu2">
-                                <li><a href="login-register.html">ورود</a></li>
-                                <li><a href="checkout.html">ثبت نام</a></li>
-                                <li><a href="my-account.html">پروفایل کاربری</a></li>
-                                <li><a href="cart.html">سبد خرید</a></li>
-                                <li><a href="wishlist.html">لیست علاقه مندی ها</a></li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li><a asp-controller="Account" asp-action="Profile">پروفایل کاربری</a></li>
+                                    <li><a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a></li>
+                                    <li><a asp-controller="Account" asp-action="LogOut">خروج</a></li>
+                                }
+                                else
+                                {
+                                    <li><a asp-controller="Account" asp-action="Login">ورود</a></li>
+                                    <li><a asp-controller="Account" asp-action="Register">ثبت نام</a></li>
+                                }
                             </ul>
                         </li>
-                        @*<li class="menu-item-has-children">
-                                <a href="#">CURRENCY: USD </a>
-                                <ul class="submenu2">
-                                    <li><a href="javascript:void(0)">€ Euro</a></li>
-                                    <li><a href="javascript:void(0)">$ US Dollar</a></li>
-                                </ul>
-                            </li>
-                            <li class="menu-item-has-children">
-                                <a href="#">LANGUAGE: EN-GB </a>
-                                <ul class="submenu2">
-                                    <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/en-gb.png" alt=""> English</a></li>
-                                    <li><a href="javascript:void(0)"><img src="~/shared/main/assets/images/icons/de-de.png" alt=""> Germany</a></li>
-                                </ul>
-                            </li>*@
                     </ul>
                 </nav>
             </div>
-
             <div class="offcanvas-widget-area">
-                <div class="off-canvas-contact-widget">
-                    <div class="header-contact-info">
-                        <ul class="header-contact-info-list">
-                            <li><i class="ion-android-phone-portrait farsi-num"></i> <a href="tel://12452456012" class="farsi-num">+9891770001112 </a></li>
-                            <li><i class="ion-android-mail"></i> <a href="mailto:info@persiandoorsco.ir">info@persiandoorsco.ir</a></li>
-                        </ul>
-                    </div>
-                </div>
                 <!--Off Canvas Widget Social Start-->
-                <div class="off-canvas-widget-social">
-                    <a href="#" title="Facebook"><i class="fa fa-facebook"></i></a>
-                    <a href="#" title="Twitter"><i class="fa fa-twitter"></i></a>
-                    <a href="#" title="LinkedIn"><i class="fa fa-linkedin"></i></a>
-                    <a href="#" title="Youtube"><i class="fa fa-youtube-play"></i></a>
-                    <a href="#" title="Vimeo"><i class="fa fa-vimeo-square"></i></a>
+                <div class="off-canvas-widget-social text-center">
+                    <a href="https://www.facebook.com/persiandoorsco" title="Facebook"><i class="fa fa-facebook fa-2x"></i></a>
+                    <a href="https://t.me/persiandoorsouthshz" title="Telegram"><i class="fa fa-telegram fa-2x"></i></a>
+                    <a href="https://www.instagram.com/persiandoorsouth" title="Instagram"><i class="fa fa-instagram fa-2x"></i></a>
                 </div>
                 <!--Off Canvas Widget Social End-->
             </div>
