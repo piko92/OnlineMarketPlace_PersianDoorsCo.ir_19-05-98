@@ -67,6 +67,30 @@ namespace OnlineMarketPlace.ClassLibraries
 
             return result;
         }
+
+        //returns path of saved file
+        public static async Task<string> ReadAndSaveFile(string contentRootPath, string folderPath, IFormFile FormFile)
+        {
+            string uploads = Path.Combine(contentRootPath, folderPath);
+            bool exists = System.IO.Directory.Exists(uploads);
+            string result = "";
+            if (!exists)
+            {
+                System.IO.Directory.CreateDirectory(uploads);
+            }
+            var file = FormFile;
+            if (file.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    result = folderPath + fileName;
+                }
+            }
+            return result;
+        }
+
         public static async Task<string> SaveImageInDirectory(string contentRootPath, string folderPath, IFormFile FormFile, bool nested = false, int entityId = 0)
         {
             string uploads;
@@ -164,10 +188,10 @@ namespace OnlineMarketPlace.ClassLibraries
         }
 
         public static string SaveThumbnail(
-                            string savePath, 
-                            string contentRootPath, 
-                            string folderPath, 
-                            ImageFormat format, 
+                            string savePath,
+                            string contentRootPath,
+                            string folderPath,
+                            ImageFormat format,
                             bool nested = false, int entityId = 0,
                             int size = 120)
         {
@@ -197,7 +221,7 @@ namespace OnlineMarketPlace.ClassLibraries
                 using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                 {
                     bmp.Save(fileStream, format);
-                    
+
                     if (nested == true)
                     {
                         result = folderPath + $"{entityId}\\{size}x{size}\\" + fileName;
@@ -206,7 +230,7 @@ namespace OnlineMarketPlace.ClassLibraries
                     {
                         result = folderPath + fileName;
                     }
-                   
+
                 }
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
@@ -239,7 +263,7 @@ namespace OnlineMarketPlace.ClassLibraries
             GC.WaitForPendingFinalizers();
             if ((System.IO.Directory.Exists(newPath)))
             {
-                System.IO.Directory.Delete(newPath,true);
+                System.IO.Directory.Delete(newPath, true);
                 return true;
             }
             return false;

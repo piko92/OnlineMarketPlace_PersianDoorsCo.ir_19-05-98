@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -138,10 +139,20 @@ namespace OnlineMarketPlace.Controllers
         }
         #endregion
         #region Panel
+
+        [Authorize]
         public IActionResult UserPanel()
         {
             return View();
         }
+
+        [Authorize]
+        public IActionResult EditProfile(string Id)
+        {
+
+            return View();
+        }
+
         #endregion
     }//end AccountController
 }

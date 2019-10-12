@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.Authentication;
 using OnlineMarketPlace.Models.ViewModels;
 using OnlineMarketPlace.Repository;
@@ -23,6 +25,10 @@ namespace OnlineMarketPlace.Controllers
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
         OnlineMarketContext _db;
+
+        private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
+        string contentRootPath;
+
         public HomeController
             (
                 UserManager<ApplicationUser> _userManager,
@@ -37,6 +43,9 @@ namespace OnlineMarketPlace.Controllers
             dbArticle = _dbArticle;
             dbGeneralPage = _dbGeneralPage;
             _db = db;
+
+            _hostingEnvironment = hostingEnvironment;
+            contentRootPath = _hostingEnvironment.ContentRootPath;
         }
         //Inject DataBase--End
         #endregion

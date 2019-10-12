@@ -196,6 +196,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             });
             builder.Entity<Country>(entity =>
             {
+                entity.Property(p => p.Id).ValueGeneratedNever();
                 entity.Property(p => p.Status).HasDefaultValue(true);
             });
             builder.Entity<Coupon>(entity =>
