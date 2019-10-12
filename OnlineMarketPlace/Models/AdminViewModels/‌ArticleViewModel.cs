@@ -10,6 +10,7 @@ namespace OnlineMarketPlace.Models.AdminViewModels
 {
     public class ArticleViewModel
     {
+        public int Id { get; set; }
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName("عنوان")]
         public string Title { get; set; }

@@ -1,0 +1,152 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش مقاله";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var Product = ViewData["Product"] as List<ProductAbstract>;
+    var dbArticle = ViewData["dbArticle"] as Article;
+}
+
+@model ArticleViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش مقاله  </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Blog" asp-action="EditPostConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden="hidden" value="@dbArticle.Id">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان مقاله<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Title" type="text" class="form-control" value="@dbArticle.Title">
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان لاتین</label>
+                            <div class="col-sm-10">
+                                <input asp-for="LatinTitle" type="text" class="form-control" value="@dbArticle.LatinTitle">
+                                <span asp-validation-for="LatinTitle"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">خلاصه مقاله</label>
+                            <div class="col-sm-10">
+                                <textarea id="txtSumOld" hidden="hidden">@dbArticle.Summery</textarea>
+                                <textarea id="txtSumNew" rows="2" asp-for="Summery" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="Summery"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">متن اصلی</label>
+                            <div class="col-sm-10">
+                                <textarea hidden="hidden" id="txtMainOld"> @dbArticle.ContentHtml</textarea>
+                                <textarea id="txtMainNew" rows="10" asp-for="ContentHtml" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="ContentHtml"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">کالای مرتبط<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <select class="form-control m-b" asp-for="RelatedProductId">
+                                    @if (Product.Count > 0)
+                                    {
+                                        @foreach (var item in Product)
+                                        {
+                                            if (dbArticle.RelatedProductId == item.Id)
+                                            {
+                                                <option value="@item.Id" selected="selected">@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
+
+
+                                        }
+                                    }
+                                </select>
+                                <span asp-validation-for="RelatedProductId"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> تغییر تصویر</label>
+                            <div class="col-sm-10">
+                                @if (dbArticle.MainImage != null)
+                                {
+                                    <img  id="img1" width="330" height="230" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle.MainImage)}")>
+                                }else
+                                {
+                                <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                }
+                                
+                                <br />
+                                <br />
+                                <div class="custom-file">
+                                    <input id="imgInsert" asp-for="MainImage" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                @if (dbArticle.Status)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت  </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+<script>
+    $(txtMainNew).html($(txtMainOld).html());
+    $(txtSumNew).html($(txtSumOld).html());
+    $(imgInsert).change(function (e) {
+        var reader = new FileReader();
+        //console.log(this.files);
+        reader.readAsDataURL(this.files[0]);
+        reader.onloadend = function (e) {
+            $(img1).attr('src', e.target.result)
+        }
+    });
+</script>

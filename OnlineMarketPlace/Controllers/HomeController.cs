@@ -20,16 +20,19 @@ namespace OnlineMarketPlace.Controllers
         UserManager<ApplicationUser> userManager;
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
+        DbRepository<OnlineMarketContext, Article, int> dbArticle;
         OnlineMarketContext _db;
         public HomeController
             (
                 UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
+                DbRepository<OnlineMarketContext, Article, int> _dbArticle,
                 OnlineMarketContext db
             )
         {
             userManager = _userManager;
             dbContactUs = _dbContactUs;
+            dbArticle = _dbArticle;
             _db = db;
         }
         //Inject DataBase--End
@@ -42,7 +45,14 @@ namespace OnlineMarketPlace.Controllers
                 .Include(x => x.ProductFeature)
                 .Include(x => x.ProductImage)
                 .Include(x => x.Category)
-                .OrderByDescending(x=> x.RegDateTime).Take(8).ToList();
+                .OrderByDescending(x => x.RegDateTime).Take(8).ToList();
+            //سه مقاله جدید
+            ViewData["LatestArticle"] = dbArticle.GetAll()
+                .Where(e => e.Status == true)
+                .OrderByDescending(x => x.WrittenDateTime)
+                .Take(3).ToList();
+
+
             return View();
         }
         [HttpPost]
@@ -114,7 +124,7 @@ namespace OnlineMarketPlace.Controllers
 
         public async Task<IActionResult> Test()
         {
-            
+
             return View();
         }
     }
