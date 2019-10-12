@@ -8,6 +8,7 @@ using System.Security.Policy;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Mail;
+using OnlineMarketPlace.Models;
 
 namespace OnlineMarketPlace.ClassLibraries.Authentication
 {
@@ -37,6 +38,15 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                     {
                         string token = await GenerateForPhoneNumber(_User);
                         string message = $"کد تایید شما: {token}";
+
+                        Tokens tokens = new Tokens()
+                        {
+                            UserId = _User.Id,
+                            Token = token,
+                            Used = false
+                        };
+                        await _db.Tokens.AddAsync(tokens);
+                        await _db.SaveChangesAsync();
 
                         SMSService.SMSService SMS = new SMSService.SMSService(_db);
                         SMS.SendSMS(new List<string> { _User.UserName }, message);
@@ -78,21 +88,25 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                         IdentityResult status;
                         if (phoneNumber == null)
                         {
-                            status = await _userManager.ChangePhoneNumberAsync(_User, _User.UserName, token);
+                            var foundToken = _db.Tokens.Where(x => x.Token == token && x.UserId == _User.Id && x.Used == false).FirstOrDefault();
+                            if (foundToken != null)
+                            {
+                                var pastTime = (DateTime.Now - foundToken.RegDateTime).TotalMinutes;
+                                if (pastTime <= 5)
+                                {
+                                    bool isConfirmd = await _userManager.IsPhoneNumberConfirmedAsync(_User);
+                                    if (isConfirmd == false)
+                                    {
+                                        _User.PhoneNumberConfirmed = true;
+                                        await _userManager.UpdateAsync(_User);
+                                        return 1; // success by SMS
+                                    }
+                                }
+                            }
                         }
                         else
                         {
                             status = await _userManager.ChangePhoneNumberAsync(_User, phoneNumber, token);
-                        }
-                        if (status.Succeeded)
-                        {
-                            bool isConfirmd = await _userManager.IsPhoneNumberConfirmedAsync(_User);
-                            if (isConfirmd == false)
-                            {
-                                _User.PhoneNumberConfirmed = true;
-                                await _userManager.UpdateAsync(_User);
-                                return 1; // success by SMS
-                            }
                         }
                     }
                     else

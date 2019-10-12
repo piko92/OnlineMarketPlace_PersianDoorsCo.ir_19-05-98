@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.ClassLibraries.DataSeed;
+using OnlineMarketPlace.Models;
 
 namespace OnlineMarketPlace.Areas.Identity.Data
 {
@@ -94,6 +95,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
         public virtual DbSet<UserReported> UserReported { get; set; }
         public virtual DbSet<VerificationCode> VerificationCode { get; set; }
         public virtual DbSet<Warehouse> Warehouse { get; set; }
+        public virtual DbSet<Tokens> Tokens { get; set; }
 
         
         protected override void OnModelCreating(ModelBuilder builder)
@@ -183,6 +185,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             });
             builder.Entity<City>(entity =>
             {
+                entity.Property(p => p.Id).ValueGeneratedNever();
                 entity.Property(p => p.Status).HasDefaultValue(true);
             });
             builder.Entity<Color>(entity =>
@@ -357,6 +360,7 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             });
             builder.Entity<Province>(entity =>
             {
+                entity.Property(p => p.Id).ValueGeneratedNever();
                 entity.Property(p => p.Status).HasDefaultValue(true);
             });
             builder.Entity<ScreenResulation>(entity =>
@@ -495,6 +499,11 @@ namespace OnlineMarketPlace.Areas.Identity.Data
             builder.Entity<Warehouse>(entity =>
             {
                 entity.Property(p => p.Status).HasDefaultValue(true);
+            });
+            builder.Entity<Tokens>(entity =>
+            {
+                entity.Property(p => p.Used).HasDefaultValue(false);
+                entity.Property(p => p.RegDateTime).HasDefaultValueSql("getdate()");
             });
 
             builder.Seed();

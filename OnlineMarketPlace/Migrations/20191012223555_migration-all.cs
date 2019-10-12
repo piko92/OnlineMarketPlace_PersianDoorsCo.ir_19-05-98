@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineMarketPlace.Migrations
 {
-    public partial class AllMigration : Migration
+    public partial class migrationall : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -228,6 +228,22 @@ namespace OnlineMarketPlace.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Texture", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Tokens",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<string>(nullable: true),
+                    Token = table.Column<string>(nullable: true),
+                    RegDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
+                    Used = table.Column<bool>(nullable: false, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tokens", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -598,7 +614,8 @@ namespace OnlineMarketPlace.Migrations
                     EmailServiceProvider = table.Column<string>(nullable: true),
                     SMSUsername = table.Column<string>(nullable: true),
                     SMSPassword = table.Column<string>(nullable: true),
-                    SMSApiAddress = table.Column<string>(nullable: true)
+                    SMSApiAddress = table.Column<string>(nullable: true),
+                    SMSApiNumber = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -884,8 +901,7 @@ namespace OnlineMarketPlace.Migrations
                 name: "Country",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     LatinName = table.Column<string>(nullable: true),
                     ContinentId = table.Column<int>(nullable: true),
@@ -1196,8 +1212,7 @@ namespace OnlineMarketPlace.Migrations
                 name: "Province",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     LatinName = table.Column<string>(nullable: true),
                     CountryId = table.Column<int>(nullable: true),
@@ -1371,8 +1386,7 @@ namespace OnlineMarketPlace.Migrations
                 name: "City",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Id = table.Column<int>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     LatinName = table.Column<string>(nullable: true),
                     ProvinceId = table.Column<int>(nullable: true),
@@ -1459,6 +1473,7 @@ namespace OnlineMarketPlace.Migrations
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<string>(nullable: true),
                     UserAddress = table.Column<string>(nullable: true),
+                    RecieverFullName = table.Column<string>(nullable: true),
                     CityId = table.Column<int>(nullable: true),
                     ProvinceId = table.Column<int>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
@@ -2739,6 +2754,18 @@ namespace OnlineMarketPlace.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Currency",
+                columns: new[] { "Id", "LatinName", "Name", "RatioPrice", "Status", "Symbol" },
+                values: new object[,]
+                {
+                    { 1, "Rial", "ریال", null, true, "ريال" },
+                    { 2, "Toman", "تومان", null, true, "تومان" },
+                    { 3, "Dollar", "دلار", null, true, "$" },
+                    { 4, "Euro", "یورو", null, true, "€" },
+                    { 5, "Yuan", "یوان", null, true, "¥" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AdditionalFeatures_ParentId",
                 table: "AdditionalFeatures",
@@ -3705,6 +3732,9 @@ namespace OnlineMarketPlace.Migrations
 
             migrationBuilder.DropTable(
                 name: "SiteGeneralInfo");
+
+            migrationBuilder.DropTable(
+                name: "Tokens");
 
             migrationBuilder.DropTable(
                 name: "TopSlider");

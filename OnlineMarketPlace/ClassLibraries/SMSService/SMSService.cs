@@ -1,6 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿//using Microsoft.AspNetCore.Mvc;
+//using Newtonsoft.Json;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Net;
+//using System.Net.Http;
+//using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using OnlineMarketPlace.Areas.Identity.Data;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,26 +78,15 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
                 smsResults.Clear();
                 foreach (var item in to)
                 {
-                    Uri targetUri = new Uri($"https://api.sabanovin.com/v1/{_SMSApiKey}/sms/send.json?gateway={_SMSProviderNumber}&to={item}&text={message}");
+                    //Uri targetUri = new Uri($"https://api.sabanovin.com/v1/{_SMSApiKey}/sms/send.json?gateway={_SMSProviderNumber}&to={item}&text={message}");
+                    Uri targetUri = new Uri($"https://api.sabanovin.com/v1/sa2543927713:N06oBU923HT0dR2dmtUQMuA9Jaz4yVtcTkEr/sms/send.json?gateway=100069183656&to={item}&text={message}");
 
                     System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(targetUri);
 
                     request.Credentials = CredentialCache.DefaultCredentials;
                     // Get the response.  
                     WebResponse response = request.GetResponse();
-                    HttpWebResponse myHttpWebResponse = (HttpWebResponse)request.GetResponse();
-                    SMSResult result = new SMSResult()
-                    {
-                        Number = item
-                    };
-                    if (myHttpWebResponse.StatusCode == HttpStatusCode.OK)
-                    {
-                        result.Result = true;
-                    }
-                    else
-                    {
-                        result.Result = false;
-                    }
+                    //HttpWebResponse myHttpWebResponse = (HttpWebResponse)request.GetResponse();
                 }
             }
             catch (Exception ex)

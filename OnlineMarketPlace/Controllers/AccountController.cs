@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -63,6 +64,7 @@ namespace OnlineMarketPlace.Controllers
                         if (result > 0)
                         {
                             HttpContext.Session.SetString("newRegUser", foundUser.Id);
+
                             return RedirectToAction("CheckIdentity");
                         }
                     }
@@ -73,14 +75,22 @@ namespace OnlineMarketPlace.Controllers
         #endregion
         #region ConfirmIdentity
         public IActionResult CheckIdentity() => View();
-        public IActionResult ConfirmIdentity(string token)
+        public async Task<IActionResult> ConfirmIdentity(string token)
         {
             var newUserId = HttpContext.Session.GetString("newRegUser");
             if (newUserId != null)
             {
-
+                var newUser = await _userManager.FindByIdAsync(newUserId);
+                if (newUser != null)
+                {
+                    TokenGenerator tokenGenerator = new TokenGenerator(_userManager, _db);
+                    var r = await tokenGenerator.ApproveVerificationToken(newUser, token);
+                    TempData["msg"] = "ثبت نام شما با موفقیت انجام پذیرفت";
+                    return RedirectToAction("Index", "Home");
+                }
             }
-            return View();
+            TempData["msg"] = "در مراجل ثبت نام شما مشکلی رخ داده است.";
+            return RedirectToAction("Register");
         }
         #endregion
         #region Login
@@ -125,9 +135,9 @@ namespace OnlineMarketPlace.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                 }
-                
+
             }
-            
+
             return RedirectToAction("Login");
         }
         #endregion

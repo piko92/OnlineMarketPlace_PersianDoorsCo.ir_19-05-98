@@ -24,9 +24,7 @@ namespace OnlineMarketPlace.Controllers
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         OnlineMarketContext _db;
-
-        private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
-        string contentRootPath;
+        
 
         public HomeController
             (
@@ -40,9 +38,7 @@ namespace OnlineMarketPlace.Controllers
             dbContactUs = _dbContactUs;
             dbArticle = _dbArticle;
             _db = db;
-
-            _hostingEnvironment = hostingEnvironment;
-            contentRootPath = _hostingEnvironment.ContentRootPath;
+            
         }
         //Inject DataBase--End
         #endregion

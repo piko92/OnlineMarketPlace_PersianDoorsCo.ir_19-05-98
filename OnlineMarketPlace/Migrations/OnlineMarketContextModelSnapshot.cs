@@ -186,6 +186,8 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<int?>("ProvinceId");
 
+                    b.Property<string>("RecieverFullName");
+
                     b.Property<DateTime?>("RegDateTime")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
@@ -744,9 +746,7 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.City", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<int?>("CallingCode");
 
@@ -2219,9 +2219,7 @@ namespace OnlineMarketPlace.Migrations
 
             modelBuilder.Entity("OnlineMarket.Models.Province", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("Id");
 
                     b.Property<int?>("CallingCode");
 
@@ -3314,6 +3312,29 @@ namespace OnlineMarketPlace.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
+                });
+
+            modelBuilder.Entity("OnlineMarketPlace.Models.Tokens", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("RegDateTime")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Token");
+
+                    b.Property<bool>("Used")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
