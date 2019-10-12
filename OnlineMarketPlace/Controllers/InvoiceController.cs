@@ -117,7 +117,7 @@ namespace OnlineMarketPlace.Controllers
         //Purchuse Cart--End
         #endregion
         #region Count & Price
-        public async Task<int> TotalInvoicePrice(int InvoiceId)
+        public int TotalInvoicePrice(int InvoiceId)
         {
             int sum = 0;
             var entity = dbInvoice.FindById(InvoiceId);
@@ -128,26 +128,26 @@ namespace OnlineMarketPlace.Controllers
 
             }
             //Update CalculatedPrice
-            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
-            var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
-            int cartId = InitializeCart(invoiceUser, currentUser);
-            var entityInvoice = dbInvoice.FindById(cartId);
-            entityInvoice.CalculatedPrice = sum;
-            dbInvoice.Update(entityInvoice);
+            // var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            // var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+            //  int cartId = InitializeCart(invoiceUser, currentUser);
+            // var entityInvoice = dbInvoice.FindById(cartId);
+            entity.CalculatedPrice = sum;
+            dbInvoice.Update(entity);
             return (sum);
         }
         public async Task<IActionResult> IncrementCount(int InvoiceProductId)
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice =await TotalInvoicePrice(id);
+            decimal totalPrice =  TotalInvoicePrice(id);
             if (entity != null)
             {
                 entity.Count++;
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice = await TotalInvoicePrice(id);
+                    totalPrice =  TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
@@ -161,7 +161,7 @@ namespace OnlineMarketPlace.Controllers
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice = await TotalInvoicePrice(id);
+            decimal totalPrice =  TotalInvoicePrice(id);
             if (entity != null)
             {
                 if (entity.Count > 1)
@@ -171,7 +171,7 @@ namespace OnlineMarketPlace.Controllers
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice = await TotalInvoicePrice(id);
+                    totalPrice =  TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
@@ -192,7 +192,7 @@ namespace OnlineMarketPlace.Controllers
                 {
                     dbInvoiceProduct.DeleteById(InvoiceProductId);
                     var id = entity.InvoiceId.GetValueOrDefault();
-                    decimal totalPrice =await TotalInvoicePrice(id);
+                    decimal totalPrice =  TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
 
                 }
@@ -216,7 +216,7 @@ namespace OnlineMarketPlace.Controllers
             string backUrl = "https://localhost:44305/Invoice/PaymentVerify";
             string CustomerEmail = "adsff@gmail.com";
             string CustomerPhoneNumber = "09171112525";
-            var result = await payment.PaymentRequest(description,backUrl,CustomerEmail,CustomerPhoneNumber);
+            var result = await payment.PaymentRequest(description, backUrl, CustomerEmail, CustomerPhoneNumber);
             if (result.Status == 100)
             {
                 //return Redirect("https://zarinpal.com/pg/startpay/"+result.Authority);
@@ -237,7 +237,7 @@ namespace OnlineMarketPlace.Controllers
                 //SandBox==Test ZarinPal
                 var payment = new ZarinpalSandbox.Payment(10000);
                 var result = await payment.Verification(autority);
-                if (result.Status==100)
+                if (result.Status == 100)
                 {
                     return View();
                 }

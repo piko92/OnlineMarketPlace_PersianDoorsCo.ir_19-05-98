@@ -21,18 +21,21 @@ namespace OnlineMarketPlace.Controllers
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
+        DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
         OnlineMarketContext _db;
         public HomeController
             (
                 UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
+                DbRepository<OnlineMarketContext, GeneralPage, int> _dbGeneralPage,
                 OnlineMarketContext db
             )
         {
             userManager = _userManager;
             dbContactUs = _dbContactUs;
             dbArticle = _dbArticle;
+            dbGeneralPage = _dbGeneralPage;
             _db = db;
         }
         //Inject DataBase--End
@@ -112,7 +115,9 @@ namespace OnlineMarketPlace.Controllers
         #region About
         public IActionResult About()
         {
-            return View();
+            var dbViewModel = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
+
+            return View(dbViewModel);
         }
         #endregion
 
@@ -124,7 +129,6 @@ namespace OnlineMarketPlace.Controllers
 
         public async Task<IActionResult> Test()
         {
-
             return View();
         }
     }

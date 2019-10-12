@@ -1,92 +1,52 @@
 ﻿
 @{
-    ViewData["Title"] = "ویرایش مقاله";
+    ViewData["Title"] = "ویرایش صفحه درباره ما";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    var Product = ViewData["Product"] as List<ProductAbstract>;
-    var dbArticle = ViewData["dbArticle"] as Article;
+    var dbAboutUs = ViewData["AboutUs"] as GeneralPage;
 }
 
-@model ArticleViewModel
+@model GeneralPageViewModel
 <div class="row">
     <div class="col-md-12">
         <div class="panel panel-card margin-b-30">
             <div class="panel-heading">
-                <h4 class="panel-title"> ویرایش مقاله  </h4>
+                <h4 class="panel-title"> ویرایش صفحه درباره ما  </h4>
             </div>
             <div class="panel-body">
                 <!-- Start .Form -->
                 <div class="panel-body">
-                    <form asp-area="admin" asp-controller="Blog" asp-action="EditPostConfirm"
+                    <form asp-area="admin" asp-controller="Home" asp-action="InsertAboutConfirm"
                           id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
-                        <input asp-for="Id" hidden="hidden" value="@dbArticle.Id">
+                        <input asp-for="Id" hidden="hidden" value="@dbAboutUs.Id">
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">عنوان مقاله<span class="red-color">*</span></label>
+                            <label class="col-sm-2 control-label">تیتر صفحه</label>
                             <div class="col-sm-10">
-                                <input asp-for="Title" type="text" class="form-control" value="@dbArticle.Title">
-                                <span asp-validation-for="Title"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">عنوان لاتین</label>
-                            <div class="col-sm-10">
-                                <input asp-for="LatinTitle" type="text" class="form-control" value="@dbArticle.LatinTitle">
-                                <span asp-validation-for="LatinTitle"></span>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">خلاصه مقاله</label>
-                            <div class="col-sm-10">
-                                <textarea id="txtSumOld" hidden="hidden">@dbArticle.Summery</textarea>
-                                <textarea id="txtSumNew" rows="2" asp-for="Summery" type="text" class="form-control"></textarea>
-                                <span asp-validation-for="Summery"></span>
+                                <input asp-for="Summary" type="text" class="form-control" value="@dbAboutUs.Summary">
+                                <span asp-validation-for="Summary"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">متن اصلی</label>
                             <div class="col-sm-10">
-                                <textarea hidden="hidden" id="txtMainOld">@dbArticle.ContentHtml</textarea>
+                                <textarea hidden="hidden" id="txtMainOld">@dbAboutUs.ContentHtml</textarea>
                                 <textarea id="txtMainNew" rows="10" asp-for="ContentHtml" type="text" class="form-control"></textarea>
                                 <span asp-validation-for="ContentHtml"></span>
-                            </div>
-                        </div>
-                        <div class="hr-line-dashed"></div>
-
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">کالای مرتبط<span class="red-color">*</span></label>
-                            <div class="col-sm-10">
-                                <select class="form-control m-b" asp-for="RelatedProductId">
-                                    @if (Product.Count > 0)
-                                    {
-                                        @foreach (var item in Product)
-                                        {
-                                            if (dbArticle.RelatedProductId == item.Id)
-                                            {
-                                                <option value="@item.Id" selected="selected">@item.Name</option>
-                                            }
-                                            else
-                                            {
-                                                <option value="@item.Id">@item.Name</option>
-                                            }
-
-
-                                        }
-                                    }
-                                </select>
-                                <span asp-validation-for="RelatedProductId"></span>
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"> تغییر تصویر</label>
                             <div class="col-sm-10">
-                                @if (dbArticle.MainImage != null)
+                                @if (dbAboutUs.MainImage != null)
                                 {
-                                    <img  id="img1" width="330" height="230" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle.MainImage)}")>
-                                }else
-                                {
-                                <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                    <img id="img1" width="330" height="230" alt=""
+                                         src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbAboutUs.MainImage)}")>
                                 }
-                                
+                                else
+                                {
+                                    <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                }
+
                                 <br />
                                 <br />
                                 <div class="custom-file">
@@ -98,7 +58,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">وضعیت </label>
                             <div class="col-sm-10">
-                                @if (dbArticle.Status)
+                                @if (dbAboutUs.Status)
                                 {
                                     <div class="radio inline-element sp-rl-padding-10">
                                         <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
@@ -140,7 +100,6 @@
 <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
 <script>
     $(txtMainNew).html($(txtMainOld).html());
-    $(txtSumNew).html($(txtSumOld).html());
     $(imgInsert).change(function (e) {
         var reader = new FileReader();
         //console.log(this.files);
@@ -150,3 +109,5 @@
         }
     });
 </script>
+
+
