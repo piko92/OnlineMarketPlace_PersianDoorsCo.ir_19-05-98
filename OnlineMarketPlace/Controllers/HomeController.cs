@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.Authentication;
 using OnlineMarketPlace.Models.ViewModels;
 using OnlineMarketPlace.Repository;
@@ -21,16 +23,24 @@ namespace OnlineMarketPlace.Controllers
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
         OnlineMarketContext _db;
+
+        private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
+        string contentRootPath;
+
         public HomeController
             (
                 UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
-                OnlineMarketContext db
+                OnlineMarketContext db,
+                IHostingEnvironment hostingEnvironment
             )
         {
             userManager = _userManager;
             dbContactUs = _dbContactUs;
             _db = db;
+
+            _hostingEnvironment = hostingEnvironment;
+            contentRootPath = _hostingEnvironment.ContentRootPath;
         }
         //Inject DataBase--End
         #endregion
@@ -38,11 +48,17 @@ namespace OnlineMarketPlace.Controllers
         public IActionResult Index() //Home Page
         {
             //هشت محصول جدید
-            ViewData["LatestProducts"] = _db.ProductAbstract
-                .Include(x => x.ProductFeature)
-                .Include(x => x.ProductImage)
-                .Include(x => x.Category)
-                .OrderByDescending(x=> x.RegDateTime).Take(8).ToList();
+            List<ProductAbstract> LatestProducts = new List<ProductAbstract>();
+            if (_db.ProductAbstract.Count() > 0)
+            {
+                LatestProducts = _db.ProductAbstract
+                 .Include(x => x.ProductFeature)
+                 .Include(x => x.ProductImage)
+                 .Include(x => x.Category)
+                 .OrderByDescending(x => x.RegDateTime).Take(8).ToList();
+            }
+            
+            ViewData["LatestProducts"] = LatestProducts;
             return View();
         }
         [HttpPost]
@@ -114,6 +130,8 @@ namespace OnlineMarketPlace.Controllers
 
         public async Task<IActionResult> Test()
         {
+            
+            var r = ReadExcelFiles.Read(contentRootPath + @"\wwwroot\data-seeds\Province_iran.xlsx");
             
             return View();
         }

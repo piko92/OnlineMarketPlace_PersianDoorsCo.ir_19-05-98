@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20191012200916_migration_fixCountry_panahi")]
+    partial class migration_fixCountry_panahi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -185,6 +187,8 @@ namespace OnlineMarketPlace.Migrations
                     b.Property<string>("PostalCode");
 
                     b.Property<int?>("ProvinceId");
+
+                    b.Property<string>("RecieverFullName");
 
                     b.Property<DateTime?>("RegDateTime")
                         .ValueGeneratedOnAdd()

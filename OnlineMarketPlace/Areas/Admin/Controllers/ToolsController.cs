@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
+using OnlineMarketPlace.ClassLibraries.NotificationHandler;
 using OnlineMarketPlace.Models.AdminViewModels;
 using OnlineMarketPlace.Repository;
 
@@ -25,16 +28,24 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         DbRepository<OnlineMarketContext, ContactUs, int> dbContactUs;
         DbRepository<OnlineMarketContext, Setting, int> dbSetting;
+        OnlineMarketContext _db;
+        private IConfiguration _configuration;
+        string contentRootPath;
         public ToolsController
             (
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
                 DbRepository<OnlineMarketContext, Setting, int> _dbSetting,
-                IHostingEnvironment env
+                IHostingEnvironment env,
+                IConfiguration configuration,
+                OnlineMarketContext db
             )
         {
             dbContactUs = _dbContactUs;
             dbSetting = _dbSetting;
             this.env = env;
+            _configuration = configuration;
+            contentRootPath = env.ContentRootPath;
+            _db = db;
         }
         //Inject DataBase--End
         #endregion
@@ -83,7 +94,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 MailMessage msg = new MailMessage(SenderEmail, ReceiverEmail);
                 msg.Subject = Subject;
                 msg.Body = Content;
-                if (model.AttachedFiles !=null)
+                if (model.AttachedFiles != null)
                 {
                     foreach (var item in model.AttachedFiles)
                     {
@@ -158,6 +169,129 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return RedirectToAction("Setting");
         }
+
+        public ViewResult FillTables(string notification)
+        {
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> FillAdditionalTables(AdditionalTablesViewModel model)
+        {
+            string nvm;
+            bool countryOK = false, provinceOK = false, cityOK = false;
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    string folderPath = _configuration.GetSection("DefaultPaths").GetSection("DataSet").Value;
+                    if (model.Country != null)
+                    {
+                        var tempFile = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.Country);
+                        var combinedPath = Path.Combine(contentRootPath, tempFile);
+                        var renderedCountyFile = ReadExcelFiles.Read(combinedPath);
+                        List<Country> countries = new List<Country>();
+                        for (int i = 0; i < renderedCountyFile.Count; i++)
+                        {
+                            Country country = new Country()
+                            {
+                                Name = renderedCountyFile[i][0]
+                            };
+                            countries.Add(country);
+                        }
+                        if (model.RewriteCountry == true)
+                        {
+                            _db.Country.RemoveRange(_db.Country.ToList());
+                            _db.SaveChanges();
+                        }
+                        countries = countries.OrderBy(x => x.Name).ToList();
+                        _db.Country.AddRange(countries);
+                        var result = _db.SaveChanges();
+                        var deleted = FileManager.DeleteFile(contentRootPath, tempFile);
+                        if (result == 1)
+                        {
+                            countryOK = true;
+                        }
+                    }//end Country
+
+                    if (model.Province != null)
+                    {
+                        var tempFile = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.Province);
+                        var combinedPath = Path.Combine(contentRootPath, tempFile);
+                        var renderedProvinceFile = ReadExcelFiles.Read(combinedPath);
+                        List<Province> provinces = new List<Province>();
+                        for (int i = 0; i < renderedProvinceFile.Count; i++)
+                        {
+                            Province province = new Province()
+                            {
+                                Name = renderedProvinceFile[i][0]
+                            };
+                            provinces.Add(province);
+                        }
+                        if (model.RewriteProvince == true)
+                        {
+                            _db.Province.RemoveRange(_db.Province.ToList());
+                            _db.SaveChanges();
+                        }
+                        provinces = provinces.OrderBy(x => x.Name).ToList();
+                        _db.Province.AddRange(provinces);
+                        var result = _db.SaveChanges();
+                        var deleted = FileManager.DeleteFile(contentRootPath, tempFile);
+                        if (result == 1)
+                        {
+                            provinceOK = true;
+                        }
+                    }//end Province
+
+                    if (model.City != null)
+                    {
+                        var tempFile = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.City);
+                        var combinedPath = Path.Combine(contentRootPath, tempFile);
+                        var renderedCityFile = ReadExcelFiles.Read(combinedPath);
+                        List<City> cities = new List<City>();
+                        for (int i = 0; i < renderedCityFile.Count; i++)
+                        {
+                            City city = new City()
+                            {
+                                Name = renderedCityFile[i][0]
+                            };
+                            cities.Add(city);
+                        }
+                        if (model.RewriteCity == true)
+                        {
+                            _db.City.RemoveRange(_db.City.ToList());
+                            _db.SaveChanges();
+                        }
+                        cities = cities.OrderBy(x => x.Name).ToList();
+                        _db.City.AddRange(cities);
+                        var result = _db.SaveChanges();
+                        var deleted = FileManager.DeleteFile(contentRootPath, tempFile);
+                        if (result == 1)
+                        {
+                            cityOK = true;
+                        }
+                    }//end City
+
+                    if (countryOK == true && provinceOK == true && cityOK == true)
+                    {
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                        return RedirectToAction("FillTables", new { notification = nvm }); //successful insert
+                    }
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("FillTables", new { notification = nvm }); //failed insert
+            }
+            catch (Exception ex)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("FillTables", new { notification = nvm }); //failed insert
+            }
+        }
         #endregion
+
     }
 }

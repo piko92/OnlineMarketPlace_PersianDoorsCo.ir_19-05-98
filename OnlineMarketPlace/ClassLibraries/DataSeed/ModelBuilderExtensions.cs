@@ -1,12 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace OnlineMarketPlace.ClassLibraries.DataSeed
 {
+
     public static class ModelBuilderExtensions
     {
         public static void Seed(this ModelBuilder modelBuilder)
@@ -53,6 +56,9 @@ namespace OnlineMarketPlace.ClassLibraries.DataSeed
                     Symbol = "¥"
                 }
             );
+
         }
+
     }
+
 }

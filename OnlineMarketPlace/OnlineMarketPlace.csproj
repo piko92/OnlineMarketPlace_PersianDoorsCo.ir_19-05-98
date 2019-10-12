@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="CoreCompat.System.Drawing" Version="1.0.0-beta006" />
+    <PackageReference Include="IronXL.Excel" Version="2019.5.2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
@@ -20,6 +21,11 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="ClassLibraries\EmailService\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <None Include="wwwroot\data-seeds\Province_iran.xlsx" />
   </ItemGroup>
 
 </Project>
