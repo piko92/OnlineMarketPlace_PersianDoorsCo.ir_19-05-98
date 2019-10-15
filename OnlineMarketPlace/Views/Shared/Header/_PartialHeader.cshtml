@@ -64,11 +64,10 @@
                                         <ul class="rtl-class">
                                             @if (User.Identity.IsAuthenticated)
                                             {
-                                                <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
                                                 <li><a asp-controller="Account" asp-action="UserPanel">پروفایل شخصی</a></li>
-                                                <li><a href="checkout.html">پرداخت ها</a></li>
-                                                <li><a href="cart.html">سبد خرید</a></li>
-                                                <li><a href="wishlist.html">لیست علاقه مندی ها</a></li>
+                                                <li><a asp-controller="Invoice" asp-action="ShowPurchuseCart">سبد خرید</a></li>
+                                                <li><a href="/Account/UserPanel#orders">پرداخت ها</a></li>
+                                                <li><a asp-controller="Account" asp-action="Logout">خروج</a></li>
                                             }
                                             else
                                             {

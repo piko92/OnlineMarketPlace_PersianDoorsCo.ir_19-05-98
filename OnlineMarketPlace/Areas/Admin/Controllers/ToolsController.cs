@@ -12,6 +12,7 @@ using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.NotificationHandler;
+using OnlineMarketPlace.ClassLibraries.SMSService.SMSIR;
 using OnlineMarketPlace.Models.AdminViewModels;
 using OnlineMarketPlace.Repository;
 
@@ -133,21 +134,40 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         #endregion
         #region Setting
         [Authorize(Roles = "Admin")]
-        public IActionResult Setting()
+        public IActionResult Setting(string notification)
         {
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
             return View();
         }
 
         [Authorize(Roles = "Admin")]
-        public IActionResult EditSetting(Setting model)
+        public IActionResult EditSetting(SettingViewModel model)
         {
+            string nvm;
             if (model != null)
             {
                 var isNotEmpty = dbSetting.GetAll();
                 if (isNotEmpty.Count == 0)
                 {
-                    dbSetting.Insert(model);
-                    return RedirectToAction("Setting");
+                    Setting setting = new Setting()
+                    {
+                        SMSApiAddress = model.SMSApiAddress,
+                        SMSApiNumber = model.SMSApiNumber,
+                        SMSUsername = model.SMSUsername,
+                        AdminEmail = model.AdminEmail,
+                        EmailPort = model.EmailPort,
+                        EmailProtocol = model.EmailProtocol,
+                        EmailServiceProvider = model.EmailServiceProvider,
+                        BaseCurrencyId = model.BaseCurrencyId
+
+                    };
+                    dbSetting.Insert(setting);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                    return RedirectToAction("Setting", new { notification = nvm });
                 }
 
                 var foundSetting = dbSetting.FindById(model.Id);
@@ -164,10 +184,12 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     foundSetting.BaseCurrencyId = model.BaseCurrencyId;
 
                     var status = dbSetting.Update(foundSetting);
-                    return RedirectToAction("Setting");
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                    return RedirectToAction("Setting", new { notification = nvm });
                 }
             }
-            return RedirectToAction("Setting");
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+            return RedirectToAction("Setting", new { notification = nvm });
         }
 
         public ViewResult FillTables(string notification)
@@ -292,6 +314,27 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }
         #endregion
-
+        #region SmsIr
+        public IActionResult SendSms(string smsText, string phoneNumber)
+        {
+            return View();
+        }
+        public IActionResult SendSmsConfirm(string smsText, string phoneNumber)
+        {
+            // string ApiKey = "ae868fb306a4d18320668fb";
+            // string SecurityCode = "PersianDoorsCo!@#12345";
+            // string lineNumber = "30004747474480";
+            var setting = dbSetting.GetAll().FirstOrDefault();
+            string ApiKey = setting.SMSApiAddress;
+            string SecurityCode = setting.SMSUsername;
+            string lineNumber = setting.SMSApiNumber;
+            //متن پیامک
+            string message = smsText;
+            //شماره مقصد
+            string mobileNumber = phoneNumber;
+            var result = SmsIrService.SendSms(ApiKey, SecurityCode, lineNumber, message, mobileNumber);
+            return Json(result);
+        }
+        #endregion
     }
 }

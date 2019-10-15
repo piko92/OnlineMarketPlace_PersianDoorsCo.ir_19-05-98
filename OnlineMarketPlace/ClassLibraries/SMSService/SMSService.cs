@@ -64,7 +64,7 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
 
                 return balance.Entry.Balance;
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 return -1;
             }
@@ -89,7 +89,7 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
                     //HttpWebResponse myHttpWebResponse = (HttpWebResponse)request.GetResponse();
                 }
             }
-            catch (Exception ex)
+            catch (Exception )
             {
                 // در صورتی که خروجی وب سرویس 200 نباشد این خطارخ می دهد.
                 throw new NotImplementedException();

@@ -22,7 +22,7 @@
                         </a>
                     </div>
                     <div class="banner-content tr-right">
-                        <h3 class="title">درهای با طراحی <br>خلاقانه </h3>
+                        <h3 class="title">درب های با طراحی <br>خلاقانه </h3>
                         <a asp-controller="product" asp-action="search">بیشتر</a>
                     </div>
                 </div>
@@ -32,13 +32,13 @@
                 <!-- Single Banner Start -->
                 <div class="single-banner-item mb-30">
                     <div class="banner-image">
-                        <a href="shop-left-sidebar.html">
+                        <a asp-controller="product" asp-action="search">
                             <img src="~/temp_images/banner/5.jpg" alt="">
                         </a>
                     </div>
                     <div class="banner-content tr-right">
-                        <h3 class="title">Stylish Divan <br> Latest Collection</h3>
-                        <a href="shop.html">SHOP NOW</a>
+                        <h3 class="title"> بهترین<br>  درب های ضد سرقت </h3>
+                        <a asp-controller="product" asp-action="search">خرید کنید</a>
                     </div>
                 </div>
                 <!-- Single Banner End -->
@@ -47,13 +47,13 @@
                 <!-- Single Banner Start -->
                 <div class="single-banner-item mb-30">
                     <div class="banner-image">
-                        <a href="shop.html">
+                        <a asp-controller="product" asp-action="search">
                             <img src="~/temp_images/banner/6.jpg" alt="">
                         </a>
                     </div>
                     <div class="banner-content tl-left color-white">
-                        <h3 class="title">2019 <br> Bed Collections</h3>
-                        <a href="shop.html">SHOP NOW</a>
+                        <h3 class="title">به روز ترین <br>  درب های ساختمانی</h3>
+                        <a asp-controller="product" asp-action="search">بیشتر</a>
                     </div>
                 </div>
                 <!-- Single Banner End -->
@@ -62,13 +62,13 @@
                 <!-- Single Banner Start -->
                 <div class="single-banner-item mb-30">
                     <div class="banner-image">
-                        <a href="shop-left-sidebar.html">
+                        <a asp-controller="product" asp-action="search">
                             <img src="~/temp_images/banner/8.jpg" alt="">
                         </a>
                     </div>
                     <div class="banner-content tl-left">
-                        <h3 class="title">TV Cabinet <br> New Arrivals</h3>
-                        <a href="shop.html">SHOP NOW</a>
+                        <h3 class="title"> تنوع<br> در انواع طرح ها</h3>
+                        <a asp-controller="product" asp-action="search">جزییات</a>
                     </div>
                 </div>
                 <!-- Single Banner End -->
@@ -107,7 +107,7 @@
                                         <div class="product-label">
                                             @*<span class="farsi-num">20%</span>*@
                                         </div>
-                                        <a href="single-product.html">
+                                        <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">
                                             @try
                                             {
                                                 if (item.ProductImage.Count > 0)
@@ -147,8 +147,8 @@
                                                        asp-route-productFeatureId="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Id"
                                                        title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </li>
-                                                <li><a href="#quick-view-modal-container" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
+                                                <li><a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
+                                                <li><a href="#" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -185,8 +185,8 @@
                         <img src="~/shared/main/assets/images/icons/feature-1.png" class="img-fluid" alt="">
                     </div>
                     <div class="feature-content rtl-class">
-                        <h4 class="title">حمل و نصب رایگان</h4>
-                        <p class="short-desc farsi-num">حمل و نصب رایگان خرید های بالای 10 میلیون تومان </p>
+                        <h4 class="title">خدمات حمل و نصب </h4>
+                        <p class="short-desc farsi-num">حمل و نصب انواع محصولات مطابق با سفارش مشتریان محترم </p>
                     </div>
                 </div>
                 <!-- Single Feature End -->
@@ -212,7 +212,9 @@
                     </div>
                     <div class="feature-content rtl-class">
                         <h4 class="title">خدمات پس از فروش</h4>
-                        <p class="short-desc">دارای بیش از 20 نمایندگی فعال در سطح کشور جهت ارائه خدمات پس از فروش </p>
+                        <p class="short-desc">
+                            پشتیبانی فنی،راه اندازی و تعمیر و تعویض محصولات
+                        </p>
                     </div>
                 </div>
                 <!-- Single Feature End -->
