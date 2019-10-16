@@ -32,7 +32,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, UserImage, int> _dbUserImage;
 
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
-        string contentRootPath;
+        readonly string contentRootPath;
         private readonly string MainAdmin = "admin@admin.com";
 
         public AccountController(UserManager<ApplicationUser> userManager,
@@ -133,7 +133,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     DateOfBirth = new DateTime(1990, 1, 20),
                     SpecialUser = true,
                     Rank = 1000,
-                    NationalCode = "2283332211"
+                    NationalCode = "2283332211",
+                    PhoneNumber = "09386723416",
+                    PhoneNumberConfirmed = true,
+                    EmailConfirmed = true
+
                 };
                 var status = await _userManager.CreateAsync(admin, "Qwerty@01234");
                 if (status.Succeeded)
@@ -293,7 +297,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("Signup", new { notification = nvm });
@@ -475,7 +479,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         _dbUserImage.Insert(userImage);
                     }
 
-                    
+
 
                     //--------------------------------
                     var status = await _userManager.UpdateAsync(user);
@@ -491,7 +495,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("UserList", new { notification = nvm });
             }
-            catch (Exception )
+            catch (Exception)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
                 return RedirectToAction("UserList", new { notification = nvm });
@@ -581,7 +585,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Remove, contentRootPath);
                 return Json(nvm);
             }
-            catch (Exception )
+            catch (Exception)
             {
                 //failed operation
                 nvm = NotificationHandler.SerializeMessage<NotificationViewModel>(NotificationHandler.Failed_Operation, contentRootPath);

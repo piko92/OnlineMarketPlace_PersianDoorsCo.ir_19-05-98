@@ -66,7 +66,9 @@
                                             <input value="1" type="number" title="تعداد">
                                         </div>
                                         <div class="add-to-link">
-                                            <button class="btn"><i class="fa fa-shopping-bag"></i> اضافه به سبد خرید </button>
+                                            <a asp-controller="Invoice" asp-action="AddToCart"
+                                               asp-route-productFeatureId="@Model.ProductFeature.Where(x => x.ProductAbstractId == Model.Id).FirstOrDefault().Id"
+                                               class="btn"><i class="fa fa-shopping-bag"></i>اضافه به سبد خرید</a>
                                         </div>
                                     </form>
                                 </div>
@@ -278,7 +280,7 @@
                             <div class="product-content">
                                 <h3 class="title"> <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">@item.Name</a></h3>
                                 <p class="product-price">
-                                    <span class="discounted-price local-price farsi-num">@($"{double.Parse(Model.BasePrice.ToString().Split(',')[0])} تومان ")</span> 
+                                    <span class="discounted-price local-price farsi-num">@($"{double.Parse(Model.BasePrice.ToString().Split(',')[0])} تومان ")</span>
                                     @*<span class="main-price discounted ">$220.00</span>*@
                                 </p>
                             </div>

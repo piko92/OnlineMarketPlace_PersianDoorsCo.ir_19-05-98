@@ -220,19 +220,26 @@
                             <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">پیام ها</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="SendEmail">ارسال ایمیل</a></li>
+                                <li><a asp-area="Admin" asp-controller="Tools" asp-action="SendSms">ارسال پیامک</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="ShowComment">ارتباط با ما</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">تبلیغات</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level collapse">
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="About">صفحه درباره ما</a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن صفحه اول</a></li>
+                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن نوار پایین</a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-cog"></i> <span class="nav-label">تنظیمات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
-                                <li><a asp-area="Admin" asp-controller="Home" asp-action="About">صفحه درباره ما</a></li>
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن صفحه اول</a></li>
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن نوار پایین</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="Setting">تنظیمات ادمین</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="FillTables">تنظیمات جداول جانبی</a></li>
                             </ul>
                         </li>
+
                     </ul>
 
                 </div>

@@ -17,6 +17,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th class="pro-thumbnail">ردیف</th>
                                     <th class="pro-thumbnail">تصویر</th>
                                     <th class="pro-title">نام محصول</th>
                                     <th class="pro-price">قیمت (ریال)</th>
@@ -25,9 +26,15 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @{ int i = 1;}
                                 @foreach (var item in Model)
                                 {
                                     <tr id="tblRow">
+                                        <td class="pro-title">
+                                            <a href="#">
+                                                @i
+                                            </a>
+                                        </td>
                                         <td class="pro-thumbnail">
                                             <a href="#">
                                                 @if (item.ProductFeature.ProductAbstract.ProductImage != null)
@@ -60,6 +67,7 @@
                                         </td>
                                         <td class="pro-remove" id="btnRemove" invoiceProductId="@item.Id"><a href="#"><i class="fa fa-trash-o "></i></a></td>
                                     </tr>
+                                    i++;
                                 }
 
 

@@ -10,14 +10,14 @@ using OnlineMarketPlace.Areas.Identity.Data;
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    [Migration("20191012225602_migration-fixToken")]
-    partial class migrationfixToken
+    [Migration("20191012231857_Repeat_All")]
+    partial class Repeat_All
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
+                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -1159,6 +1159,10 @@ namespace OnlineMarketPlace.Migrations
                     b.Property<string>("LatinTitle");
 
                     b.Property<string>("Links");
+
+                    b.Property<byte[]>("MainImage");
+
+                    b.Property<string>("MainImagePath");
 
                     b.Property<string>("MetaDescription");
 

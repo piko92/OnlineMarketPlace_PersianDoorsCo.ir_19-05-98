@@ -207,13 +207,16 @@ namespace OnlineMarketPlace.Controllers
         #region Payment
         public async Task<IActionResult> PaymentInitialize()
         {
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+            var totalPrice = TotalInvoicePrice(invoiceUser.Id);
             string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
-            int totalPrice = 10000;
+           // int totalPrice = 10000;
             //var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
             //SandBox==Test ZarinPal
             var payment = new ZarinpalSandbox.Payment(totalPrice);
             string description = "توضیحات";
-            string backUrl = "https://localhost:44305/Invoice/PaymentVerify";
+            string backUrl = $"https://localhost:44305/Invoice/PaymentVerify/?Price={totalPrice}";
             string CustomerEmail = "adsff@gmail.com";
             string CustomerPhoneNumber = "09171112525";
             var result = await payment.PaymentRequest(description, backUrl, CustomerEmail, CustomerPhoneNumber);
@@ -224,7 +227,7 @@ namespace OnlineMarketPlace.Controllers
             }
             return Json("No");
         }
-        public async Task<IActionResult> PaymentVerify()
+        public async Task<IActionResult> PaymentVerify(int Price)
         {
             if (HttpContext.Request.Query["Status"] != "" &&
                 HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
@@ -235,14 +238,14 @@ namespace OnlineMarketPlace.Controllers
                 //string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
                 //var payment = new Zarinpal.Payment(YourMerchantId, 10000);
                 //SandBox==Test ZarinPal
-                var payment = new ZarinpalSandbox.Payment(10000);
+                var payment = new ZarinpalSandbox.Payment(Price);
                 var result = await payment.Verification(autority);
                 if (result.Status == 100)
                 {
                     return View();
                 }
             }
-            return Json("Error");
+            return RedirectToAction("ShowPurchuseCart");
         }
         #endregion
     }

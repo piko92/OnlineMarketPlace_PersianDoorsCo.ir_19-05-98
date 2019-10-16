@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineMarketPlace.Migrations
 {
-    public partial class migrationall : Migration
+    public partial class Repeat_All : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -239,7 +239,7 @@ namespace OnlineMarketPlace.Migrations
                     UserId = table.Column<string>(nullable: true),
                     Token = table.Column<string>(nullable: true),
                     RegDateTime = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
-                    Used = table.Column<bool>(nullable: false, defaultValue: true)
+                    Used = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -1665,6 +1665,8 @@ namespace OnlineMarketPlace.Migrations
                     Tags = table.Column<string>(nullable: true),
                     Links = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false, defaultValue: true),
+                    MainImage = table.Column<byte[]>(nullable: true),
+                    MainImagePath = table.Column<string>(nullable: true),
                     RelatedProductId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

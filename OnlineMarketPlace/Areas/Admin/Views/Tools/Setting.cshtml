@@ -4,7 +4,7 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-@model Setting
+@model SettingViewModel
 @inject OnlineMarketContext _db
 @{
     var currency = _db.Currency.Where(x => x.Status == true).ToList();
@@ -14,12 +14,38 @@
     <div class="col-md-12">
         <div class="panel panel-card margin-b-30">
             <div class="panel-heading">
-                <h4 class="panel-title"> تنظیمات </h4>
+                @*<h4 class="panel-title"> تنظیمات </h4>*@
             </div>
             <div class="panel-body">
                 <form asp-area="admin" asp-controller="Tools" asp-action="EditSetting"
                       id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
                     <input type="number" asp-for="Id" value="@(setting != null ? setting.Id : 0)" hidden />
+                    <h3 class=""> تنظیمات پنل پیامک </h3>
+                    <br />
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Api Key</label>
+                        <div class="col-sm-10">
+                            <input asp-for="SMSApiAddress" type="text" class="form-control" value="@(setting != null ? setting.SMSApiAddress : "")">
+                            <span asp-validation-for="SMSApiAddress"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Security Code  </label>
+                        <div class="col-sm-10">
+                            <input asp-for="SMSUsername" type="text" class="form-control" value="@(setting != null ? setting.SMSUsername : "")">
+                            <span asp-validation-for="SMSUsername"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">شماره خط </label>
+                        <div class="col-sm-10">
+                            <input asp-for="SMSApiNumber" type="text" class="form-control" value="@(setting != null ? setting.SMSApiNumber : "")">
+                            <span asp-validation-for="SMSApiNumber"></span>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <h3 class=""> تنظیمات ایمیل  </h3>
+                    <br />
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Admin Email </label>
                         <div class="col-sm-10">
@@ -48,20 +74,9 @@
                             <span asp-validation-for="EmailServiceProvider"></span>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">SMS API </label>
-                        <div class="col-sm-10">
-                            <input asp-for="SMSApiAddress" type="text" class="form-control" value="@(setting != null ? setting.SMSApiAddress : "")">
-                            <span asp-validation-for="SMSApiAddress"></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">SMS Number </label>
-                        <div class="col-sm-10">
-                            <input asp-for="SMSApiNumber" type="text" class="form-control" value="@(setting != null ? setting.SMSApiNumber : "")">
-                            <span asp-validation-for="SMSApiNumber"></span>
-                        </div>
-                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <h3 class=""> سایر تنظیمات  </h3>
+                    <br />
                     <div class="form-group">
                         <label class="col-sm-2 control-label">واحد پول </label>
                         <div class="col-sm-10">
