@@ -48,8 +48,8 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                         await _db.Tokens.AddAsync(tokens);
                         await _db.SaveChangesAsync();
 
-                        SMSService.SMSService SMS = new SMSService.SMSService(_db);
-                        SMS.SendSMS(new List<string> { _User.UserName }, message);
+                        //SMSService.SMSService SMS = new SMSService.SMSService(_db); 
+                        //SMS.SendSMS(new List<string> { _User.UserName }, message);
                         return 1;
                     }
                     else

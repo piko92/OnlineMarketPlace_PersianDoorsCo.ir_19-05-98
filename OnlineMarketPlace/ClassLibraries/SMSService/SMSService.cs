@@ -25,19 +25,13 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
     {
         private static readonly HttpClient client = new HttpClient();
         private List<SMSResult> smsResults = new List<SMSResult>();
-        OnlineMarketContext _db;
 
-        private readonly string _SMSApiKey = "";
-        private readonly string _SMSProviderNumber = "";
-
-        public SMSService(OnlineMarketContext db)
+        private string _SMSApi;
+        public SMSService(string SMSApi)
         {
+            _SMSApi = SMSApi;
             var b = Task.Run(() => this.GetBalance());
             var balance = b.Result;
-            _db = db;
-            var setting = _db.Setting.FirstOrDefault();
-            _SMSApiKey = setting.SMSApiAddress;
-            _SMSProviderNumber = setting.SMSApiNumber;
         }
         public void BalanceAlert(int balance, List<string> nums)
         {
@@ -51,7 +45,8 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
         {
             try
             {
-                Uri targetUri = new Uri($"https://api.sabanovin.com/v1/{_SMSApiKey}/account/balance.json");
+                //Uri targetUri = new Uri($"https://api.sabanovin.com/v1/{_SMSApiKey}/account/balance.json");
+                Uri targetUri = new Uri(_SMSApi);
                 var response = await client.GetAsync(targetUri);
 
                 string json;
@@ -79,7 +74,7 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService
                 foreach (var item in to)
                 {
                     //Uri targetUri = new Uri($"https://api.sabanovin.com/v1/{_SMSApiKey}/sms/send.json?gateway={_SMSProviderNumber}&to={item}&text={message}");
-                    Uri targetUri = new Uri($"https://api.sabanovin.com/v1/sa2543927713:N06oBU923HT0dR2dmtUQMuA9Jaz4yVtcTkEr/sms/send.json?gateway=100069183656&to={item}&text={message}");
+                    Uri targetUri = new Uri(_SMSApi);
 
                     System.Net.HttpWebRequest request = (System.Net.HttpWebRequest)System.Net.WebRequest.Create(targetUri);
 
