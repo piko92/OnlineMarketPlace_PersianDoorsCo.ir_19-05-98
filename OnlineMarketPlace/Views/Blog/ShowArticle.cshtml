@@ -5,21 +5,21 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 @model Article
-        <!--Blog section start-->
+<!--Blog section start-->
 <div class="blog-section section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-40 pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50">
     <div class="container">
         <div class="row">
             <div class="col-lg-3 order-lg-2 order-2">
                 <!-- Single Sidebar Start  -->
                 @*<div class="common-sidebar-widget">
-                    <h3 class="sidebar-title">Search</h3>
-                    <div class="sidebar-search">
-                        <form action="#">
-                            <input type="text" placeholder="Search">
-                            <button><i class="fa fa-search"></i></button>
-                        </form>
-                    </div>
-                </div>*@
+                        <h3 class="sidebar-title">Search</h3>
+                        <div class="sidebar-search">
+                            <form action="#">
+                                <input type="text" placeholder="Search">
+                                <button><i class="fa fa-search"></i></button>
+                            </form>
+                        </div>
+                    </div>*@
                 <!-- Single Sidebar End  -->
                 @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle);
                 <!-- Single Sidebar End  -->
@@ -31,7 +31,7 @@
                             <div class="blog-media">
                                 <div class="image">
                                     @if (
-                                   Model.MainImage != null)
+                                  Model.MainImage != null)
                                     {
                                         <img width="500" height="400" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}")" />
                                     }
@@ -44,7 +44,7 @@
                             <div class="content">
                                 <ul class="meta">
                                     <li class="farsi-num">16 مهر, 1398</li>
-                                    
+
                                 </ul>
                                 <h2 class="title text-right">@Model.Title</h2>
                                 <div class="desc mb-30" dir="rtl">
@@ -64,30 +64,30 @@
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20 ">
                         <!-- Start Comment -->
                         @*<div class="comments-wrapper">
-                            <div class="inner">
-                                <h3 class="text-right">نظرات</h3>
-                                <div class="commnent-list-wrap mt-25">
-                                    <!-- Start Single Comment -->
-                                    <div class="comment">
-                                        <div class="content">
-                                            <div class="info d-flex justify-content-between">
-                                                <span class="reply-btn"><a href="#">پاسخ</a></span>
-                                                <h6 class="mb-0">فاطمه رضایی</h6>
-                                            </div>
-                                            <div class="comment-footer mt-5 text-right">
-                                                <span>May 17, 2018 at 1:59 am</span>
-                                            </div>
-                                            <div class="text mt-5 pr-50 pr-sm-5 text-right">
-                                                <p class="bk_pra">
-                                                    متن نظر
-                                                </p>
+                                <div class="inner">
+                                    <h3 class="text-right">نظرات</h3>
+                                    <div class="commnent-list-wrap mt-25">
+                                        <!-- Start Single Comment -->
+                                        <div class="comment">
+                                            <div class="content">
+                                                <div class="info d-flex justify-content-between">
+                                                    <span class="reply-btn"><a href="#">پاسخ</a></span>
+                                                    <h6 class="mb-0">فاطمه رضایی</h6>
+                                                </div>
+                                                <div class="comment-footer mt-5 text-right">
+                                                    <span>May 17, 2018 at 1:59 am</span>
+                                                </div>
+                                                <div class="text mt-5 pr-50 pr-sm-5 text-right">
+                                                    <p class="bk_pra">
+                                                        متن نظر
+                                                    </p>
+                                                </div>
                                             </div>
                                         </div>
+                                        <!-- End Single Comment -->
                                     </div>
-                                    <!-- End Single Comment -->
                                 </div>
-                            </div>
-                        </div>*@
+                            </div>*@
                         <!-- End Comment -->
                     </div>
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20">

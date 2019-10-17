@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "درباره ما";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var GeneralPages = ViewData["GeneralPages"] as List<GeneralPage>;
 }
 
 @await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml",
@@ -13,39 +14,72 @@
 @model GeneralPage
 @if (Model != null)
 {
-
-
-<!--About Us Area Start-->
-<div class="about-us-area section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45 pb-70 pb-lg-50 pb-md-60 pb-sm-60 pb-xs-50">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 col-12">
-                <!--About Us Image Start-->
-                <div class="about-us-img-wrapper mb-30 mb-xs-15">
-                    <div class="about-us-image img-full">
-                        <a href="#"><img alt="" width="500" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}") ></a>
+    <!--About Us Area Start-->
+    <div class="about-us-area section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45 pb-70 pb-lg-50 pb-md-60 pb-sm-60 pb-xs-50">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-12">
+                    <!--About Us Image Start-->
+                    <div class="about-us-img-wrapper mb-30 mb-xs-15">
+                        <div class="about-us-image img-full">
+                            <a href="#"><img alt="عکس" width="500" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}")></a>
+                        </div>
                     </div>
+                    <!--About Us Image End-->
                 </div>
-                <!--About Us Image End-->
-            </div>
-            <div class="col-lg-6 col-12 ">
-                <!--About Us Content Start-->
-                <div class="rtl-class about-us-content pl-30 pl-md-0 pl-sm-0 pl-xs-0 text-right">
-                    @{
-                        string[] lines = Model.ContentHtml.Split('\n');
-                    }
-                    <span>@Model.Summary</span>
-                    <h2></h2>
-                    @foreach (var item in lines)
-                    {
-                        <p class="text-justify ">@item</p>
-                    }
+                <div class="col-lg-6 col-12 ">
+                    <!--About Us Content Start-->
+                    <div class="rtl-class about-us-content pl-30 pl-md-0 pl-sm-0 pl-xs-0 text-right">
+                        @{
+                            string[] lines = Model.ContentHtml.Split('\n');
+                        }
+                        <span>@Model.Summary</span>
+                        <h2></h2>
+                        @foreach (var item in lines)
+                        {
+                            <p class="text-justify ">@item</p>
+                        }
+                    </div>
+                    <!--About Us Content End-->
                 </div>
-                <!--About Us Content End-->
             </div>
         </div>
     </div>
-</div>
-<!--About Us Area End-->
+    <!--About Us Area End-->
 }
+<!--GeneralPages Area Start-->
+
+<div class="features-section section pt-30 pt-lg-15 pt-md-0 pt-sm-0 pt-xs-15">
+    <div class="container">
+        <div class="row ">
+            @if (GeneralPages != null)
+            {
+                foreach (var item in GeneralPages)
+                {
+                    <div class="col-lg-5 col-md-6 m-3  rtl-class">
+                        <!-- Single Feature Start -->
+                        <div class="single-feature">
+                            <div class="about-us-img-wrapper mb-30 mb-xs-15 ">
+                                <div class="about-us-image img-full m-4">
+                                    <a asp-controller="Home" asp-action="Pages" asp-route-Id="@item.Id">
+                                    <img width="60" alt="" src="~/shared/main/assets/images/icons/author.png"></a>
+                                </div>
+                            </div>
+
+                            <div class="feature-content  ">
+                                <a asp-controller="Home" asp-action="Pages" asp-route-Id="@item.Id">
+                                    <h4 class="title">@item.Title </h4>
+                                    <p class="short-desc farsi-num">@item.Description </p>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Single Feature End -->
+                    </div>
+
+                }
+            }
+        </div>
+    </div>
+</div>
+<!--GeneralPages section end-->
 @await Html.PartialAsync("~/Views/Shared/Footer/_PartialNewsletter.cshtml")

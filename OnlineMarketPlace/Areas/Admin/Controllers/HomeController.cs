@@ -68,11 +68,21 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return View();
         }
+        public IActionResult Editor(string txt1)
+        {
+            return View();
+        }
+        public IActionResult EditorConfirm(string txt1)
+        {
+            return View();
+        }
         #endregion
+        #region About
+
         public IActionResult About(string notification)
         {
             var entity = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
-            if (entity==null)
+            if (entity == null)
             {
                 GeneralPage generalPage = new GeneralPage()
                 {
@@ -80,18 +90,18 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 };
                 dbGeneralPage.Insert(generalPage);
             }
-            ViewData["AboutUs"] = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault(); ;
+            ViewData["AboutUs"] = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
             return View();
         }
         public IActionResult InsertAboutConfirm(GeneralPageViewModel model)
         {
             string nvm;
-            if (ModelState.IsValid==false)
+            if (ModelState.IsValid == false)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
                 return RedirectToAction("InsertPost", new { notification = nvm });
             }
-            
+
             byte[] b = null;
             var entity = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
             if (entity != null)
@@ -117,7 +127,104 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
                 return RedirectToAction("Index", new { notification = nvm });
             }
-           
+
         }
+        #endregion
+        #region General Page
+        public IActionResult ShowGeneralPage(string notification)
+        {
+          List<GeneralPage> viewModel = dbGeneralPage.GetAll().Where(e => e.Title != "AboutUs").ToList(); 
+            //var viewModel = dbGeneralPage.GetAll() ;
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(viewModel);
+            }
+            return View(viewModel);
+        }
+        public IActionResult InsertGeneralPage(string notification)
+        {
+            return View();
+        }
+        public IActionResult InsertGeneralPageConfirm(GeneralPageViewModel model)
+        {
+            string nvm;
+            if (ModelState.IsValid == false)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+            GeneralPage generalPage = new GeneralPage()
+            {
+                Title = model.Title,
+                Description = model.Description,
+                RegdDateTime = DateTime.Now,
+                ContentHtml = model.ContentHtml,
+                Status = model.Status
+            };
+            try
+            {
+                dbGeneralPage.Insert(generalPage);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+
+        }
+
+        public IActionResult DeleteGeneralPage(int Id)
+        {
+            string nvm;
+            try
+            {
+                dbGeneralPage.DeleteById(Id);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                return Json(nvm);
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                return Json(nvm);
+            }
+        }
+        public IActionResult EditGeneralPage(int Id)
+        {
+            ViewData["GeneralPage"] = dbGeneralPage.FindById(Id);
+            return View();
+        }
+        public IActionResult EditGeneralPageConfirm(GeneralPageViewModel model)
+        {
+            string nvm;
+            if (ModelState.IsValid == false)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+            var entity = dbGeneralPage.FindById(model.Id);
+            if (entity != null)
+            {
+                entity.Title = model.Title;
+                entity.Description = model.Description;
+                entity.RegdDateTime = DateTime.Now;
+                entity.ContentHtml = model.ContentHtml;
+                entity.Status = model.Status;
+            }
+            try
+            {
+                dbGeneralPage.Update(entity);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowGeneralPage", new { notification = nvm });
+            }
+        }
+        #endregion
     }
 }
