@@ -9,7 +9,7 @@ namespace OnlineMarket.Models
     public partial class Address: IEntity<int>
     {
         public int Id { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; } 
         public string UserAddress { get; set; }
         public string RecieverFullName { get; set; }
         public int? CityId { get; set; }

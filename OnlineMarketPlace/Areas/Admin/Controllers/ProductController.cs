@@ -151,11 +151,15 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     {
                         category.ParentId = null;
                     }
-                    //Insert Image
-                    string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
-                    var savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
+                    if (model.Image1 != null )
+                    {
+                        //Insert Image
+                        string folderPath = _configuration.GetSection("DefaultPaths").GetSection("CategoryImage").Value;
+                        var savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.Image1);
 
-                    category.ImagePath = savePath;
+                        category.ImagePath = savePath;
+                    }
+                    
                     dbCategory.Insert(category);// Insert
 
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
