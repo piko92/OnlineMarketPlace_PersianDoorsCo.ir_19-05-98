@@ -1,0 +1,222 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش صفحات اضافه";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var GeneralPage = ViewData["GeneralPage"] as GeneralPage;
+}
+@{
+    var OpacityDocumentStyle = "";
+    if (GeneralPage.DocumentPath == null)
+    {
+        OpacityDocumentStyle = "filter: opacity(20%);";
+    }
+    else
+    {
+        OpacityDocumentStyle = "filter: opacity(100%);";
+    }
+    var OpacityMovieStyle = "";
+    if (GeneralPage.MoviePath == null)
+    {
+        OpacityMovieStyle = "filter: opacity(20%);";
+    }
+    else
+    {
+        OpacityMovieStyle = "filter: opacity(100%);";
+    }
+}
+
+@model GeneralPageViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش صفحات اضافه </h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Home" asp-action="EditGeneralPageConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden="hidden" value="@GeneralPage.Id">
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Title" type="text" class="form-control" value="@GeneralPage.Title">
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">توضیحات خلاصه</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Description" type="text" class="form-control" value="@GeneralPage.Description">
+                                <span asp-validation-for="Description"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">متن اصلی</label>
+                            <div class="col-sm-10">
+                                <textarea id="txtContentHtmlOld" hidden="hidden">@GeneralPage.ContentHtml</textarea>
+                                <textarea id="txtContentHtmlNew" rows="5" asp-for="ContentHtml" type="text" class="form-control"></textarea>
+                                <span asp-validation-for="ContentHtml"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تصویر  </label>
+                            <div class="col-sm-10">
+                                @if (GeneralPage.MainImagePath != null)
+                                {
+                                    <img id="img1" src="@(GeneralPage.MainImagePath.Replace("wwwroot",""))" class="img-thumbnail" width="150" />
+                                }
+                                else
+                                {
+                                    <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"> تغییر تصویر</label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input id="imgInsert" asp-for="MainImage" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">فایل فیلم </label>
+                            <div class="col-sm-10 col-lg-2 text-center">
+                                <img id="img1" style="@OpacityMovieStyle" src="~/images/Icons/icons8-movie-64.png" class="img-thumbnail" width="150" />
+                                <div  class="">
+                                    <br />
+                                    <button  FilePath="@GeneralPage.MoviePath" class="btn btn-danger" style="@OpacityMovieStyle" type="button" 
+                                            id="btnRemoveMovie">حذف </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغییر فایل فیلم </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input asp-for="MovieFile" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">فایل اسناد </label>
+                            <div class="col-sm-10 col-lg-2 text-center">
+                                <img id="img1" style="@OpacityDocumentStyle" src="~/images/Icons/icons8-document-64.png" class="img-thumbnail" width="150" />
+                                <div class="">
+                                    <br />
+                                    <button  FilePath="@GeneralPage.DocumentPath" class="btn btn-danger" type="button" style="@OpacityDocumentStyle"
+                                            id="btnRemoveDocument">حذف </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغغیر فایل اسناد </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input asp-for="DocumentFile" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">اولویت نمایش</label>
+                            <div class="col-sm-10">
+                                <input asp-for="ShowOrder" type="number" class="form-control" value="@GeneralPage.ShowOrder">
+                                <span asp-validation-for="ShowOrder"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <div class="col-sm-10">
+                                @if (GeneralPage.Status)
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" )>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="true" type="radio" id="Option_1">
+                                        <label for="Option_1">فعال</label>
+                                    </div>
+                                    <div class="radio inline-element sp-rl-padding-10">
+                                        <input asp-for="Status" value="false" type="radio" id="Option_2" checked>
+                                        <label for="Option_2">غیر فعال</label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت  </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+
+<script>
+    $(txtContentHtmlNew).html($(txtContentHtmlOld).html());
+    $(imgInsert).change(function (e) {
+        var reader = new FileReader();
+        //console.log(this.files);
+        reader.readAsDataURL(this.files[0]);
+        reader.onloadend = function (e) {
+            $(img1).attr('src', e.target.result)
+        }
+    });
+    $(btnRemoveMovie).click( function () {
+        var filePath = $(this).attr('FilePath');
+        var btn = $(this);
+        $.post('/admin/Home/DeleteFileByPath', { filePath: filePath }, function (value) {
+            var result = JSON.parse(value)
+            if (result['Status'] == true) {
+                swal("حذف گردید!", result['Text'], "success");
+                btn.parent().parent().fadeOut();
+            } else {
+                swal("خطا!", result['Text'], "warning");
+            }
+
+        })
+    });
+    $(btnRemoveDocument).click(function () {
+        var filePath = $(this).attr('FilePath');
+        var btn = $(this);
+        $.post('/admin/Home/DeleteFileByPath', { filePath: filePath }, function (value) {
+            var result = JSON.parse(value)
+            if (result['Status'] == true) {
+                swal("حذف گردید!", result['Text'], "success");
+                btn.parent().parent().fadeOut();
+            } else {
+                swal("خطا!", result['Text'], "warning");
+            }
+
+        })
+    });
+</script>
+

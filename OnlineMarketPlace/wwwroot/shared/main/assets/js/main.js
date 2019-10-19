@@ -13,7 +13,7 @@ var windows = $(window);
 
     windows.on('scroll', function () {
     var scroll = windows.scrollTop();
-    if (scroll < 300) {
+    if (scroll < 150) {
         sticky.removeClass('is-sticky');
        // Imgsticky.removeClass('is-sticky');
         Imgsticky.attr('src', '/images/logo.png');

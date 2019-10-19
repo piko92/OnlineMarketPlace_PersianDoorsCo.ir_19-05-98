@@ -14,6 +14,30 @@ namespace OnlineMarketPlace.ClassLibraries
 {
     public class FileManager
     {
+        #region SaveFile
+        public static async Task<string> ReadAndSaveFile(string contentRootPath, string folderPath, IFormFile FormFile)
+        {
+            string uploads = Path.Combine(contentRootPath, folderPath);
+            bool exists = System.IO.Directory.Exists(uploads);
+            string result = "";
+            if (!exists)
+            {
+                System.IO.Directory.CreateDirectory(uploads);
+            }
+            var file = FormFile;
+            if (file.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                {
+                    await file.CopyToAsync(fileStream);
+                    result = folderPath + fileName;
+                }
+            }
+            return result;
+        }
+        #endregion
+        #region Image
         public static string SaveImageInDirectoryResizing(
                 string contentRootPath,
                 string folderPath,
@@ -24,6 +48,8 @@ namespace OnlineMarketPlace.ClassLibraries
                 int maxSize = 1000
             )
         {
+            
+            GC.WaitForPendingFinalizers();
             string uploads;
             if (nested == false)
             {
@@ -69,30 +95,12 @@ namespace OnlineMarketPlace.ClassLibraries
         }
 
         //returns path of saved file
-        public static async Task<string> ReadAndSaveFile(string contentRootPath, string folderPath, IFormFile FormFile)
-        {
-            string uploads = Path.Combine(contentRootPath, folderPath);
-            bool exists = System.IO.Directory.Exists(uploads);
-            string result = "";
-            if (!exists)
-            {
-                System.IO.Directory.CreateDirectory(uploads);
-            }
-            var file = FormFile;
-            if (file.Length > 0)
-            {
-                var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
-                using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
-                {
-                    await file.CopyToAsync(fileStream);
-                    result = folderPath + fileName;
-                }
-            }
-            return result;
-        }
+       
 
         public static async Task<string> SaveImageInDirectory(string contentRootPath, string folderPath, IFormFile FormFile, bool nested = false, int entityId = 0)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             string uploads;
             if (nested == false)
             {
@@ -109,13 +117,14 @@ namespace OnlineMarketPlace.ClassLibraries
                 System.IO.Directory.CreateDirectory(uploads);
             }
             var file = FormFile;
-
+            
             if (file.Length > 0)
             {
                 var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
                 using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
                 {
-                    await file.CopyToAsync(fileStream);
+                     await file.CopyToAsync(fileStream);
+                    fileStream.Flush();
                     if (nested == true)
                     {
                         result = folderPath + $"{entityId}\\" + fileName;
@@ -127,6 +136,7 @@ namespace OnlineMarketPlace.ClassLibraries
 
                 }
             }
+
             GC.Collect();
             GC.WaitForPendingFinalizers();
             return result;
@@ -142,6 +152,8 @@ namespace OnlineMarketPlace.ClassLibraries
                 int sizeH = 120
             )
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             var file = FormFile;
             string uploads, result = "";
 
@@ -173,6 +185,7 @@ namespace OnlineMarketPlace.ClassLibraries
                 {
                     //await file.CopyToAsync(fileStream);
                     bitmap.Save(fileStream, format);
+                    fileStream.Flush();
                     if (nested == true)
                     {
                         result = folderPath + $"{entityId}\\{sizeW}x{sizeH}\\" + fileName;
@@ -183,7 +196,8 @@ namespace OnlineMarketPlace.ClassLibraries
                     }
                 }
             }
-
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             return result;
         }
 
@@ -195,6 +209,8 @@ namespace OnlineMarketPlace.ClassLibraries
                             bool nested = false, int entityId = 0,
                             int size = 120)
         {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
             var url = Path.Combine(contentRootPath, savePath);
             FileStream FS = new FileStream(url, FileMode.Open);
 
@@ -232,42 +248,14 @@ namespace OnlineMarketPlace.ClassLibraries
                     }
 
                 }
+                FS.Dispose();
+                FS.Close();
                 GC.Collect();
                 GC.WaitForPendingFinalizers();
                 return result;
             }
             return null;
         }//end SaveThumbnailAsync
-
-        public static bool DeleteFile(string contentRootPath, string imagePath)
-        {
-            var fileName = contentRootPath + "\\" + imagePath;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if ((System.IO.File.Exists(fileName)))
-            {
-
-                System.IO.File.Delete(fileName);
-                return true;
-            }
-            return false;
-        }
-        public static bool DeleteDirectory(string contentRootPath, string imagePath)
-        {
-            //var aPath = imagePath.Split("\\");
-            //var newAPath = aPath.Take(aPath.Count() - 1).ToArray();
-            //var newPath = String.Join("", newAPath);
-            var fileName = contentRootPath + "\\" + imagePath;
-            var newPath = Path.GetDirectoryName(fileName);
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            if ((System.IO.Directory.Exists(newPath)))
-            {
-                System.IO.Directory.Delete(newPath, true);
-                return true;
-            }
-            return false;
-        }
 
         /// <summary>
         /// به کمک این تابع میتوان به نسبت طول و عرض تصویر اندازه آنرا تغییر داد
@@ -301,5 +289,39 @@ namespace OnlineMarketPlace.ClassLibraries
             }
             return ((int)newWidth, (int)newHeight);
         }
+        #endregion
+        #region Delete File & Directory
+
+        public static bool DeleteFile(string contentRootPath, string imagePath)
+        {
+            var fileName = contentRootPath + "\\" + imagePath;
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if ((System.IO.File.Exists(fileName)))
+            {
+
+                System.IO.File.Delete(fileName);
+                return true;
+            }
+            return false;
+        }
+        public static bool DeleteDirectory(string contentRootPath, string imagePath)
+        {
+            //var aPath = imagePath.Split("\\");
+            //var newAPath = aPath.Take(aPath.Count() - 1).ToArray();
+            //var newPath = String.Join("", newAPath);
+            var fileName = contentRootPath + "\\" + imagePath;
+            var newPath = Path.GetDirectoryName(fileName);
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            if ((System.IO.Directory.Exists(newPath)))
+            {
+                System.IO.Directory.Delete(newPath, true);
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
     }
 }

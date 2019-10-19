@@ -1152,6 +1152,10 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<string>("Description");
 
+                    b.Property<byte[]>("DocumentFile");
+
+                    b.Property<string>("DocumentPath");
+
                     b.Property<string>("ImageIconPath");
 
                     b.Property<string>("LatinTitle");
@@ -1166,11 +1170,17 @@ namespace OnlineMarketPlace.Migrations
 
                     b.Property<string>("MetaTagJson");
 
+                    b.Property<byte[]>("MovieFile");
+
+                    b.Property<string>("MoviePath");
+
                     b.Property<DateTime>("RegdDateTime")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("RelatedProductId");
+
+                    b.Property<int>("ShowOrder");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()

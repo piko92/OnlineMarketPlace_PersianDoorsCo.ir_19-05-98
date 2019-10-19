@@ -2916,7 +2916,11 @@ ul.cart-items > li {
     -ms-transform: scale(1.2);
     transform: scale(1.2);
 }
-
+.pages-img-wrapper:hover .about-us-image img {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transition-duration: 0.8s;
+}
 .single-team {
     position: relative;
 }

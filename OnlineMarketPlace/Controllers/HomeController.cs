@@ -25,7 +25,7 @@ namespace OnlineMarketPlace.Controllers
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
         OnlineMarketContext _db;
-        
+
 
         public HomeController
             (
@@ -41,7 +41,7 @@ namespace OnlineMarketPlace.Controllers
             dbArticle = _dbArticle;
             dbGeneralPage = _dbGeneralPage;
             _db = db;
-            
+
         }
         //Inject DataBase--End
         #endregion
@@ -116,22 +116,26 @@ namespace OnlineMarketPlace.Controllers
         }
 
         #endregion
-
         #region About
         public IActionResult About()
         {
             var dbViewModel = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
-
+            ViewData["GeneralPages"] = dbGeneralPage.GetAll()
+                .Where(e => e.Title != "AboutUs" && e.Status==true)
+                .OrderBy(e=>e.ShowOrder)
+                .ToList();
+            return View(dbViewModel);
+        }
+        public IActionResult Pages(int Id)
+        {
+            var dbViewModel = dbGeneralPage.FindById(Id);
             return View(dbViewModel);
         }
         #endregion
-
         #region PageNotFound
         [Route("[action]")]
         public ViewResult PageNotFound() => View(); //Independant layout
         #endregion
-
-
         public async Task<IActionResult> Test()
         {
             return View();

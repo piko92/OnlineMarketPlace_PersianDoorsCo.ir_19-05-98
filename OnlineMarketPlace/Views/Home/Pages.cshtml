@@ -1,0 +1,121 @@
+﻿@model GeneralPage
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml",
+    new PageBannerViewModel {
+        Title = Model.Title,
+        PageName = Model.Title
+
+    })
+@if (Model != null)
+{
+    <!--Blog section start-->
+    <div class="blog-section section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-40 pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 order-lg-2 order-2">
+                </div>
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="blog-details col-12">
+                            <div class="blog-inner">
+
+                                <div class="content">
+
+                                    <h2 class="title text-right">@Model.Title</h2>
+
+                                    <div class="desc mb-30" dir="rtl">
+                                        <div class="content text-justify">
+                                            <p>@Model.ContentHtml</p>
+                                        </div>
+                                    </div>
+                                    <div class="blog-video mb-20 text-center">
+                                        @if (Model.MoviePath != null)
+                                        {
+                                            <iframe style="height:486px;width:720px;" src=@Model.MoviePath.Replace("wwwroot","")></iframe>
+
+                                        }
+                                        else
+                                        {
+                                            @*<img src="~/AdminLayout/images/bg.jpg" />*@
+                                        }
+
+                                    </div>
+                                    @if (Model.DocumentPath != null)
+                                    {
+
+                                    <!-- Section Start -->
+
+                                    <div class="row rtl-class">
+                                        <div class="col-md-12">
+                                            @*<div class="faq-content">
+                                                    <div class="faq-desc">
+                                                        <h3>لیست دانلود ها</h3>
+                                                    </div>
+                                                </div>*@
+                                            <!--Accordin Start-->
+                                            <div class="faq-accordion">
+                                                <div id="accordion">
+                                                    <div class="card actives">
+                                                        <div class="card-header" id="headingOne">
+                                                            <h5 class="mb-0">
+                                                                <a class="" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                                                    &nbsp&nbsp&nbsp&nbsp&nbsp   لیست دانلود ها
+                                                                </a>
+                                                            </h5>
+                                                        </div>
+                                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+                                                            <div class="card-body">
+                                                                <a href=@Model.DocumentPath.Replace("wwwroot","")>@Model.Title</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--Accordin Start-->
+                                        </div>
+                                    </div>
+                                    <!-- Section End -->
+                                    <hr />
+                                    }
+
+                                    <ul class="meta">
+                                        <li class="farsi-num">16 مهر, 1398</li>
+                                    </ul>
+                                    <ul class="tags">
+                                        <li><i class="fa fa-tags"></i></li>
+                                        <li><a href="#">درب ضد سرقت</a></li>
+                                        <li><a href="#">درب ساختمان</a></li>
+                                        <li><a href="#">درب شیراز</a></li>
+                                    </ul>
+
+                                </div>
+                                @*<div class="blog-media">
+                                        <div class="image">
+                                            @if (Model.MainImage != null)
+                                            {
+                                                <img width="500" height="400" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}")" />
+                                            }
+                                            else
+                                            {
+                                                <img height="250" width="250" src="~/AdminLayout/images/bg.jpg" />
+                                            }
+                                        </div>
+                                    </div>*@
+
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Blog section end-->
+}
