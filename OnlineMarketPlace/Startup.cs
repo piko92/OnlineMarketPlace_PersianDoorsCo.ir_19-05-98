@@ -43,10 +43,21 @@ namespace OnlineMarketPlace
                 option.Password.RequireDigit = false;
             });
 
-            // Add Session services. 
-            services.AddSession(x => x.IdleTimeout = TimeSpan.FromMinutes(5));
+
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+
+            services.AddDistributedMemoryCache(); // Adds a default in-memory implementation of IDistributedCache
+            // Add Session services. 
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing.
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                // Make the session cookie essential
+                options.Cookie.IsEssential = true;
+            });
 
             //Add Repository Services
             services.AddTransient(typeof(DbRepository<,,>));
@@ -98,9 +109,6 @@ namespace OnlineMarketPlace
 
             // configures Session middleware 
             app.UseSession();
-
-            //app.UseDefaultImage(defaultImagePath: Configuration.GetSection("defaultImagePath").Value);
-            //app.UseMvcWithDefaultRoute();
 
             app.UseMvc(routes =>
             {

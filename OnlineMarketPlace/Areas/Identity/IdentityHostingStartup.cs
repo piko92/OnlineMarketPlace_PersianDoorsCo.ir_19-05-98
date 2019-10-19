@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries.Authentication;
 
 [assembly: HostingStartup(typeof(OnlineMarketPlace.Areas.Identity.IdentityHostingStartup))]
 namespace OnlineMarketPlace.Areas.Identity
@@ -19,8 +20,10 @@ namespace OnlineMarketPlace.Areas.Identity
                     options.UseSqlServer(
                         context.Configuration.GetConnectionString("OnlineMarketContextConnection")));
 
-                services.AddDefaultIdentity<ApplicationUser>().AddRoles<IdentityRole>()
-                    .AddEntityFrameworkStores<OnlineMarketContext>();
+                services.AddDefaultIdentity<ApplicationUser>()
+                    .AddRoles<IdentityRole>()
+                    .AddEntityFrameworkStores<OnlineMarketContext>()
+                    .AddDefaultTokenProviders();
             });
         }
     }

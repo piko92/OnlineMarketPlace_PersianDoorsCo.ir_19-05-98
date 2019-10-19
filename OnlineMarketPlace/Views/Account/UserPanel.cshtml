@@ -2,8 +2,9 @@
 @{
     ViewData["Title"] = "پنل کاربری";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var addresses = ViewData["addresses"] as List<Address>;
 }
-@model EditUserViewModel
+@model UserPanelViewModel
 @inject UserManager<ApplicationUser> _userManager
 @{
     var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
@@ -127,16 +128,16 @@
                                                 </div>
                                             </div>
                                             @*<div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label class="fg-pale-gray">تاریخ تولد : </label>
-                                                    <label class="farsi-num">
-                                                        @if (currentUser.DateOfBirth != null)
-                                                        {
-                                                            <strong>@CustomizeCalendar.GregorianToPersian(currentUser.DateOfBirth ?? DateTime.Now)</strong>
-                                                        }
-                                                    </label>
-                                                </div>
-                                            </div>*@
+                                                    <div class="form-group">
+                                                        <label class="fg-pale-gray">تاریخ تولد : </label>
+                                                        <label class="farsi-num">
+                                                            @if (currentUser.DateOfBirth != null)
+                                                            {
+                                                                <strong>@CustomizeCalendar.GregorianToPersian(currentUser.DateOfBirth ?? DateTime.Now)</strong>
+                                                            }
+                                                        </label>
+                                                    </div>
+                                                </div>*@
                                         </div>
                                     </div>
 
@@ -197,84 +198,84 @@
 
                                     <div class="account-details-form">
                                         <form asp-action="EditProfile" asp-controller="Account">
-                                            <input asp-for="Id" value="@currentUser.Id" hidden />
+                                            <input asp-for="EditUserViewModel.Id" value="@currentUser.Id" hidden />
                                             <div>
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">نام : </label>
                                                     <div class="col-sm-9">
-                                                        <input asp-for="Firstname" class="form-control" type="text" value="@currentUser.FirstName">
-                                                        <span asp-validation-for="Firstname"></span>
+                                                        <input asp-for="EditUserViewModel.Firstname" class="form-control" type="text" value="@currentUser.FirstName">
+                                                        <span asp-validation-for="EditUserViewModel.Firstname"></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">نام خانوادگی : </label>
                                                     <div class="col-sm-9">
-                                                        <input asp-for="Lastname" class="form-control" type="text" value="@currentUser.LastName">
-                                                        <span asp-validation-for="Lastname"></span>
+                                                        <input asp-for="EditUserViewModel.Lastname" class="form-control" type="text" value="@currentUser.LastName">
+                                                        <span asp-validation-for="EditUserViewModel.Lastname"></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">پست الکترونیک : </label>
                                                     <div class="col-sm-9">
-                                                        <input asp-for="Email" class="form-control" type="email" value="@currentUser.Email">
-                                                        <span asp-validation-for="Email"></span>
+                                                        <input asp-for="EditUserViewModel.Email" class="form-control" type="email" value="@currentUser.Email">
+                                                        <span asp-validation-for="EditUserViewModel.Email"></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">شماره تلفن همراه : </label>
                                                     <div class="col-sm-9">
-                                                        <input asp-for="Phonenumber" class="form-control" type="number" value="@currentUser.PhoneNumber">
-                                                        <span asp-validation-for="Phonenumber"></span>
+                                                        <input asp-for="EditUserViewModel.Phonenumber" class="form-control" type="number" value="@currentUser.PhoneNumber">
+                                                        <span asp-validation-for="EditUserViewModel.Phonenumber"></span>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
                                                     <label class="col-sm-3 col-form-label">کد ملی : </label>
                                                     <div class="col-sm-9">
-                                                        <input asp-for="Nationalcode" class="form-control" type="number" value="@currentUser.NationalCode">
-                                                        <span asp-validation-for="Nationalcode"></span>
+                                                        <input asp-for="EditUserViewModel.Nationalcode" class="form-control" type="number" value="@currentUser.NationalCode">
+                                                        <span asp-validation-for="EditUserViewModel.Nationalcode"></span>
                                                     </div>
                                                 </div>
 
                                                 @*<div class="row">
-                                                    <label class="col-sm-3 col-form-label">تاریخ تولد : </label>
-                                                    <div class="col-sm-2">
-                                                        <select class="form-control full-width farsi-num sp-select">
-                                                            <option value="">روز</option>
-                                                            @for (int i = 1; i <= 31; i++)
-                                                            {
-                                                                <option value="@i">@i</option>
-                                                            }
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-3">
-                                                        <select class="form-control full-width sp-select">
-                                                            <option value="">ماه</option>
-                                                            @if (CustomizeCalendar.months.Count > 0)
-                                                            {
-                                                                foreach (var item in CustomizeCalendar.months)
-                                                                {
-                                                                    <option value="@item.Key">@item.Value</option>
-                                                                }
-                                                            }
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-sm-2">
-                                                        <select class="form-control full-width farsi-num sp-select">
-                                                            <option value="">سال</option>
-                                                            @if (currentPersianYear > 0)
-                                                            {
-                                                                @for (int i = currentPersianYear - 5; i >= currentPersianYear - 90; i--)
+                                                        <label class="col-sm-3 col-form-label">تاریخ تولد : </label>
+                                                        <div class="col-sm-2">
+                                                            <select class="form-control full-width farsi-num sp-select">
+                                                                <option value="">روز</option>
+                                                                @for (int i = 1; i <= 31; i++)
                                                                 {
                                                                     <option value="@i">@i</option>
                                                                 }
-                                                            }
-                                                        </select>
-                                                    </div>
-                                                </div>*@
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-3">
+                                                            <select class="form-control full-width sp-select">
+                                                                <option value="">ماه</option>
+                                                                @if (CustomizeCalendar.months.Count > 0)
+                                                                {
+                                                                    foreach (var item in CustomizeCalendar.months)
+                                                                    {
+                                                                        <option value="@item.Key">@item.Value</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-sm-2">
+                                                            <select class="form-control full-width farsi-num sp-select">
+                                                                <option value="">سال</option>
+                                                                @if (currentPersianYear > 0)
+                                                                {
+                                                                    @for (int i = currentPersianYear - 5; i >= currentPersianYear - 90; i--)
+                                                                    {
+                                                                        <option value="@i">@i</option>
+                                                                    }
+                                                                }
+                                                            </select>
+                                                        </div>
+                                                    </div>*@
 
                                                 <div class="col-12">
                                                     <button class="save-change-btn">ثبت تغییرات</button>
@@ -286,26 +287,41 @@
                                 </div>
                             </div>
                             <!-- Single Tab Content End -->
-                            
                             <!-- Single Tab Content Start -->
                             <div class="tab-pane fade" id="address-edit" role="tabpanel">
                                 <div class="myaccount-content">
-                                    <h3>آدرس ها
+                                    <h3>
+                                        آدرس ها
                                         <label class="dashed-link">
-                                            <a href="#">ثبت آدرس جدید</a>
+                                            <a href="#" id="addAddress">ثبت آدرس جدید</a>
                                         </label>
                                     </h3>
-                                    
-                                    <address>
-                                        <p><strong>Alex Tuntuni</strong></p>
-                                        <p>
-                                            1355 Market St, Suite 900 <br>
-                                            San Francisco, CA 94103
-                                        </p>
-                                        <p>Mobile: (123) 456-7890</p>
-                                    </address>
+                                    <div class="col-md-12">
+                                        <div class="row" id="addressContainer">
+                                            @if (addresses.Count > 0)
+                                            {
+                                                foreach (var item in addresses)
+                                                {
+                                                    <div class="col-md-4">
+                                                        <address>
+                                                            <p><strong>@item.RecieverFullName</strong></p>
+                                                            <p>
+                                                                @item.UserAddress
+                                                            </p>
+                                                            <p class="farsi-num">
+                                                                @item.PostalCode
+                                                            </p>
+                                                            <p class="farsi-num">تلفن تماس: @item.Phone</p>
+                                                        </address>
 
-                                    <a href="#" class="btn d-inline-block edit-address-btn"><i class="fa fa-edit"></i>ویرایش آدرس</a>
+                                                        <button class="btn d-inline-block edit-address-btn" data-toggle="modal" data-target="#myModal"><i class="fa fa-edit"></i>ویرایش</button>
+                                                        <a href="/Account/RemoveAddress/@item.Id" class="btn d-inline-block edit-address-btn"><i class="fa fa-edit"></i>حذف</a>
+                                                    </div>
+                                                }
+                                            }
+
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Single Tab Content End -->
@@ -315,17 +331,21 @@
                                     <h3>تغییر کلمه عبور</h3>
 
                                     <div class="account-details-form">
-                                        <form action="#">
+                                        <form asp-action="ChangePassword" asp-controller="Account" method="post">
                                             <div class="row">
-                                                
+
                                                 <div class="col-12 mb-30">
-                                                    <input id="currentPass" placeholder="کلمه عبور فعلی" type="password">
+                                                    <input asp-for="ChangePasswordViewModel.CurrentPasword" id="currentPass" placeholder="کلمه عبور فعلی" type="password">
+                                                    <input asp-for="AddressViewModel.PostalCode" id="currentPass" placeholder="کلمه عبور فعلی" type="password">
+                                                    <span asp-validation-for="ChangePasswordViewModel.CurrentPasword"></span>
                                                 </div>
                                                 <div class="col-12 mb-30">
-                                                    <input id="newPass" placeholder="کلمه عبور جدید" type="password">
+                                                    <input asp-for="ChangePasswordViewModel.Newpassword" id="newPass" placeholder="کلمه عبور جدید" type="password">
+                                                    <span asp-validation-for="ChangePasswordViewModel.Newpassword"></span>
                                                 </div>
                                                 <div class="col-12 mb-30">
-                                                    <input id="confirmNewPass" placeholder="تکرار کلمه عبور جدید" type="password">
+                                                    <input asp-for="ChangePasswordViewModel.NewPasswordConfirm" id="confirmNewPass" placeholder="تکرار کلمه عبور جدید" type="password">
+                                                    <span asp-validation-for="ChangePasswordViewModel.NewPasswordConfirm"></span>
                                                 </div>
 
                                                 <div class="col-12">
@@ -347,14 +367,91 @@
 
         </div>
     </div>
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">ویرایش آدرس</h4>
+                </div>
+                <div class="modal-body">
+                    <form asp-action="EditAddress" asp-controller="Account">
+                        <div class="form-group">
+                            <label asp-for="AddressViewModel.Fullname"></label>
+                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
+                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AddressViewModel.Fullname"></label>
+                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
+                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AddressViewModel.Fullname"></label>
+                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
+                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="AddressViewModel.Fullname"></label>
+                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
+                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
 <!--My Account section end-->
 <script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
 <script>
     $(document).ready(function () {
         //Localize Prices
         $(".local-price").each(function () {
             $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+        })
+    })
+
+    $(function () {
+
+        $("#addAddress").click(function () {
+            var addressContainer = $("#addressContainer");
+            var newForm = `<div class="col-md-4 card" id="newAddress">
+                                                <form action="CreateAddress" controller="Account" method="post">
+                                                    <div class="card-body">
+                                                        <div class="form-group">
+                                                            <input name="Fullname" type="text" class="form-control" placeholder="نام و نام خانوادگی تحویل گیرنده" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input name="MobilePhoneNumber" type="text" class="form-control" placeholder="شماره تلفن تماس" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input name="PostalCode" type="text" class="form-control" placeholder="کد پستی" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <textarea name="Address" placeholder="آدرس" class="form-control"></textarea>
+                                                        </div>
+                                                        <button class="btn d-inline-block edit-address-btn">ثبت آدرس</button>
+                                                        <button type="button" class="btn d-inline-block edit-address-btn" id="cancelAddress">صرف نظر</button>
+                                                    </div>
+                                                </form>
+                                            </div>`;
+            if (addressContainer.find("#newAddress").length < 1) {
+                addressContainer.append(newForm);
+            }
+        })
+        $(document).on('click', '#cancelAddress', function () {
+            var addressContainer = $("#addressContainer");
+            addressContainer.find("#newAddress").remove();
         })
     })
 </script>

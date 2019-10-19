@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "ReSendVerification";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+@model VerifyViewModel
+<div dir="rtl" class="text-right login-register-section section pt-90 pt-lg-70 pt-md-60 pt-sm-55 pt-xs-45  pb-70 pb-lg-50 pb-md-40 pb-sm-30 pb-xs-20">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="customer-login-register">
+
+                    <div class="text-right register-form">
+                        <div class="text-center form-register-title">
+                            <h2>ارسال مجدد کد تایید</h2>
+                        </div>
+                        <hr />
+                        <form asp-controller="Account" asp-action="ReSendVerificationConfirm">
+                            <div class="form-fild">
+                                <p><label>نام کاربری که با آن ثبت نام نموده اید </label></p>
+                                <input name="Username" value="" type="text" placeholder="شماره تلفن همراه یا آدرس ایمیل">
+                            </div>
+                            <div class="register-submit mt-4">
+                                <button type="submit" class="btn btn-block ">ارسال</button>
+                            </div>
+                            <hr />
+                            <div>
+                                <a asp-controller="Account" asp-action="Login" class="red-color">ورود به حساب کاربری</a>
+                            </div>
+                            <div>
+                                <a asp-controller="Account" asp-action="Register" class="red-color">ثبت نام نکرده اید؟</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+

@@ -84,3 +84,76 @@
     max-height:250px !important;
     overflow-y:scroll !important;
 }
+
+.snackbar-container {
+    width: 100%;
+    position: fixed;
+    top: -130px;
+    text-align: center !important;
+    z-index: 999;
+    visibility: hidden;
+}
+
+
+.snackbar {
+    position: absolute;
+    top: 100px !important;
+    width: 100%;
+    text-align: center;
+    direction: rtl;
+}
+
+    .snackbar label {
+        background: rgba(18, 18, 18, 0.80);
+        padding: 8px 36px 8px 26px;
+        color: #fff;
+        position: relative;
+        border-radius: 2px !important;
+    }
+
+.btn-clide {
+    position: absolute;
+    top: 2px;
+    right: 10px !important;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+a.red-color{
+    color:#d71a1a !important;
+}
+    a.red-color:hover,
+    a.red-color:focus {
+        color: #d71a1a !important;
+        border-bottom: 1px dashed #d71a1a;
+    }
+
+::-webkit-input-placeholder { /* Edge */
+    color: #9f9f9f;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #9f9f9f;
+}
+
+::placeholder {
+    color: #9f9f9f;
+}
+
+.card-body ::-webkit-input-placeholder {
+    font-size: 12px !important;
+}
+.card-body :-ms-input-placeholder {
+    font-size: 12px !important;
+}
+.card-body ::placeholder {
+    font-size: 12px !important;
+}
+.card-body{
+    padding:10px 5px !important;
+}
+#addressContainer .btn {
+    font-size: 12px !important;
+    margin: 5px !important;
+    padding: 8px 16px !important;
+}

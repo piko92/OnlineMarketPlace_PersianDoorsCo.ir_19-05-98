@@ -321,13 +321,13 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult SendSmsConfirm(string smsText, string phoneNumber)
         {
-            // string ApiKey = "ae868fb306a4d18320668fb";
-            // string SecurityCode = "PersianDoorsCo!@#12345";
-            // string lineNumber = "30004747474480";
-            var setting = dbSetting.GetAll().FirstOrDefault();
-            string ApiKey = setting.SMSApiAddress;
-            string SecurityCode = setting.SMSUsername;
-            string lineNumber = setting.SMSApiNumber;
+            string ApiKey = "ae868fb306a4d18320668fb";
+            string SecurityCode = "PersianDoorsCo!@#12345";
+            string lineNumber = "30004747474480";
+            //var setting = dbSetting.GetAll().FirstOrDefault();
+            //string ApiKey = setting.SMSApiAddress;
+            //string SecurityCode = setting.SMSUsername;
+            //string lineNumber = setting.SMSApiNumber;
             //متن پیامک
             string message = smsText;
             //شماره مقصد

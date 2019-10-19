@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
-
+@{
+    var msg = ViewData["msg"];
+}
 <html lang="fa">
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -38,8 +40,16 @@
 
         @* ------------- Footer ------------ *@
         @await Html.PartialAsync("~/Views/Shared/Footer/_PartialFooter.cshtml")
-    </div>
 
+    </div>
+    <div id="_snackbar" class="snackbar-container">
+        <div class="snackbar">
+            <label>
+                <span class="btn-clide">&times;</span>
+                این متن جهت تست اسنک بار میباشد.
+            </label>
+        </div>
+    </div>
     <!-- =========================
         Main Loding JS Script
     ============================== -->
@@ -50,6 +60,16 @@
     <script src="~/shared/main/assets/js/vendor/bootstrap.min.js"></script>
     <script src="~/shared/main/assets/js/plugins/plugins.js"></script>
     <script src="~/shared/main/assets/js/main.js"></script>
-
+    <script>
+        $(function () {
+            $(document).ready(function () {
+                setTimeout(() => {
+                    $(".snackbar-container").addClass("show")
+                }, 3000)
+            })
+            
+        })
+        
+    </script>
 </body>
 </html>
