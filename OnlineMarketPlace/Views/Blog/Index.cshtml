@@ -30,7 +30,7 @@
                         <div class="blog col-lg-6 col-md-6">
                             <div class="blog-inner mb-30">
                                 <div class="blog-media">
-                                    <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id" class="image">
+                                    <a href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)" class="image">
                                         @if (item.MainImage != null)
                                         {
                                             <img width="330" height="230" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(item.MainImage)}")>
@@ -39,16 +39,16 @@
                                 </div>
                                 <div class="content">
                                     <ul class="meta  ">
-                                        <li class="farsi-num">16 مهر, 1398</li>
+                                        <li class="farsi-num">@CustomizeCalendar.GregorianToPersian(item.WrittenDateTime)</li>
                                         @*<li><a href="#">25 پسندیدن</a></li>
                                             <li><a href="#">28 بازدید</a></li>*@
                                     </ul>
                                     <h3 class="title  text-right">
-                                        <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">
+                                        <a href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)">
                                             @item.Title
                                         </a>
                                     </h3>
-                                    <a class="read-more text-left" asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">مشاهده مقاله</a>
+                                    <a class="read-more text-left" href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)">مشاهده مقاله</a>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +58,7 @@
 
 
                 </div>
-                <div class="row mt-20 mt-xs-0">
+                @*<div class="row mt-20 mt-xs-0">
                     <div class="col">
                         <ul class="page-pagination">
                             <li class="active"><a href="#">01</a></li>
@@ -69,7 +69,7 @@
                             <li><a href="#">Next</a></li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>

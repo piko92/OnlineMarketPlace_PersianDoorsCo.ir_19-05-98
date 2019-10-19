@@ -17,15 +17,14 @@
                 </div>
             </div>
             <div class="panel-body">
-                <table id="basic-datatables" class="table table-bordered" cellspacing="0" width="100%">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0">
                     <thead>
                         <tr>
                             <th># </th>
                             <th>نام </th>
-                            <th>کد</th>
-                            <th>پیام</th>
                             <th>ایمیل</th>
-                            <th>تایید</th>
+                            <th>متن پیام</th>
+                            <th>تاریخ ارسال</th>
                             <th>پاسخ</th>
                             <th>حذف</th>
                         </tr>
@@ -34,9 +33,9 @@
                         <tr>
                             <th># </th>
                             <th>نام </th>
-                            <th>کد</th>
-                            <th>پیام</th>
                             <th>ایمیل</th>
+                            <th>متن پیام</th>
+                            <th>تاریخ ارسال</th>
                             <th>پاسخ</th>
                             <th>حذف</th>
                         </tr>
@@ -47,22 +46,20 @@
                             int Counter = 1;
                             @foreach (var item in Model)
                             {
-                                <tr>
-                                    <td>@Counter</td>
-                                    <td>@item.Name</td>
-                                    <td>@item.Email</td>
-                                    <td>@item.Comment</td>
-                                    <td>@item.Approved</td>
-                                    <td>@CustomizeCalendar.GregorianToPersianDateTime(item.RegdDateTime)</td>
-                                    <td>
-                                        <a asp-action="ReplyComment" asp-controller="Tools" asp-area="Admin" asp-route-Id="@item.Id"
-                                           class="btn btn-success btn-block">ارسال پاسخ</a>
-                                    </td>
-                                    <td>
-                                        <a asp-action="DeleteComment" asp-controller="Tools" asp-area="Admin" asp-route-Id="@item.Id"
-                                           class="btn btn-danger btn-block">حذف</a>
-                                    </td>
-                                </tr>
+                        <tr>
+                            <td>@Counter</td>
+                            <td>@item.Name</td>
+                            <td>@item.Email</td>
+                            <td  style="max-width:400px;">@item.Comment</td>
+                            <td class="farsi-num">@CustomizeCalendar.GregorianToPersianDateTime(item.RegdDateTime)</td>
+                            <td>
+                                <a asp-action="ReplyComment" asp-controller="Tools" asp-area="Admin" asp-route-Id="@item.Id"
+                                   class="btn btn-success btn-block"> پاسخ</a>
+                            </td>
+                            <td>
+                                <a class="btn btn-danger btn-block" id="btnDelete" dataId="@item.Id">حذف</a>
+                            </td>
+                        </tr>
                                 Counter++;
                             }
                         }
@@ -73,5 +70,40 @@
         </div>
         <!-- End .panel -->
     </div>
-    
+
 </div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    $('.panel-body').on('click', "#btnDelete", function () {
+        var dataId = $(this).attr("dataId");
+        var thisElement = $(this);
+        swal({
+            title: "آیا از حذف این آیتم اطمینان دارید؟",
+            text: "پس از تایید، بازیابی این آیتم امکان پذیر نمی باشد.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "بله، حذف شود",
+            cancelButtonText: "خیر، منصرف شدم",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.post("/Admin/Tools/DeleteComment", { Id: dataId }, function (value) {
+                    var result = JSON.parse(value)
+                    if (result['Status'] == true) {
+                        swal("حذف گردید!", result['Text'], "success");
+                        thisElement.parent().parent().fadeOut();
+                    } else {
+                        swal("حذف ناموفق", result['Text'], "warning");
+                    }
+                }, 'json')
+
+            } else {
+                swal("انصراف از حذف", "این آیتم همچنان در لیست شما باقی می ماند :)", "error");
+            }
+        });
+    })
+
+</script>

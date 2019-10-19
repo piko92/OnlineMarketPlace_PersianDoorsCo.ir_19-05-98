@@ -23,7 +23,7 @@
                     <div class="blog col-lg-4 col-md-6">
                         <div class="blog-inner mb-30">
                             <div class="blog-media">
-                                <a href="blog-details.html" class="image">
+                                <a href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)" class="image">
                                     @if (item.MainImage != null)
                                     {
                                         <img width="330" height="230" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(item.MainImage)}")>
@@ -31,15 +31,15 @@
                                 </a>
                             </div>
                             <div class="content">
-                                <ul class="meta rtl-class">
-                                    <li class="farsi-num">16 مهر, 1398</li>
+                                <ul class="meta ">
+                                    <li class="farsi-num">@CustomizeCalendar.GregorianToPersian(item.WrittenDateTime)</li>
                                 </ul>
                                 <h3 class="title rtl-class">
-                                    <a href="blog-details.html">
+                                    <a href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)">
                                         @item.Title
                                     </a>
                                 </h3>
-                                <a class="read-more" asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@item.Id">ادامه مطلب</a>
+                                <a class="read-more" href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)">ادامه مطلب</a>
                             </div>
                         </div>
                     </div>
