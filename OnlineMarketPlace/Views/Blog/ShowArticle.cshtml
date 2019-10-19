@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewData["Title"] = "ShowArticle";
+    ViewData["Title"] = Model.Title;
     var dbArticle = ViewData["Article"] as List<Article>;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
@@ -31,7 +31,7 @@
                             <div class="blog-media">
                                 <div class="image">
                                     @if (
-                                  Model.MainImage != null)
+                           Model.MainImage != null)
                                     {
                                         <img width="500" height="400" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}")" />
                                     }
@@ -43,7 +43,7 @@
                             </div>
                             <div class="content">
                                 <ul class="meta">
-                                    <li class="farsi-num">16 مهر, 1398</li>
+                                    <li class="farsi-num">@CustomizeCalendar.GregorianToPersian(Model.WrittenDateTime)</li>
 
                                 </ul>
                                 <h2 class="title text-right">@Model.Title</h2>
@@ -60,60 +60,74 @@
                                 </ul>
                             </div>
                         </div>
+                        <hr />
                     </div>
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20 ">
                         <!-- Start Comment -->
-                        @*<div class="comments-wrapper">
+                        @if (Model.UserArticleReview != null)
+                        {
+                            <div class="comments-wrapper">
                                 <div class="inner">
                                     <h3 class="text-right">نظرات</h3>
                                     <div class="commnent-list-wrap mt-25">
-                                        <!-- Start Single Comment -->
-                                        <div class="comment">
-                                            <div class="content">
-                                                <div class="info d-flex justify-content-between">
-                                                    <span class="reply-btn"><a href="#">پاسخ</a></span>
-                                                    <h6 class="mb-0">فاطمه رضایی</h6>
-                                                </div>
-                                                <div class="comment-footer mt-5 text-right">
-                                                    <span>May 17, 2018 at 1:59 am</span>
-                                                </div>
-                                                <div class="text mt-5 pr-50 pr-sm-5 text-right">
-                                                    <p class="bk_pra">
-                                                        متن نظر
-                                                    </p>
+                                        @foreach (var item in Model.UserArticleReview)
+                                        {
+                                            <!-- Start Single Comment -->
+                                            <div class="comment rtl-class">
+                                                <div class="content">
+                                                    <div class="info d-flex justify-content-between">
+                                                        @*<span class="reply-btn"><a href="#">پاسخ</a></span>*@
+                                                        <h4 class="mb-0">@item.FakeUserName</h4>
+                                                    </div>
+                                                    <div class="comment-footer mt-5 text-right">
+                                                        <ul class="meta">
+                                                          
+                                                            <li class="farsi-num" style="opacity:0.5">  تاریخ ثبت نظر: @CustomizeCalendar.GregorianToPersian(item.RegDateTime.Value)</li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="text mt-5 pr-50 pr-sm-5 text-right">
+                                                        <p class="bk_pra">
+                                                            @item.Comment
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- End Single Comment -->
+                                            <!-- End Single Comment -->
+                                        }
                                     </div>
                                 </div>
-                            </div>*@
+                            </div>
+                        }
                         <!-- End Comment -->
+                        <hr />
                     </div>
-                    <div class="col-12 mt-60 mt-sm-30 mt-xs-20">
-                        <div class="comment-wrapper text-right">
-
+                    <div id="divMain" class="col-12 mt-60 mt-sm-30 mt-xs-20">
+                        <div id="divComment" class="comment-wrapper text-right">
                             <h3>نظر بدهید</h3>
-
                             <div class="comment-form">
-                                <form role="form" asp-area="admin" asp-controller="Product" asp-action="InsertBrandConfirm">
+                                <form id="form1" method="get" action="\Blog\InsertArticleComment">
                                     <div class="row row-10" dir="rtl">
+                                        <input name="artileId" id="artileId" hidden="hidden" value="@Model.Id">
                                         <div class="form-group col-md-6 col-12 mb-20">
-                                            <input class="form-control" asp-for="Name" type="text" placeholder="نام">
+                                            <input class="form-control" id="Name" name="name" type="text" placeholder="نام" required>
                                         </div>
                                         <div class="form-group col-md-6 col-12 mb-20">
-                                            <input class="form-control" asp-for="Name" type="text" placeholder="ایمیل">
+                                            <input class="form-control" id="Email" name="email" type="text" placeholder="ایمیل">
                                         </div>
                                         <div class="form-group col-12 mb-20">
-                                            <textarea class="form-control" asp-for="Name" type="text" placeholder="نظر"></textarea>
+                                            <textarea class="form-control" id="comment" name="comment" type="text" placeholder="نظر" required></textarea>
                                         </div>
                                         <div class="col-12">
-                                            <button class="btn">ارسال نظر</button>
+                                            <button class="btn" id="btnSubmitForm">ارسال نظر</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-
+                        </div>
+                    </div>
+                    <div id="divResponse" style="display: none" class="col-12 mt-20 mt-sm-20 mt-xs-20">
+                        <div class="comment-wrapper rtl-class">
+                            <h4>نظر شما ثبت شد و پس از تایید نمایش داده می شود</h4>
                         </div>
                     </div>
                 </div>
@@ -122,3 +136,27 @@
     </div>
 </div>
 <!--Blog section end-->
+<script src="~/shared/main/assets/js/vendor/jquery-1.12.4.min.js"></script>
+
+<script>
+    $(form1).submit(function (e) {
+
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            type: "post",
+            url: url,
+            data: form.serialize(), // serializes the form's elements.
+            success: function (data) {
+                if (data.status) {
+                    $(divComment).fadeOut();
+                    $(divResponse).show('slow');
+                    setTimeout(function () { $(divResponse).fadeOut(); }, 3000);
+                }
+            }
+        });
+    });
+</script>

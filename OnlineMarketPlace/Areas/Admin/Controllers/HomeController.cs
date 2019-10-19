@@ -66,7 +66,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             ViewData[" userManagerCount"] = userManager.Users.Where(x => x.Status == true).Count();
             ViewData[" ProductFeatureCount"] = dbProductFeature.GetAll().Where(x => x.Status == true).Count();
             ViewData[" CategoryCount"] = dbCategory.GetAll().Where(x => x.Status == true).Count();
-            ViewData[" ContactUsCount"] = dbContactUs.GetAll().Where(x => x.Status == true).Count();
+            ViewData[" ContactUsCount"] = dbContactUs.GetAll().Count();
             ViewData[" ArticleCount"] = dbArticle.GetAll().Where(x => x.Status == true).Count();
             ViewData[" PaidInvoiceCount"] = dbInvoice.GetAll().Where(x => x.IsPaid == true).Count();
             if (notification != null)

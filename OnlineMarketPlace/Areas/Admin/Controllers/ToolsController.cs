@@ -59,16 +59,19 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult DeleteComment(int Id)
         {
-            var status = dbContactUs.DeleteById(Id);
-            if (status)
+            string nvm;
+            try
             {
-
+                var status = dbContactUs.DeleteById(Id);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                return Json(nvm);
             }
-            else
+            catch (Exception)
             {
-
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                return Json(nvm);
             }
-            return RedirectToAction("ShowComment");
+
         }
         public IActionResult ReplyComment(int Id)
         {

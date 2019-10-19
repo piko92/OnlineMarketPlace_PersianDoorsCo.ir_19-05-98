@@ -105,14 +105,14 @@ namespace OnlineMarketPlace.Controllers
                 try
                 {
                     dbContactUs.Insert(contactUs);
-                    return RedirectToAction("Index");
+                    return Json(new { status = true });
                 }
                 catch (Exception)
                 {
-                    return RedirectToAction("ContactUs");
+                    return Json(new { status = false });
                 }
             }
-            return RedirectToAction("ContactUs");
+            return Json(new { status = false });
         }
 
         #endregion
