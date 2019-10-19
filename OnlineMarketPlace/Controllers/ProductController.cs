@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
 using OnlineMarketPlace.ClassLibraries;
+using OnlineMarketPlace.ClassLibraries.Pagination;
 using OnlineMarketPlace.Repository;
 
 namespace OnlineMarketPlace.Controllers
@@ -33,8 +34,10 @@ namespace OnlineMarketPlace.Controllers
         }
         //Inject DataBase--End
         #endregion
-        public IActionResult Search(string name)
+        public IActionResult Search(string name,
+            int pageNumber = 1, int pageSize = 12)
         {
+            //تست
             if (name != null)
             {
                 var products = _db.ProductAbstract
@@ -47,8 +50,18 @@ namespace OnlineMarketPlace.Controllers
                         x.Category.Name.Contains(name) ||
                         x.Brand.Name.Contains(name)
                     )
-                    .OrderByDescending(x => x.RegDateTime).ToList();
-                return View(products);
+                    .OrderByDescending(x => x.RegDateTime);
+
+                var finalResult = PagedResult<ProductAbstract>.GetPaged(products, pageNumber, pageSize);
+                ViewData["pagenumber"] = pageNumber;
+                ViewData["pagesize"] = pageSize;
+                ViewData["totalRecords"] = products.Count();
+                ViewData["searchedName"] = name;
+
+
+                var result = finalResult.Results.ToList();
+
+                return View(result);
             }
             else
             {
@@ -58,8 +71,15 @@ namespace OnlineMarketPlace.Controllers
                     .Include(x => x.ProductFeature)
                     .Include(x => x.ProductImage)
                     .Include(x => x.Category)
-                    .OrderByDescending(x => x.RegDateTime).Take(15).ToList();
-                return View(products);
+                    .OrderByDescending(x => x.RegDateTime);
+
+                var finalResult = PagedResult<ProductAbstract>.GetPaged(products, pageNumber, pageSize);
+                ViewData["pagenumber"] = pageNumber;
+                ViewData["pagesize"] = pageSize;
+                ViewData["totalRecords"] = products.Count();
+                var result = finalResult.Results.ToList();
+
+                return View(result);
             }
         }
 

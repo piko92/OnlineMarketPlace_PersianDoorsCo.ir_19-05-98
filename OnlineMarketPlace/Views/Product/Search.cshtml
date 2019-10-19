@@ -2,6 +2,11 @@
 @{
     ViewData["Title"] = "لیست محصولات";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var pageNumber = (int)ViewData["pagenumber"];
+    var pageSize = (int)ViewData["pagesize"];
+    var totalRecords = (int)ViewData["totalRecords"];
+    var searchedName = ViewData["searchedName"];
+
 }
 @model List<ProductAbstract>
 @*@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml", "لیست محصولات");*@
@@ -584,15 +589,12 @@
                                 </div>
                             </div>
                             <div class="row mb-30 mb-sm-40 mb-xs-30">
-                                <div class="col">
-                                    <ul class="page-pagination">
-                                        <li class="active"><a href="#">01</a></li>
-                                        <li><a href="#">02</a></li>
-                                        <li><a href="#">03</a></li>
-                                        <li><a href="#">04</a></li>
-                                        <li><a href="#">05</a></li>
-                                        <li><a href="#">Next</a></li>
-                                    </ul>
+                                <!-- Page navigation start -->
+                                <div class="pagination-box hidden-mb-45 text-center">
+                                    <nav aria-label="Page navigation example">
+                                        <div class="paging farsi-num">
+                                        </div>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
@@ -603,3 +605,38 @@
     </div>
 </div>
 <!-- Shop Section End -->
+
+@if (searchedName != null)
+{
+    <script>
+        $(function () {
+            $(".paging").pagination({
+                items: @totalRecords,
+                itemsOnPage: @pageSize,
+                displayedPages: 3,
+                cssStyle: 'light-theme',
+                currentPage: @pageNumber,
+                hrefTextPrefix: `Search?name=${@searchedName}&pageNumber=`,
+                prevText: 'قبلی',
+                nextText: 'بعدی'
+            });
+        });
+    </script>
+}
+else
+{
+    <script>
+        $(function () {
+            $(".paging").pagination({
+                items: @totalRecords,
+                itemsOnPage: @pageSize,
+                displayedPages: 3,
+                cssStyle: 'light-theme',
+                currentPage: @pageNumber,
+                hrefTextPrefix: 'Search?pageNumber=',
+                prevText: 'قبلی',
+                nextText: 'بعدی'
+            });
+        });
+    </script>
+}
