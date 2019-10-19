@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using OnlineMarket.Models;
 using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.ClassLibraries;
 using OnlineMarketPlace.ClassLibraries.NotificationHandler;
 using OnlineMarketPlace.Models.AdminViewModels;
 using OnlineMarketPlace.Repository;
@@ -28,6 +30,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, Invoice, int> dbInvoice;
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
         private readonly IHostingEnvironment hostingEnvironment;
+        private IConfiguration configuration;
         string contentRootPath;
         public HomeController
             (
@@ -38,7 +41,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
                 DbRepository<OnlineMarketContext, Invoice, int> _dbInvoice,
                 DbRepository<OnlineMarketContext, GeneralPage, int> _dbGeneralPage,
-                IHostingEnvironment _hostingEnvironment
+                IHostingEnvironment _hostingEnvironment,
+                IConfiguration _configuration
             )
         {
             userManager = _userManager;
@@ -50,6 +54,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbGeneralPage = _dbGeneralPage;
             hostingEnvironment = _hostingEnvironment;
             contentRootPath = hostingEnvironment.ContentRootPath;
+            configuration = _configuration;
         }
         //Inject DataBase--End
         #endregion
@@ -146,7 +151,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         {
             return View();
         }
-        public IActionResult InsertGeneralPageConfirm(GeneralPageViewModel model)
+        public async Task<IActionResult> InsertGeneralPageConfirm(GeneralPageViewModel model)
         {
             string nvm;
             if (ModelState.IsValid == false)
@@ -164,6 +169,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             };
             try
             {
+                //Save File in wwwroot
+                string folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                string savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
+                generalPage.MainImagePath = savePath;
+
                 dbGeneralPage.Insert(generalPage);
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
                 return RedirectToAction("ShowGeneralPage", new { notification = nvm });
@@ -196,7 +206,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             ViewData["GeneralPage"] = dbGeneralPage.FindById(Id);
             return View();
         }
-        public IActionResult EditGeneralPageConfirm(GeneralPageViewModel model)
+        public async Task<IActionResult> EditGeneralPageConfirm(GeneralPageViewModel model)
         {
             string nvm;
             if (ModelState.IsValid == false)
@@ -212,6 +222,17 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 entity.RegdDateTime = DateTime.Now;
                 entity.ContentHtml = model.ContentHtml;
                 entity.Status = model.Status;
+            }
+            //Delete Old Image then Insert New Image
+            if (model.MainImage != null)
+            {
+                if (entity.MainImage != null)
+                {
+                    bool imgDel = FileManager.DeleteFile(contentRootPath, entity.MainImagePath);
+                }
+                string folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                string savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
+                entity.MainImagePath = savePath;
             }
             try
             {

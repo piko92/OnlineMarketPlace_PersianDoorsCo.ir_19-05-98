@@ -43,26 +43,45 @@
                     <!--About Us Content End-->
                 </div>
             </div>
+            <hr />
         </div>
     </div>
     <!--About Us Area End-->
 }
 <!--GeneralPages Area Start-->
 
-<div class="features-section section pt-30 pt-lg-15 pt-md-0 pt-sm-0 pt-xs-15">
+
+<div class="features-section section pt-15 pt-lg-15 pt-md-0 pt-sm-0 pt-xs-15">
+
     <div class="container">
+        <div class=" col-lg-6 mx-auto text-center justify-content-center">
+            <h3> آشنایی بیشتر با پرشین درب جنوب</h3>
+            <hr />
+        </div>
         <div class="row ">
+
             @if (GeneralPages != null)
             {
+
                 foreach (var item in GeneralPages)
                 {
                     <div class="col-lg-5 col-md-6 m-3  rtl-class">
+
                         <!-- Single Feature Start -->
                         <div class="single-feature">
-                            <div class="about-us-img-wrapper mb-30 mb-xs-15 ">
-                                <div class="about-us-image img-full m-4">
+                            <div class="pages-img-wrapper mb-30 mb-xs-15">
+                                <div class="about-us-image img-full m-4 ">
                                     <a asp-controller="Home" asp-action="Pages" asp-route-Id="@item.Id">
-                                    <img width="60" alt="" src="~/shared/main/assets/images/icons/author.png"></a>
+                                        @if (item.MainImagePath != null)
+                                        {
+                                            <img width="80" alt="" src=@item.MainImagePath.Replace("wwwroot","")>
+                                        }
+                                        else
+                                        {
+
+                                            <img width="80" alt="" src="~/shared/main/assets/images/icons/author.png">
+                                        }
+                                    </a>
                                 </div>
                             </div>
 
@@ -73,6 +92,7 @@
                                 </a>
                             </div>
                         </div>
+
                         <!-- Single Feature End -->
                     </div>
 

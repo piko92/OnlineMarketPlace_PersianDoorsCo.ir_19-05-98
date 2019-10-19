@@ -244,7 +244,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     {
                         entity.ParentId = null;
                     }
-                    //Insert Image
+                    //Delete Old Image then Insert New Image
                     if (model.Image1 != null)
                     {
                         if (entity.ImagePath != null)
@@ -595,7 +595,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     };
 
                     string folderPath = _configuration.GetSection("DefaultPaths").GetSection("ProductImage").Value;
-
+                    
                     string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, model.MainImage, true, id);
                     string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
 
@@ -622,13 +622,13 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
                         string savePath = await FileManager.SaveImageInDirectory(contentRootPath, folderPath, item, true, id);
                         string thumnailSavePath = FileManager.SaveThumbnail(savePath, contentRootPath, folderPath, ImageFormat.Png, true, id);
-
+                        
                         productImage.ImagePath = savePath;
                         productImage.ImageThumbnailPath = thumnailSavePath;
 
                         dbProductImage.Insert(productImage);
                     }
-                }
+                      }
                 //Insert Other Images -End
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
                 return RedirectToAction("ShowProduct", new { notification = nvm });
@@ -695,7 +695,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             try
             {
-                var entityProductAbstract = dbProductAbstract.FindById(model.Id);
+                var entityProductAbstract = dbProductAbstract.GetInclude(e=>e.ProductImage).Where(e=>e.Id==model.Id).FirstOrDefault();
                 if (entityProductAbstract != null)
                 {
                     entityProductAbstract.Name = model.Name;
@@ -717,9 +717,10 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 //Insert Main Image - Start
                 if (model.MainImage != null)
                 {
-                    var mainImage = entityProductAbstract.ProductImage.Where(e => e.ProductId == id).Where(e => e.IsMainImage == true).FirstOrDefault();
-                    if (mainImage != null)
+                    var _mainImage = entityProductAbstract.ProductImage.Where(e => e.IsMainImage == true);
+                    if (_mainImage.FirstOrDefault() != null)
                     {
+                        var mainImage = _mainImage.FirstOrDefault();
                         bool status = dbProductImage.DeleteById(mainImage.Id);
                         if (status)
                         {
