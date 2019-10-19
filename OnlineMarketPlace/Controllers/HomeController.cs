@@ -120,7 +120,10 @@ namespace OnlineMarketPlace.Controllers
         public IActionResult About()
         {
             var dbViewModel = dbGeneralPage.GetAll().Where(e => e.Title == "AboutUs").FirstOrDefault();
-            ViewData["GeneralPages"] = dbGeneralPage.GetAll().Where(e => e.Title != "AboutUs").ToList();
+            ViewData["GeneralPages"] = dbGeneralPage.GetAll()
+                .Where(e => e.Title != "AboutUs" && e.Status==true)
+                .OrderBy(e=>e.ShowOrder)
+                .ToList();
             return View(dbViewModel);
         }
         public IActionResult Pages(int Id)

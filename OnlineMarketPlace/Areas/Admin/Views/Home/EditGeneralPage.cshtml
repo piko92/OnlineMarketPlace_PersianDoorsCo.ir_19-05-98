@@ -4,7 +4,26 @@
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
     var GeneralPage = ViewData["GeneralPage"] as GeneralPage;
 }
-
+@{
+    var OpacityDocumentStyle = "";
+    if (GeneralPage.DocumentPath == null)
+    {
+        OpacityDocumentStyle = "filter: opacity(20%);";
+    }
+    else
+    {
+        OpacityDocumentStyle = "filter: opacity(100%);";
+    }
+    var OpacityMovieStyle = "";
+    if (GeneralPage.MoviePath == null)
+    {
+        OpacityMovieStyle = "filter: opacity(20%);";
+    }
+    else
+    {
+        OpacityMovieStyle = "filter: opacity(100%);";
+    }
+}
 
 @model GeneralPageViewModel
 <div class="row">
@@ -46,6 +65,7 @@
                                 <span asp-validation-for="ContentHtml"></span>
                             </div>
                         </div>
+                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">تصویر  </label>
                             <div class="col-sm-10">
@@ -59,7 +79,6 @@
                                 }
                             </div>
                         </div>
-                        <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"> تغییر تصویر</label>
                             <div class="col-sm-10">
@@ -69,6 +88,54 @@
                             </div>
                         </div>
                         <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">فایل فیلم </label>
+                            <div class="col-sm-10 col-lg-2 text-center">
+                                <img id="img1" style="@OpacityMovieStyle" src="~/images/Icons/icons8-movie-64.png" class="img-thumbnail" width="150" />
+                                <div  class="">
+                                    <br />
+                                    <button  FilePath="@GeneralPage.MoviePath" class="btn btn-danger" style="@OpacityMovieStyle" type="button" 
+                                            id="btnRemoveMovie">حذف </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغییر فایل فیلم </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input asp-for="MovieFile" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">فایل اسناد </label>
+                            <div class="col-sm-10 col-lg-2 text-center">
+                                <img id="img1" style="@OpacityDocumentStyle" src="~/images/Icons/icons8-document-64.png" class="img-thumbnail" width="150" />
+                                <div class="">
+                                    <br />
+                                    <button  FilePath="@GeneralPage.DocumentPath" class="btn btn-danger" type="button" style="@OpacityDocumentStyle"
+                                            id="btnRemoveDocument">حذف </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغغیر فایل اسناد </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input asp-for="DocumentFile" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">اولویت نمایش</label>
+                            <div class="col-sm-10">
+                                <input asp-for="ShowOrder" type="number" class="form-control" value="@GeneralPage.ShowOrder">
+                                <span asp-validation-for="ShowOrder"></span>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">وضعیت </label>
                             <div class="col-sm-10">
@@ -123,4 +190,33 @@
             $(img1).attr('src', e.target.result)
         }
     });
+    $(btnRemoveMovie).click( function () {
+        var filePath = $(this).attr('FilePath');
+        var btn = $(this);
+        $.post('/admin/Home/DeleteFileByPath', { filePath: filePath }, function (value) {
+            var result = JSON.parse(value)
+            if (result['Status'] == true) {
+                swal("حذف گردید!", result['Text'], "success");
+                btn.parent().parent().fadeOut();
+            } else {
+                swal("خطا!", result['Text'], "warning");
+            }
+
+        })
+    });
+    $(btnRemoveDocument).click(function () {
+        var filePath = $(this).attr('FilePath');
+        var btn = $(this);
+        $.post('/admin/Home/DeleteFileByPath', { filePath: filePath }, function (value) {
+            var result = JSON.parse(value)
+            if (result['Status'] == true) {
+                swal("حذف گردید!", result['Text'], "success");
+                btn.parent().parent().fadeOut();
+            } else {
+                swal("خطا!", result['Text'], "warning");
+            }
+
+        })
+    });
 </script>
+

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OnlineMarketPlace.Areas.Identity.Data;
 
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    partial class OnlineMarketContextModelSnapshot : ModelSnapshot
+    [Migration("20191019114643_generalpage02")]
+    partial class generalpage02
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1179,8 +1181,6 @@ namespace OnlineMarketPlace.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("RelatedProductId");
-
-                    b.Property<int>("ShowOrder");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()

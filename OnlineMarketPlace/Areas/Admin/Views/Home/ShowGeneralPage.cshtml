@@ -24,6 +24,7 @@
                             <th>#</th>
                             <th>نام</th>
                             <th>توضیحات</th>
+                            <th>اولویت نمایش</th>
                             <th>وضعیت</th>
                             <th>ویرایش</th>
                             <th>حذف</th>
@@ -34,6 +35,7 @@
                             <th>#</th>
                             <th>نام</th>
                             <th>توضیحات</th>
+                            <th>اولویت نمایش</th>
                             <th>وضعیت</th>
                             <th>ویرایش</th>
                             <th>حذف</th>
@@ -49,6 +51,7 @@
                                     <td>@Counter</td>
                                     <td>@item.Title</td>
                                     <td>@item.Description</td>
+                                    <td>@item.ShowOrder</td>
                                     <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
                                     <td>
                                         <a asp-action="EditGeneralPage" asp-controller="Home" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>

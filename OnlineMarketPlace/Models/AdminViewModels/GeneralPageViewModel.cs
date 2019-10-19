@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,6 +11,7 @@ namespace OnlineMarketPlace.Models.AdminViewModels
     public class GeneralPageViewModel
     {
         public int Id { get; set; }
+
         public string Title { get; set; }
         public string LatinTitle { get; set; }
         public string AliasTitle { get; set; }
@@ -24,9 +27,15 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         public string Tags { get; set; }
         public string Links { get; set; }
         public bool Status { get; set; }
+        public int ShowOrder { get; set; }
         public int? RelatedProductId { get; set; }
         public IFormFile MainImage { get; set; }
         public string MainImagePath { get; set; }
+     
+        public IFormFile MovieFile { get; set; }
+        public string MoviePath { get; set; }
+        public IFormFile DocumentFile { get; set; }
+        public string DocumentPath { get; set; }
 
     }
 }

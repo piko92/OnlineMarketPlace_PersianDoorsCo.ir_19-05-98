@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -58,6 +59,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         //Inject DataBase--End
         #endregion
+
         #region Index
         public IActionResult Index(string notification)
         {
@@ -73,7 +75,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             return View();
         }
-        public IActionResult Editor(string txt1)
+        public IActionResult Editor()
+        {
+            return View();
+        }
+        public IActionResult Summernote()
         {
             return View();
         }
@@ -82,6 +88,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             return View();
         }
         #endregion
+
         #region About
 
         public IActionResult About(string notification)
@@ -135,10 +142,11 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         }
         #endregion
+
         #region General Page
         public IActionResult ShowGeneralPage(string notification)
         {
-          List<GeneralPage> viewModel = dbGeneralPage.GetAll().Where(e => e.Title != "AboutUs").ToList(); 
+            List<GeneralPage> viewModel = dbGeneralPage.GetAll().Where(e => e.Title != "AboutUs").ToList();
             //var viewModel = dbGeneralPage.GetAll() ;
             if (notification != null)
             {
@@ -151,6 +159,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         {
             return View();
         }
+        [DisableRequestSizeLimit]
         public async Task<IActionResult> InsertGeneralPageConfirm(GeneralPageViewModel model)
         {
             string nvm;
@@ -165,15 +174,29 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 Description = model.Description,
                 RegdDateTime = DateTime.Now,
                 ContentHtml = model.ContentHtml,
+                ShowOrder = model.ShowOrder,
                 Status = model.Status
             };
             try
             {
                 //Save File in wwwroot
-                string folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
-                string savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
+                string folderPath = "";
+                string savePath = "";
+                folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
                 generalPage.MainImagePath = savePath;
-
+                if (model.MovieFile != null)
+                {
+                    folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                    savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MovieFile);
+                    generalPage.MoviePath = savePath;
+                }
+                if (model.DocumentFile != null)
+                {
+                    folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                    savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.DocumentFile);
+                    generalPage.DocumentPath = savePath;
+                }
                 dbGeneralPage.Insert(generalPage);
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
                 return RedirectToAction("ShowGeneralPage", new { notification = nvm });
@@ -189,8 +212,13 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         public IActionResult DeleteGeneralPage(int Id)
         {
             string nvm;
+            var entity = dbGeneralPage.FindById(Id);
             try
             {
+                if (entity.MainImagePath != null)
+                {
+                    bool imgDel = FileManager.DeleteFile(contentRootPath, entity.MainImagePath);
+                }
                 dbGeneralPage.DeleteById(Id);
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
                 return Json(nvm);
@@ -221,18 +249,41 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 entity.Description = model.Description;
                 entity.RegdDateTime = DateTime.Now;
                 entity.ContentHtml = model.ContentHtml;
+                entity.ShowOrder = model.ShowOrder;
                 entity.Status = model.Status;
             }
             //Delete Old Image then Insert New Image
+            string folderPath;
+            string savePath;
             if (model.MainImage != null)
             {
-                if (entity.MainImage != null)
+                if (entity.MainImagePath != null)
                 {
                     bool imgDel = FileManager.DeleteFile(contentRootPath, entity.MainImagePath);
                 }
-                string folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
-                string savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
+                folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MainImage);
                 entity.MainImagePath = savePath;
+            }
+            if (model.MovieFile != null)
+            {
+                if (entity.MoviePath != null)
+                {
+                    bool FileDel = FileManager.DeleteFile(contentRootPath, entity.MoviePath);
+                }
+                folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.MovieFile);
+                entity.MoviePath = savePath;
+            }
+            if (model.DocumentFile != null)
+            {
+                if (entity.DocumentPath != null)
+                {
+                    bool FileDel = FileManager.DeleteFile(contentRootPath, entity.DocumentPath);
+                }
+                folderPath = configuration.GetSection("DefaultPaths").GetSection("PagesFiles").Value;
+                savePath = await FileManager.ReadAndSaveFile(contentRootPath, folderPath, model.DocumentFile);
+                entity.DocumentPath = savePath;
             }
             try
             {
@@ -246,6 +297,45 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 return RedirectToAction("ShowGeneralPage", new { notification = nvm });
             }
         }
+
+        public  IActionResult DeleteFileByPath(string filePath)
+        {
+            string nvm;
+            if (filePath==null)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return Json(nvm);
+            }
+            var generalPage = dbGeneralPage.GetAll();
+            try
+            {
+                var entityMovie = generalPage.Where(e => e.MoviePath == filePath);
+                if (entityMovie.Count()>0)
+                {
+                    var _entityMovie = entityMovie.FirstOrDefault();
+                    _entityMovie.MoviePath =null;
+                    dbGeneralPage.Update(_entityMovie);
+                    bool FileDel = FileManager.DeleteFile(contentRootPath, filePath);
+                }
+                var entityDocument = generalPage.Where(e => e.DocumentPath == filePath);
+                if (entityDocument.Count()>0)
+                {
+                    var _entityDocument = entityDocument.FirstOrDefault();
+                    _entityDocument.DocumentPath = null;
+                    dbGeneralPage.Update(_entityDocument);
+                    bool FileDel = FileManager.DeleteFile(contentRootPath, filePath);
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                return Json(nvm);
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                return Json(nvm);
+            }
+           
+        }
+
         #endregion
     }
 }

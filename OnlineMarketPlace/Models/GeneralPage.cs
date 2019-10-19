@@ -30,9 +30,13 @@ namespace OnlineMarket.Models
         public string Tags { get; set; }
         public string Links { get; set; }
         public bool Status { get; set; }
+        public int ShowOrder { get; set; }
         public byte[] MainImage { get; set; }
         public string MainImagePath { get; set; }
-
+        public byte[] MovieFile { get; set; }
+        public string MoviePath { get; set; }
+        public byte[] DocumentFile { get; set; }
+        public string DocumentPath { get; set; }
         public int? RelatedProductId { get; set; }
 
         [ForeignKey("RelatedProductId")]

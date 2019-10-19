@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewData["Title"] = "Summernote";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script type="text/javascript" src="~/AdminLayout/bootstrap-rtl-master/dist/js/bootstrap-rtl.min.js"></script>
+<script type="text/javascript" src="~/AdminLayout/js/jquery.min.js"></script>
+
+<link href="~/AdminLayout/summernote/dist/summernote-lite.css" rel="stylesheet" />
+<script src="~/AdminLayout/summernote/dist/summernote-lite.js"></script>
+
+
+<textarea rows="6" id="summernote">متن خود را وارد کنید </textarea>
+
+<script>
+    let summernoteOptions = {
+        height: 250,
+        disableResizeEditor: true,
+
+    };
+    $(summernote).summernote(summernoteOptions);
+    $(summernote).summernote("code", "متن خود را وارد کنید");
+</script>

@@ -20,5 +20,9 @@ namespace OnlineMarketPlace
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>();
+        //     .UseKestrel(options =>
+        //     {
+        //    options.Limits.MaxRequestBodySize = 10000000; // or a given limit
+        //});
     }
 }
