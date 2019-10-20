@@ -314,7 +314,7 @@
                                                             <p class="farsi-num">تلفن تماس: @item.Phone</p>
                                                         </address>
 
-                                                        <button class="btn d-inline-block edit-address-btn" data-toggle="modal" data-target="#myModal"><i class="fa fa-edit"></i>ویرایش</button>
+                                                        <button class="btn d-inline-block edit-address-btn" data-toggle="modal" data-target="#myModal" data-id="@item.Id" id="btnEdit"><i class="fa fa-edit"></i>ویرایش</button>
                                                         <a href="/Account/RemoveAddress/@item.Id" class="btn d-inline-block edit-address-btn"><i class="fa fa-edit"></i>حذف</a>
                                                     </div>
                                                 }
@@ -374,39 +374,43 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">ویرایش آدرس</h4>
+                    <h4 class="modal-title rtl-class">ویرایش آدرس</h4>
                 </div>
-                <div class="modal-body">
-                    <form asp-action="EditAddress" asp-controller="Account">
+                <form asp-action="EditAddress" asp-controller="Account" method="post">
+                    <div class="modal-body">
+                        <input asp-for="AddressViewModel.Id" class="form-control" id="txtId" hidden />
                         <div class="form-group">
                             <label asp-for="AddressViewModel.Fullname"></label>
-                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
+                            <input asp-for="AddressViewModel.Fullname" class="form-control" id="txtName" />
                             <span asp-validation-for="AddressViewModel.Fullname"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="AddressViewModel.Fullname"></label>
-                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
-                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                            <label asp-for="AddressViewModel.MobilePhoneNumber"></label>
+                            <input asp-for="AddressViewModel.MobilePhoneNumber" class="form-control" id="txtPhone" />
+                            <span asp-validation-for="AddressViewModel.MobilePhoneNumber"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="AddressViewModel.Fullname"></label>
-                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
-                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                            <label asp-for="AddressViewModel.PostalCode"></label>
+                            <input asp-for="AddressViewModel.PostalCode" class="form-control" id="txtPostalCode" />
+                            <span asp-validation-for="AddressViewModel.PostalCode"></span>
                         </div>
                         <div class="form-group">
-                            <label asp-for="AddressViewModel.Fullname"></label>
-                            <input asp-for="AddressViewModel.Fullname" class="form-control" />
-                            <span asp-validation-for="AddressViewModel.Fullname"></span>
+                            <label asp-for="AddressViewModel.Address"></label>
+                            <textarea asp-for="AddressViewModel.Address" class="form-control" id="txtAddress"></textarea>
+                            <span asp-validation-for="AddressViewModel.Address"></span>
                         </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">ثبت تغییرات</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
+                    </div>
+                </form>
             </div>
 
         </div>
+
     </div>
+</div>
 </div>
 <!--My Account section end-->
 <script src="~/lib/jquery/dist/jquery.js"></script>
@@ -422,7 +426,32 @@
     })
 
     $(function () {
+        $("button#btnEdit").click(function () {
+            var thisElemVal = $(this);
+            $.post("/Account/GetUserAddress", { id: thisElemVal.data("id") }, function (value) {
+                var objj = JSON.stringify(value);
+                var result = jQuery.parseJSON(objj);
 
+                console.log(result);
+                console.log(result.name);
+
+                var txtId = $("#txtId");
+                var txtname = $("#txtName");
+                var txtphone = $("#txtPhone");
+                var txtpost = $("#txtPostalCode");
+                var txtaddress = $("#txtAddress");
+
+                if (result.status == true) {
+                    txtId.val(result.id);
+                    txtname.val(result.name);
+                    txtphone.val(result.phone);
+                    txtpost.val(result.postalCode);
+                    txtaddress.html(result.address);
+                } else {
+                    txtaddress.html("هیچ آدرسی یافت نشد!")
+                }
+            })
+        })
         $("#addAddress").click(function () {
             var addressContainer = $("#addressContainer");
             var newForm = `<div class="col-md-4 card" id="newAddress">

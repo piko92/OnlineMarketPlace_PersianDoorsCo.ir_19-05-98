@@ -9,7 +9,9 @@ namespace OnlineMarketPlace.Models.ViewModels
 {
     public class AddressViewModel
     {
-        [DisplayName("نام و نام خوانوادگی گیرنده")]
+        public int Id { get; set; }
+
+        [DisplayName("نام و نام خانوادگی گیرنده")]
         [Required(ErrorMessage ="تکمیل این فیلد الزامی میباشد")]
         public string Fullname { get; set; }
 

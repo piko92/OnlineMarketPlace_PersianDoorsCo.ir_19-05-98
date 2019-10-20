@@ -393,20 +393,52 @@ namespace OnlineMarketPlace.Controllers
             }
             return RedirectToAction("UserPanel");
         }
-        public IActionResult EditAddress(int id)
+        public IActionResult EditAddress(UserPanelViewModel model)
         {
-            if (id > 0)
+            if (!ModelState.IsValid)
             {
-                var address = _dbAddress.FindById(id);
+                TempData["msg"] = "تکمیل فیلدهای ستاره دار الزامی میباشد";
+                return RedirectToAction("UserPanel");
+            }
+            if (model.AddressViewModel.Id > 0)
+            {
+                var address = _dbAddress.FindById(model.AddressViewModel.Id);
                 if (address != null)
                 {
-                    
+                    address.RecieverFullName = model.AddressViewModel.Fullname;
+                    address.Phone = model.AddressViewModel.MobilePhoneNumber;
+                    address.PostalCode = model.AddressViewModel.PostalCode;
+                    address.UserAddress = model.AddressViewModel.Address;
+
+                    _dbAddress.Update(address);
+
                     return RedirectToAction("UserPanel");
                 }
             }
             return RedirectToAction("UserPanel");
         }
 
+        public JsonResult GetUserAddress(int id)
+        {
+            if (id > 0)
+            {
+                var address = _dbAddress.FindById(id);
+                if (address != null)
+                {
+                    var result = new
+                    {
+                        status = true,
+                        id = address.Id,
+                        name = address.RecieverFullName,
+                        phone = address.Phone,
+                        postalCode = address.PostalCode,
+                        address = address.UserAddress
+                    };
+                    return Json(result);
+                }
+            }
+            return Json(new { status = false });
+        }
         #endregion
     }//end AccountController
 }
