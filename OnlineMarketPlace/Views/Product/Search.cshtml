@@ -6,6 +6,7 @@
     var pageSize = (int)ViewData["pagesize"];
     var totalRecords = (int)ViewData["totalRecords"];
     var searchedName = ViewData["searchedName"];
+    var dbCategory = ViewData["dbCategory"] as List<Category>;
 
 }
 @model List<ProductAbstract>
@@ -27,29 +28,35 @@
                     <div class="row">
                         <div class="col-12">
                             <!-- Grid & List View Start -->
+
                             <div class="shop-topbar-wrapper d-flex justify-content-between align-items-center">
                                 <div class="grid-list-option d-flex">
                                     <ul class="nav">
                                         <li>
                                             <a class="active show" data-toggle="tab" href="#grid"><i class="fa fa-th"></i></a>
                                         </li>
-                                        <li>
-                                            <a data-toggle="tab" href="#list" class=""><i class="fa fa-th-list"></i></a>
-                                        </li>
+                                        @*<li>
+                                                <a data-toggle="tab" href="#list" class=""><i class="fa fa-th-list"></i></a>
+                                            </li>*@
                                     </ul>
-                                    <p>نمایش محصولات - 1 تا 15</p>
+                                    @if (Model.Count > 0)
+                                    {
+                                        <p>
+                                            نمایش محصولات -  @(pageSize * (pageNumber - 1) + 1) تا @Math.Min((pageNumber * pageSize), totalRecords)
+                                            (@totalRecords کالا)
+                                        </p>
+                                    }
                                 </div>
                                 <!--Toolbar Short Area Start-->
-                                <div class="toolbar-short-area d-md-flex align-items-center">
-                                    <div class="toolbar-shorter ">
+                                <div class="toolbar-short-area d-md-flex align-items-center rtl-class">
+                                    <div class="toolbar-shorter rtl-class ">
                                         <label>مرتب سازی بر اساس:</label>
-                                        <select class="wide">
-                                            <option data-display="Select">Nothing</option>
-                                            <option value="Relevance">Relevance</option>
-                                            <option value="Name, A to Z">Name, A to Z</option>
-                                            <option value="Name, Z to A">Name, Z to A</option>
-                                            <option value="Price, low to high">Price, low to high</option>
-                                            <option value="Price, high to low">Price, high to low</option>
+                                        <select class="wide rtl-class mr-3">
+                                            <option data-display="انتخاب کنید">انتخاب کنید</option>
+                                            <option value="newest">جدیدترین</option>
+                                            <option value="cheapest">ارزان ترین</option>
+                                            <option value="mostExpensive">گران ترین</option>
+                                            <option value="Name">بر اساس نام</option>
                                         </select>
                                     </div>
                                 </div>
@@ -58,26 +65,66 @@
                             <!-- Grid & List View End -->
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-3 order-lg-2 order-2">
+                    <div class="row ">
+                        <div class="col-lg-3 order-lg-2 order-2 rtl-class">
+                            <!-- Single Sidebar Start  -->
+                            @if (searchedName != null)
+                            {
+                                <div class="common-sidebar-widget rtl-class">
+                                    <h3 class="sidebar-title"> فیلترهای اعمال شده  </h3>
+                                    <div class="">
+                                        <ul>
+                                            <li>
+                                                <a href="#" class="title mr-3">
+                                                    @searchedName
+                                                </a>
+                                                <a asp-controller="Product" asp-action="search" class="remove-compare">
+                                                    <i class="fa fa-close"></i>
+                                                </a>
+
+
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            }
+                            <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
                             <div class="common-sidebar-widget">
+                                <h3 class="sidebar-title">جست و جو در محصولات</h3>
+                                <div class="sidebar-search">
+                                    <form asp-action="Search" asp-controller="Product">
+                                        <input name="d" hidden="hidden" value="">
+                                        <input name="name" type="text" placeholder="مثال: درب نیکا">
+                                        <button><i class="fa fa-search"></i></button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- Single Sidebar End  -->
+                            <!-- Single Sidebar Start  -->
+                            <div class="common-sidebar-widget rtl-class">
                                 <h3 class="sidebar-title">دسته بندی محصولات</h3>
                                 <ul class="sidebar-list">
-                                    <li><a href="#"><i class="fa fa-plus"></i>Accessories <span class="count">(14)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Decor <span class="count">(14)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Furniture <span class="count">(28)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Lighting <span class="count">(14)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Outdoor <span class="count">(14)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Sports <span class="count">(13)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Storage <span class="count">(9)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Toys <span class="count">(9)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>Uncategorized <span class="count">(0)</span></a></li>
+                                    @if (dbCategory != null)
+                                    {
+                                        foreach (var item in dbCategory)
+                                        {
+                                            <li>
+                                                <a href="#">
+                                                    <i class="fa fa-plus ml-2"></i>
+                                                    @item.Name
+                                                    @*<span class="count">(1)</span>*@
+                                                </a>
+                                            </li>
+
+                                        }
+                                    }
+
                                 </ul>
                             </div>
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
-                            <div class="common-sidebar-widget">
+                            <div class="common-sidebar-widget rtl-class">
                                 <h3 class="sidebar-title">محدوده قیمت</h3>
                                 <div class="sidebar-price">
                                     <div id="price-range" class="mb-20"></div>
@@ -85,48 +132,8 @@
                                     <input type="text" id="price-amount" class="price-amount" readonly>
                                 </div>
                             </div>
-                            <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
-                            <div class="common-sidebar-widget">
-                                <h3 class="sidebar-title">نوع چوب</h3>
-                                <ul class="sidebar-list">
-                                    <li><a href="#"><i class="fa fa-plus"></i>راش <span class="count">(1)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>گردو <span class="count">(1)</span></a></li>
-                                    <li><a href="#"><i class="fa fa-plus"></i>چنار <span class="count">(1)</span></a></li>
-                                </ul>
-                            </div>
-                            <!-- Single Sidebar End  -->
-                            <!-- Single Sidebar Start  -->
-                            @*<div class="common-sidebar-widget">
-                                    <h3 class="sidebar-title">Compare Products</h3>
-                                    <div class="compare-products-list">
-                                        <ul>
-                                            <li>
-                                                <a href="#" class="title">Cras neque metus</a>
-                                                <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="title">Cras neque metus</a>
-                                                <a href="#" class="remove-compare"><i class="fa fa-close"></i></a>
-                                            </li>
-                                        </ul>
-                                        <a href="#" class="clear-btn">Clear all</a>
-                                        <button type="button" class="btn compare-btn">Compare</button>
-                                    </div>
-                                </div>*@
-                            <!-- Single Sidebar End  -->
-                            <!-- Single Sidebar Start  -->
-                            <div class="common-sidebar-widget">
-                                <h3 class="sidebar-title">برچسب محصولات</h3>
-                                <ul class="sidebar-tag">
-                                    <li><a href="#">blouse</a></li>
-                                    <li><a href="#">clothes</a></li>
-                                    <li><a href="#">fashion</a></li>
-                                    <li><a href="#">handbag</a></li>
-                                    <li><a href="#">laptop</a></li>
-                                </ul>
-                            </div>
-                            <!-- Single Sidebar End  -->
+
                         </div>
                         <div class="col-lg-9 order-lg-1 order-1">
                             <div class="row">
@@ -152,7 +159,7 @@
                                                                                 {
                                                                                     if (item.ProductImage.Count > 0)
                                                                                     {
-                                                                                        var mainImage = item.ProductImage.Where(x => x.IsMainImage == true && x.Status == true).FirstOrDefault();
+                                                                                        var mainImage = item.ProductImage.Where(x => x.IsMainImage == true).FirstOrDefault();
                                                                                         if (mainImage != null)
                                                                                         {
                                                                                             <img src="@mainImage.ImagePath.Replace("wwwroot","")" class="img-fluid" alt="@item.Name">
@@ -188,22 +195,27 @@
                                                                                            title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                                                     </li>
                                                                                     <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع کالا"><i class="fa fa-eye"></i></a></li>
-                                                                                    <li><a href="wishlit.html" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
+                                                                                    <li><a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="product-content">
                                                                             <h3 class="title"> <a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)">@item.Name</a></h3>
                                                                             <p class="product-price">
                                                                                 @if (item.BasePrice != null)
                                                                                 {
-                                                                                    <span class="discounted-price farsi-num">تومان @((int)item.BasePrice) </span>
-                                                                                    @*<span class="main-price discounted">$230.00</span>*@
+                                                                                    <span class="product-price discounted-price">
+                                                                                        <span style="font-size:0.01px">ا</span>
+                                                                                        <span class="local-price farsi-num">
+                                                                                            @($"{double.Parse(item.BasePrice.ToString().Split(',')[0])} ")
+                                                                                        </span>
+                                                                                        <span style="font-size:14px">تومان</span>
+                                                                                    </span>
                                                                                 }
                                                                                 else
                                                                                 {
                                                                                     <span class="discounted-price">تماس بگیرید</span>
-                                                                                    @*<span class="main-price discounted">$230.00</span>*@
                                                                                 }
                                                                             </p>
                                                                         </div>
@@ -212,391 +224,34 @@
                                                                 </div>
                                                             }
                                                         }
+                                                        else
+                                                        {
+                                                            <div class="col-12 text-center">
+                                                                <h3> محصولی یافت نشد</h3>
+                                                            </div>
+
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div id="list" class="tab-pane fade">
-                                                <div class="product-list-view">
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span class="sale">New</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-3.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-4.jpg" class="img-fluid" alt="">
-                                                                        </a>
 
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Miro Dining Table</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$170.00</span> <span class="main-price discounted">$210.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span class="sale">New</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-1.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-2.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Stylish Design Chair</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$190.00</span> <span class="main-price discounted">$230.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span class="sale">New</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-3.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-4.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Janus Table Lamp</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$130.00</span> <span class="main-price discounted">$150.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span class="sale">New</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-5.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-6.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Normal Dining chair</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$190.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span class="sale">Sale</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-7.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-8.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Affordances Side Table</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$130.00</span> </p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span>-20%</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-10.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-11.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Hot Design Table</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$153.00</span> </p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <div class="product-label">
-                                                                            <span>-29%</span>
-                                                                        </div>
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-12.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-13.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Outdoor Lock Chair</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$190.00</span> <span class="main-price discounted">$230.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                    <!-- Single List Product Start -->
-                                                    <div class="product-list-item mb-40">
-                                                        <div class="row">
-                                                            <div class="col-md-4 col-sm-6">
-                                                                <div class="single-grid-product">
-                                                                    <div class="product-image">
-                                                                        <a href="single-product.html">
-                                                                            <img src="~/shared/main/assets/images/product/product-16.jpg" class="img-fluid" alt="">
-                                                                            <img src="~/shared/main/assets/images/product/product-15.jpg" class="img-fluid" alt="">
-                                                                        </a>
-
-                                                                        <div class="product-action">
-                                                                            <ul>
-                                                                                <li><a href="cart.html"><i class="fa fa-cart-plus"></i></a></li>
-                                                                                <li><a href="#quick-view-modal-container" data-toggle="modal" title="Quick View"><i class="fa fa-eye"></i></a></li>
-                                                                                <li><a href="wishlit.html"><i class="fa fa-heart-o"></i></a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-8 col-sm-6">
-                                                                <div class="product-content-shop-list">
-                                                                    <div class="product-content">
-                                                                        <h3 class="title"> <a href="single-product.html">Normal Dining chair</a></h3>
-                                                                        <div class="product-category-rating">
-                                                                            <span class="rating">
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star active"></i>
-                                                                                <i class="fa fa-star-o"></i>
-                                                                            </span>
-                                                                            <span class="review"><a href="#">(1 review)</a></span>
-                                                                        </div>
-                                                                        <p class="product-price"><span class="discounted-price">$287.00</span></p>
-                                                                        <p class="product-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Single List Product Start -->
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-30 mb-sm-40 mb-xs-30">
-                                <!-- Page navigation start -->
-                                <div class="pagination-box hidden-mb-45 text-center">
-                                    <nav aria-label="Page navigation example">
-                                        <div class="paging farsi-num">
-                                        </div>
-                                    </nav>
+                            <!-- Page navigation start -->
+                            @if (Model.Count > 0)
+                            {
+                                <div class="row mb-30 mb-sm-40 mb-xs-30 mx-auto">
+                                    <div class="pagination-box hidden-mb-45 " style="float: none;margin: 0 auto;">
+                                        <nav aria-label="Page navigation example">
+                                            <div class="paging farsi-num">
+                                            </div>
+                                        </nav>
+                                    </div>
                                 </div>
-                            </div>
+                            }
+                            <!-- Page navigation end -->
                         </div>
                     </div>
                 </div>
@@ -606,6 +261,14 @@
 </div>
 <!-- Shop Section End -->
 
+<script>
+    $(document).ready(function () {
+        //Localize Prices
+        $(".local-price").each(function () {
+            $(this).text($(this).text().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"))
+        })
+    })
+</script>
 @if (searchedName != null)
 {
     <script>
@@ -616,7 +279,8 @@
                 displayedPages: 3,
                 cssStyle: 'light-theme',
                 currentPage: @pageNumber,
-                hrefTextPrefix: `Search?name=${@searchedName}&pageNumber=`,
+               // hrefTextPrefix: 'Search',
+                hrefTextPrefix: `Search?name=@searchedName&pageNumber=`,
                 prevText: 'قبلی',
                 nextText: 'بعدی'
             });

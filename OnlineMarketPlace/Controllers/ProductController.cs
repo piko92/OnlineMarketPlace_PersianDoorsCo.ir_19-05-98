@@ -20,24 +20,32 @@ namespace OnlineMarketPlace.Controllers
         //Inject DataBase--Start
         UserManager<ApplicationUser> _userManager;
         DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProduct;
+        DbRepository<OnlineMarketContext, Category, int> dbCategory;
         OnlineMarketContext _db;
         public ProductController
             (
                 UserManager<ApplicationUser> userManager,
                 DbRepository<OnlineMarketContext, ProductAbstract, int> dbProduct,
+                DbRepository<OnlineMarketContext, Category, int> _dbCategory,
                 OnlineMarketContext db
             )
         {
             _userManager = userManager;
             _dbProduct = dbProduct;
+            dbCategory = _dbCategory;
             _db = db;
         }
         //Inject DataBase--End
         #endregion
-        public IActionResult Search(string name,
-            int pageNumber = 1, int pageSize = 12)
+        public IActionResult Search(
+            string name,
+            int categoryId = 1,
+            int pageNumber = 1, 
+            int pageSize = 12
+            )
         {
             //تست
+            ViewData["dbCategory"] = dbCategory.GetAll().Where(e => e.Status == true).ToList();
             if (name != null)
             {
                 var products = _db.ProductAbstract
@@ -60,7 +68,7 @@ namespace OnlineMarketPlace.Controllers
 
 
                 var result = finalResult.Results.ToList();
-
+                
                 return View(result);
             }
             else

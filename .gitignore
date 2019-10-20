@@ -261,3 +261,4 @@ __pycache__/
 *.pyc
 /OnlineMarketPlace/wwwroot/files/images
 /OnlineMarketPlace/wwwroot/files/pages/files
+/OnlineMarketPlace/wwwroot/files/
