@@ -499,7 +499,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
                         transaction.Commit(); //Save the new records in 'User' table and 'UserImage' table
 
-                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
                         return RedirectToAction("UserList", new { notification = nvm });
                     }
                 }

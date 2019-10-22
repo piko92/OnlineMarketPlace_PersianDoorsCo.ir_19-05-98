@@ -13,7 +13,7 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         public int? ScreenResulationId { get; set; }
         public int? Priotity { get; set; }
 
-        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
+        //[Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public IFormFile Image { get; set; }
         public string ImagePath { get; set; }
         //public string ThumbnailImagePath { get; set; }

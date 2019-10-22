@@ -291,21 +291,21 @@
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="profileNewPassword">کلمه عبور قدیمی</label>
                     <div class="col-md-8">
-                        <input type="text" asp-for="CurrentPassword" class="form-control" id="profileCurrentPassword">
+                        <input type="password" asp-for="CurrentPassword" class="form-control" id="profileCurrentPassword">
                         <span asp-validation-for="CurrentPassword"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="profileNewPassword">کلمه عبور جدید</label>
                     <div class="col-md-8">
-                        <input asp-for="NewPassword" type="text" class="form-control" id="profileNewPassword">
+                        <input asp-for="NewPassword" type="password" class="form-control" id="profileNewPassword">
                         <span asp-validation-for="NewPassword"></span>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-md-3 control-label" for="profileNewPasswordRepeat">تکرار کلمه عبور جدید</label>
                     <div class="col-md-8">
-                        <input asp-for="ConfirmNewPassword" type="text" class="form-control" id="profileNewPasswordRepeat">
+                        <input asp-for="ConfirmNewPassword" type="password" class="form-control" id="profileNewPasswordRepeat">
                         <span asp-validation-for="ConfirmNewPassword"></span>
                     </div>
                 </div>
