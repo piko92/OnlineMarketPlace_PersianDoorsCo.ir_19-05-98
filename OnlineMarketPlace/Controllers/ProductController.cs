@@ -20,18 +20,21 @@ namespace OnlineMarketPlace.Controllers
         UserManager<ApplicationUser> _userManager;
         DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProduct;
         DbRepository<OnlineMarketContext, Category, int> dbCategory;
+        DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> dbProductAdditionalFeatures;
         OnlineMarketContext _db;
         public ProductController
             (
                 UserManager<ApplicationUser> userManager,
                 DbRepository<OnlineMarketContext, ProductAbstract, int> dbProduct,
                 DbRepository<OnlineMarketContext, Category, int> _dbCategory,
+                DbRepository<OnlineMarketContext, ProductAdditionalFeatures, int> _dbProductAdditionalFeatures,
                 OnlineMarketContext db
             )
         {
             _userManager = userManager;
             _dbProduct = dbProduct;
             dbCategory = _dbCategory;
+            dbProductAdditionalFeatures = _dbProductAdditionalFeatures;
             _db = db;
         }
         //Inject DataBase--End
@@ -119,6 +122,7 @@ namespace OnlineMarketPlace.Controllers
         [Route("Product/{id}/{productName}")]
         public IActionResult SingleProduct(int id)
         {
+
             try
             {
                 string productName;
@@ -139,7 +143,8 @@ namespace OnlineMarketPlace.Controllers
                             .Include(x => x.Category)
                             .OrderByDescending(x => x.RegDateTime).Take(8)
                             .Take(8).ToList();
-
+                        ViewData["ProductAdditionalFeatures"] = dbProductAdditionalFeatures.GetInclude(e=>e.AdditionalFeatures).
+                            Where(e => e.ProductFeatureId == product.ProductFeature.FirstOrDefault().Id && e.Value != null).ToList();
                         ViewData["relatedProducts"] = relatedProducts;
                         return View(product);
                     }

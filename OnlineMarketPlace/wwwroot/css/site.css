@@ -8,3 +8,10 @@ for details on configuring this project to bundle and minify static web assets. 
 .input-validation-error {
     background-color: whitesmoke;
 }
+
+.ProductFeature {
+    background-color: #f7f7f7;
+    height: 60px;
+    line-height: 60px;
+    
+}

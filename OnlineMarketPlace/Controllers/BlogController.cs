@@ -40,15 +40,15 @@ namespace OnlineMarketPlace.Controllers
         #region Article
         public IActionResult Index()
         {
-            ViewData["Article"] = dbArticle.GetAll();
+            ViewData["Article"] = dbArticle.GetAll().OrderByDescending(e => e.WrittenDateTime).ToList(); 
             ViewData["Category"] = dbCategory.GetAll();
-            var dbViewModel = dbArticle.GetAll();
+            var dbViewModel = dbArticle.GetAll().OrderByDescending(e => e.WrittenDateTime).ToList(); 
             return View(dbViewModel);
         }
         [Route("Blog/{id}/{ArticleTitle}")]
         public IActionResult ShowArticle(int Id)
         {
-            ViewData["Article"] = dbArticle.GetAll();
+            ViewData["Article"] = dbArticle.GetAll().OrderByDescending(e=>e.WrittenDateTime).ToList();
             ViewData["Category"] = dbCategory.GetAll();
             var dbViewModel = dbArticle.GetInclude(e=>e.UserArticleReview).Where(e=>e.Id==Id).FirstOrDefault();
             return View(dbViewModel);

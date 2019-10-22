@@ -33,10 +33,10 @@ namespace OnlineMarketPlace.Models.AdminViewModels
 
         [DisplayName("وضعیت")]
         public bool Status { get; set; }
-
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName("قیمت اصلی")]
         public decimal? BasePrice { get; set; }
-
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public int Code { get; set; }
     }
 }

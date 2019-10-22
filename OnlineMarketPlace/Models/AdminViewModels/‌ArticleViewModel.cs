@@ -17,11 +17,13 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         [DisplayName("عنوان لاتین")]
         public string LatinTitle { get; set; }
         public int? SubjectId { get; set; }
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName(" خلاصه مقاله")]
         public string Summery { get; set; }
         [DisplayName(" تصویر اصلی مقاله")]
         public IFormFile MainImage { get; set; }
         public string MainImagePath { get; set; }
+        [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         [DisplayName(" متن اصلی")]
         public string ContentHtml { get; set; }
         public string StyleCss { get; set; }

@@ -60,7 +60,7 @@
                                 <!--Crunccy dropdown-->
                                 <ul class="currency-dropdown">
                                     <li>
-                                        <a href="my-account.html" class="rtl-class">حساب کاربری من</a>
+                                        <a asp-controller="Account" asp-action="UserPanel" class="rtl-class">حساب کاربری من</a>
                                         <ul class="rtl-class">
                                             @if (User.Identity.IsAuthenticated)
                                             {

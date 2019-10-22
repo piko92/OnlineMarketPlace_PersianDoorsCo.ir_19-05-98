@@ -716,9 +716,11 @@ table.table thead .sorting_desc_disabled {
 .sorting:before {
     content: "\f0dc";
     margin-right: 7px;
+    margin-left: 7px;
 }
 .sorting_asc:before {
     content: "\f0de";
+    margin-right: 7px;
     margin-right: 7px;
 }
 .sorting_desc:before {

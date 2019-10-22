@@ -25,7 +25,7 @@
                             <th>نام </th>
                             <th>کد</th>
                             <th>تعداد موجودی</th>
-                            <th>قیمت</th>
+                            <th>قیمت (تومان)</th>
                             <th>ثبت تغییرات</th>
                         </tr>
                     </thead>
@@ -58,13 +58,13 @@
 
 
                                         </td>*@
-                                    <td id="tdCount">
+                                    <td id="tdCount" style="max-width:40px">
                                         <input id="count" style=" width: 100%;" type="text" class="form-control"
                                                value="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Count">
                                     </td>
 
 
-                                    <td id="tdbasePrice">
+                                    <td id="tdbasePrice" style="max-width:100px">
                                         <input id="basePrice" style=" width: 100%;" type="text" class="form-control"
                                                value="@((int)item.BasePrice)">
                                     </td>
