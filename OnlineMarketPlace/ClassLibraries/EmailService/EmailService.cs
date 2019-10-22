@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineMarketPlace.ClassLibraries.EmailService
 {
-    public class EmailService
+    public static class EmailService
     {
         public static bool Send(EmailViewModel model, string smtpAdress, int? smtpPort)
         {
@@ -39,7 +39,7 @@ namespace OnlineMarketPlace.ClassLibraries.EmailService
             if (smtpAdress==null || smtpPort==null)
             {
                 smtpAdress = "mail.persiandoorsco.ir";
-                smtpPort =587 ;
+                smtpPort = 587;
             }
             SmtpClient smtpClient = new SmtpClient(smtpAdress, smtpPort.Value);
             smtpClient.Credentials = new System.Net.NetworkCredential(SenderEmail, Password);

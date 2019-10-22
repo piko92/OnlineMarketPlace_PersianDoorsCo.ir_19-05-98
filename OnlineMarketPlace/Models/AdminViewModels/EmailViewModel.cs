@@ -11,14 +11,19 @@ namespace OnlineMarketPlace.Models.AdminViewModels
     {
         [Required(ErrorMessage = "انتخاب این فیلد الزامیست")]
         public string SenderEmail { get; set; }
+
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public string Password { get; set; }
+
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public string ReceiverEmail { get; set; }
+
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public string Subject { get; set; }
+
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public string Content { get; set; }
+
         public List<IFormFile> AttachedFiles { get; set; }
     }
 }
