@@ -5,7 +5,11 @@
     var pageNumber = (int)ViewData["pagenumber"];
     var pageSize = (int)ViewData["pagesize"];
     var totalRecords = (int)ViewData["totalRecords"];
-    var searchedName = ViewData["searchedName"];
+    var searchedName = (string)ViewData["searchedName"];
+    var FilteredCategory = (string)ViewData["FilteredCategory"];
+    var FilteredCategoryId = (int)ViewData["FilteredCategoryId"];
+    var sortBy = (int)ViewData["sortBy"];
+    var IsFilterExist = (bool)ViewData["IsFilterExist"];
     var dbCategory = ViewData["dbCategory"] as List<Category>;
 
 }
@@ -20,7 +24,7 @@
     })
 
 <!-- Shop Section Start -->
-<div class="shop-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-30  pb-70 pb-lg-50 pb-md-40 pb-sm-60 pb-xs-50">
+<div id="MainDiv" class="shop-section section pt-60 pt-lg-40 pt-md-30 pt-sm-20 pt-xs-30  pb-70 pb-lg-50 pb-md-40 pb-sm-60 pb-xs-50">
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -29,9 +33,9 @@
                         <div class="col-12">
                             <!-- Grid & List View Start -->
 
-                            <div class="shop-topbar-wrapper d-flex justify-content-between align-items-center">
+                            <div class="shop-topbar-wrapper d-flex justify-content-between align-items-center rtl-class">
                                 <div class="grid-list-option d-flex">
-                                    <ul class="nav">
+                                    <ul class="nav ml-3">
                                         <li>
                                             <a class="active show" data-toggle="tab" href="#grid"><i class="fa fa-th"></i></a>
                                         </li>
@@ -51,12 +55,12 @@
                                 <div class="toolbar-short-area d-md-flex align-items-center rtl-class">
                                     <div class="toolbar-shorter rtl-class ">
                                         <label>مرتب سازی بر اساس:</label>
-                                        <select class="wide rtl-class mr-3">
-                                            <option data-display="انتخاب کنید">انتخاب کنید</option>
-                                            <option value="newest">جدیدترین</option>
-                                            <option value="cheapest">ارزان ترین</option>
-                                            <option value="mostExpensive">گران ترین</option>
-                                            <option value="Name">بر اساس نام</option>
+                                        <select id="sortSelect" name="sortBy" class="wide rtl-class mr-3">
+                                            <option value="-1">انتخاب کنید</option>
+                                            <option value="1">جدیدترین</option>
+                                            <option value="2">ارزان ترین</option>
+                                            <option value="3">گران ترین</option>
+                                            <option value="4">بر اساس نام</option>
                                         </select>
                                     </div>
                                 </div>
@@ -68,34 +72,52 @@
                     <div class="row ">
                         <div class="col-lg-3 order-lg-2 order-2 rtl-class">
                             <!-- Single Sidebar Start  -->
-                            @if (searchedName != null)
+                            @if (IsFilterExist)
                             {
+                                /**/
                                 <div class="common-sidebar-widget rtl-class">
                                     <h3 class="sidebar-title"> فیلترهای اعمال شده  </h3>
-                                    <div class="">
+                                    <div style="color:orangered">
                                         <ul>
-                                            <li>
-                                                <a href="#" class="title mr-3">
-                                                    @searchedName
-                                                </a>
-                                                <a asp-controller="Product" asp-action="search" class="remove-compare">
-                                                    <i class="fa fa-close"></i>
-                                                </a>
+                                            @if (searchedName != null && searchedName.ToString() != "")
+                                            {
+                                                <li>
+                                                    <a href="#" class="title mr-3 ">
+                                                        @searchedName
+                                                    </a>
+                                                    <a asp-controller="Product" asp-action="search"
+                                                       asp-route-name="" asp-route-categoryId=@FilteredCategoryId class="remove-compare">
+                                                        <i class="fa fa-close"></i>
+                                                    </a>
 
+                                                </li>
+                                            }
+                                            @if (FilteredCategory != null)
+                                            {
+                                                <li>
+                                                    <a href="#" class="title mr-3 ">
+                                                        @FilteredCategory
+                                                    </a>
+                                                    <a asp-controller="Product" asp-action="search"
+                                                       asp-route-name=@searchedName asp-route-categoryId="-1" class="remove-compare">
+                                                        <i class="fa fa-close"></i>
+                                                    </a>
 
-                                            </li>
+                                                </li>
+                                            }
                                         </ul>
                                     </div>
                                 </div>
                             }
+
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
                             <div class="common-sidebar-widget">
                                 <h3 class="sidebar-title">جست و جو در محصولات</h3>
                                 <div class="sidebar-search">
                                     <form asp-action="Search" asp-controller="Product">
-                                        <input name="d" hidden="hidden" value="">
                                         <input name="name" type="text" placeholder="مثال: درب نیکا">
+                                        <input name="categoryId" hidden="hidden" value=@FilteredCategoryId>
                                         <button><i class="fa fa-search"></i></button>
                                     </form>
                                 </div>
@@ -110,7 +132,8 @@
                                         foreach (var item in dbCategory)
                                         {
                                             <li>
-                                                <a href="#">
+                                                <a asp-controller="Product" asp-action="Search"
+                                                   asp-route-categoryId=@item.Id asp-route-name=@searchedName>
                                                     <i class="fa fa-plus ml-2"></i>
                                                     @item.Name
                                                     @*<span class="count">(1)</span>*@
@@ -124,18 +147,18 @@
                             </div>
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
-                            <div class="common-sidebar-widget rtl-class">
-                                <h3 class="sidebar-title">محدوده قیمت</h3>
-                                <div class="sidebar-price">
-                                    <div id="price-range" class="mb-20"></div>
-                                    <button type="button" class="btn">اعمال فیلتر</button>
-                                    <input type="text" id="price-amount" class="price-amount" readonly>
-                                </div>
-                            </div>
+                            @*<div class="common-sidebar-widget rtl-class">
+                                    <h3 class="sidebar-title">محدوده قیمت</h3>
+                                    <div class="sidebar-price">
+                                        <div id="price-range" class="mb-20"></div>
+                                        <button type="button" class="btn">اعمال فیلتر</button>
+                                        <input type="text" id="price-amount" class="price-amount" readonly>
+                                    </div>
+                                </div>*@
                             <!-- Single Sidebar Start  -->
 
                         </div>
-                        <div class="col-lg-9 order-lg-1 order-1">
+                        <div class="col-lg-9 order-lg-1 order-1 rtl-class">
                             <div class="row">
                                 <div class="col-12">
                                     <div class="shop-product">
@@ -259,8 +282,9 @@
         </div>
     </div>
 </div>
+<input id="searchedNameValue" value="@searchedName" hidden="hidden" />
 <!-- Shop Section End -->
-
+<script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     $(document).ready(function () {
         //Localize Prices
@@ -269,9 +293,15 @@
         })
     })
 </script>
-@if (searchedName != null)
+@if (searchedName == null)
 {
-    <script>
+    searchedName = "";
+}
+
+<script>
+    $('#sortSelect option[value=@sortBy]').attr('selected', 'selected');
+    var DefSortId = $(sortSelect).find(":selected").val();
+    //pagging
         $(function () {
             $(".paging").pagination({
                 items: @totalRecords,
@@ -279,28 +309,20 @@
                 displayedPages: 3,
                 cssStyle: 'light-theme',
                 currentPage: @pageNumber,
-               // hrefTextPrefix: 'Search',
-                hrefTextPrefix: `Search?name=@searchedName&pageNumber=`,
+                hrefTextPrefix: `Search?name=@searchedName&sortBy=${DefSortId}&categoryId=@FilteredCategoryId&pageNumber=`,
                 prevText: 'قبلی',
                 nextText: 'بعدی'
             });
+    });
+
+    //sorting
+     
+    var _searchedName = $(searchedNameValue).val();
+    $(document).ready(function () {
+        $(sortSelect).change(function () {
+            var SelectedortId = $(this).find(":selected").val();
+            var _dir = `/product/Search?name=${_searchedName}&sortBy=${SelectedortId}&categoryId=@FilteredCategoryId&pageNumber=`;
+            window.location.href = _dir;
         });
-    </script>
-}
-else
-{
-    <script>
-        $(function () {
-            $(".paging").pagination({
-                items: @totalRecords,
-                itemsOnPage: @pageSize,
-                displayedPages: 3,
-                cssStyle: 'light-theme',
-                currentPage: @pageNumber,
-                hrefTextPrefix: 'Search?pageNumber=',
-                prevText: 'قبلی',
-                nextText: 'بعدی'
-            });
-        });
-    </script>
-}
+    });
+</script>
