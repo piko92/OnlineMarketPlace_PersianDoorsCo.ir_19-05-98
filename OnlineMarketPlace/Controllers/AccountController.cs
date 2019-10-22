@@ -393,6 +393,7 @@ namespace OnlineMarketPlace.Controllers
             }
             return RedirectToAction("UserPanel");
         }
+
         public IActionResult EditAddress(UserPanelViewModel model)
         {
             if (!ModelState.IsValid)

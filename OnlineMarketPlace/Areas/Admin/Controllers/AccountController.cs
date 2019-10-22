@@ -418,7 +418,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     if (userModifierRoleName == "Admin")
                     {
                         //"admin@admin.com" will never be disable
-                        if (user.UserName != MainAdmin)
+                        if (user.UserName == MainAdmin)
                         {
                             user.Status = model.Status;
                             //change user role

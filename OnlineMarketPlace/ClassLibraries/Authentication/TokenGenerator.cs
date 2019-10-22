@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Net.Mail;
 using OnlineMarketPlace.Models;
 using OnlineMarketPlace.ClassLibraries.SMSService.SMSIR;
+using OnlineMarketPlace.Models.AdminViewModels;
 
 namespace OnlineMarketPlace.ClassLibraries.Authentication
 {
@@ -25,7 +26,7 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
         {
             _userManager = userManager;
             _db = db;
-            var expiredTokens = _db.Tokens.Where(x => (DateTime.Now - x.RegDateTime).Minutes > 5 || x.Used == true).ToList();
+            var expiredTokens = _db.Tokens.Where(x => (DateTime.Now - x.RegDateTime).TotalMinutes > 5 || x.Used == true).ToList();
             if (expiredTokens.Count > 0)
             {
                 _db.Tokens.RemoveRange(expiredTokens);
@@ -44,33 +45,33 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
             {
                 if (_User != null)
                 {
+                    var setting = _db.Setting.FirstOrDefault();
+                    string token = await GenerateForPhoneNumber(_User);
+                    string message = $"کد تایید شما: {token}";
+                    var lastTokens = _db.Tokens.Where(x => x.UserId == _User.Id).ToList();
+                    if (lastTokens.Count > 0)
+                    {
+                        _db.Tokens.RemoveRange(lastTokens);
+                        _db.SaveChanges();
+                    }
+
+                    Tokens tokens = new Tokens()
+                    {
+                        UserId = _User.Id,
+                        Token = token,
+                        Used = false
+                    };
+                    await _db.Tokens.AddAsync(tokens);
+                    await _db.SaveChangesAsync();
+
                     var isUserName_Number = double.TryParse(_User.UserName, out double r) ? r : 0;
                     if (isUserName_Number > 0)
                     {
-                        string token = await GenerateForPhoneNumber(_User);
-                        string message = $"کد تایید شما: {token}";
-                        var lastTokens = _db.Tokens.Where(x => x.UserId == _User.Id).ToList();
-                        if (lastTokens.Count > 0)
-                        {
-                            _db.Tokens.RemoveRange(lastTokens);
-                            _db.SaveChanges();
-                        }
-
-                        Tokens tokens = new Tokens()
-                        {
-                            UserId = _User.Id,
-                            Token = token,
-                            Used = false
-                        };
-                        await _db.Tokens.AddAsync(tokens);
-                        await _db.SaveChangesAsync();
-
-
                         //متن پیامک
                         //string message = smsText;
                         //شماره مقصد
                         string mobileNumber = _User.UserName;
-                        var result = SmsIrService.SendSms(ApiKey, SecurityCode, lineNumber, message, mobileNumber);
+                        var result = SmsIrService.SendSms(setting.SMSApiAddress, setting.SMSPassword, setting.SMSApiNumber, message, mobileNumber);
 
                         //SMSService.SMSService SMS = new SMSService.SMSService(_db); 
                         //SMS.SendSMS(new List<string> { _User.UserName }, message);
@@ -79,11 +80,18 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                     else
                     {
                         //still not complete....
-                        string token = await GenerateForEmail(_User);
-                        string message = $@"<p>
-                                        کاربر بنام کاربری : {_User.UserName}, جهت تایید آدرس ایمیل خود در وبسایت پرشین درب جنوب، بروی لینک زیر کلیک نمایید. <br/>
-                                        {token}
-                                    </p>";
+
+                        EmailViewModel emailViewModel = new EmailViewModel()
+                        {
+                            Subject = "ایمیل تاییدیه ثبت نام",
+                            ReceiverEmail = _User.UserName,
+                            Content = message,
+                            SenderEmail = setting.AdminEmail,
+                            Password = setting.AdminEmailPassword
+                        };
+                        var port = int.TryParse(setting.EmailPort, out int rr) ? rr : 587;
+                        EmailService.EmailService.Send(emailViewModel, setting.EmailServiceProvider, port);
+
                         return 2;
                     }
                 }
@@ -107,55 +115,63 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                 if (_User != null && token != null)
                 {
                     var isUserName_Number = double.TryParse(_User.UserName, out double r) ? r : 0;
-                    if (isUserName_Number > 0)
+                    bool isVerified = false;
+                    if (phoneNumber == null)
                     {
-                        bool isVerified = false;
-                        if (phoneNumber == null)
+                        var tokenExist = _db.Tokens.Where(x => x.UserId == _User.Id && x.Token == token && x.Used == false).LastOrDefault();
+                        if (tokenExist != null)
                         {
-                            var tokenExist = _db.Tokens.Where(x => x.UserId == _User.Id && x.Token == token && x.Used == false).LastOrDefault();
-                            if (tokenExist != null)
+                            if ((DateTime.Now - tokenExist.RegDateTime).TotalMinutes <= 5)
                             {
-                                if ((DateTime.Now - tokenExist.RegDateTime).TotalMinutes <= 5)
-                                {
-                                    isVerified = await _userManager.VerifyChangePhoneNumberTokenAsync(_User, token, _User.UserName);
-                                    tokenExist.Used = true;
-                                    _db.Tokens.Update(tokenExist);
-                                }
+                                isVerified = await _userManager.VerifyChangePhoneNumberTokenAsync(_User, token, _User.UserName);
+                                tokenExist.Used = true;
+                                _db.Tokens.Update(tokenExist);
                             }
-                        }
-                        else
-                        {
-                            var tokenExist = _db.Tokens.Where(x => x.UserId == _User.Id && x.Token == token && x.Used == false).LastOrDefault();
-                            if (tokenExist != null)
-                            {
-                                if ((DateTime.Now - tokenExist.RegDateTime).Minutes <= 5)
-                                {
-                                    isVerified = await _userManager.VerifyChangePhoneNumberTokenAsync(_User, token, phoneNumber);
-                                    tokenExist.Used = true;
-                                    _db.Tokens.Update(tokenExist);
-                                }
-                                else
-                                {
-                                    return -2;
-                                }
-                            }
-                        }
-
-                        if (isVerified == true)
-                        {
-                            _User.PhoneNumberConfirmed = true;
-                            await _userManager.UpdateAsync(_User);
-                            return 1; // success by SMS
-                        }
-                        else
-                        {
-                            return 0;
                         }
                     }
                     else
                     {
-                        return 2; // success by Email
+                        var tokenExist = _db.Tokens.Where(x => x.UserId == _User.Id && x.Token == token && x.Used == false).LastOrDefault();
+                        if (tokenExist != null)
+                        {
+                            if ((DateTime.Now - tokenExist.RegDateTime).Minutes <= 5)
+                            {
+                                isVerified = await _userManager.VerifyChangePhoneNumberTokenAsync(_User, token, phoneNumber);
+                                tokenExist.Used = true;
+                                _db.Tokens.Update(tokenExist);
+                            }
+                            else
+                            {
+                                return -2;
+                            }
+                        }
                     }
+
+                    if (isVerified == true)
+                    {
+                        if (isUserName_Number > 0)
+                        {
+                            _User.PhoneNumberConfirmed = true;
+                        }
+                        else
+                        {
+                            _User.EmailConfirmed = true;
+                        }
+                        await _userManager.UpdateAsync(_User);
+                        return 1; // success by SMS
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                    //if (isUserName_Number > 0)
+                    //{
+
+                    //}
+                    //else
+                    //{
+                    //    return 2; // success by Email
+                    //}
                 }
                 return 0;// no action
             }
@@ -169,25 +185,43 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
         {
             if (_User != null)
             {
+                var setting = _db.Setting.FirstOrDefault();
                 var isUserName_Number = double.TryParse(_User.UserName, out double r) ? r : 0;
-                if (isUserName_Number > 0)
-                {
-                    var token = await GeneratePhoneNumberTokenAsync(_User);
-                    if (token != null)
-                    {
-                        string message = $"کد بازیابی کلمه عبور: {token}";
-                        string mobileNumber = _User.UserName;
-                        var result = SmsIrService.SendSms(ApiKey, SecurityCode, lineNumber, message, mobileNumber);
 
-                        var hasPassword = await _userManager.HasPasswordAsync(_User);
-                        if (hasPassword == true)
-                        {
-                            var removePassword = await _userManager.RemovePasswordAsync(_User);
-                        }
-                        return 1;
+                var token = await GeneratePhoneNumberTokenAsync(_User);
+                if (token != null)
+                {
+                    string message = $"کد بازیابی کلمه عبور: {token}";
+
+                    if (isUserName_Number > 0)
+                    {
+                        string mobileNumber = _User.UserName;
+                        var result = SmsIrService.SendSms(setting.SMSApiAddress, setting.SMSPassword, setting.SMSApiNumber, message, mobileNumber);
                     }
-                    return -1;
+                    else
+                    {
+
+                        EmailViewModel emailViewModel = new EmailViewModel()
+                        {
+                            Subject = "ایمیل تاییدیه ثبت نام",
+                            ReceiverEmail = _User.UserName,
+                            Content = message,
+                            SenderEmail = setting.AdminEmail,
+                            Password = setting.AdminEmailPassword
+                        };
+                        var port = int.TryParse(setting.EmailPort, out int rr) ? rr : 587;
+                        EmailService.EmailService.Send(emailViewModel, setting.EmailServiceProvider, port);
+                    }
+
+                    var hasPassword = await _userManager.HasPasswordAsync(_User);
+                    if (hasPassword == true)
+                    {
+                        var removePassword = await _userManager.RemovePasswordAsync(_User);
+                    }
+                    return 1;
                 }
+
+                
                 return -2;
             }
             else
