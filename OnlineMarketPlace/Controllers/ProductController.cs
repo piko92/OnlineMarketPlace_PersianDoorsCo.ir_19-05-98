@@ -13,76 +13,91 @@ using OnlineMarketPlace.Repository;
 
 namespace OnlineMarketPlace.Controllers
 {
-    //صرفا جهت تست و نمایش قالب ایجاد گردیده
     public class ProductController : Controller
     {
         #region Inject
         //Inject DataBase--Start
         UserManager<ApplicationUser> _userManager;
         DbRepository<OnlineMarketContext, ProductAbstract, int> _dbProduct;
+        DbRepository<OnlineMarketContext, Category, int> dbCategory;
         OnlineMarketContext _db;
         public ProductController
             (
                 UserManager<ApplicationUser> userManager,
                 DbRepository<OnlineMarketContext, ProductAbstract, int> dbProduct,
+                DbRepository<OnlineMarketContext, Category, int> _dbCategory,
                 OnlineMarketContext db
             )
         {
             _userManager = userManager;
             _dbProduct = dbProduct;
+            dbCategory = _dbCategory;
             _db = db;
         }
         //Inject DataBase--End
         #endregion
-        public IActionResult Search(string name,
-            int pageNumber = 1, int pageSize = 12)
+        #region Search Products
+        public IActionResult Search(string name, int categoryId = -1, int sortBy = 1, int pageNumber = 1, int pageSize = 12)
         {
-            //تست
-            if (name != null)
+            //Filter Name
+            name = name ?? "";
+            var products = _db.ProductAbstract
+                .Include(x => x.Category)
+                .Include(x => x.Brand)
+                .Include(x => x.ProductImage)
+                .Include(x => x.ProductFeature)
+                .Where(x =>
+                    x.Name.Contains(name) || x.LatinName.ToLower().Contains(name.ToLower()) ||
+                    x.Category.Name.Contains(name) ||
+                    x.Brand.Name.Contains(name)
+                );
+
+            //Filter Category
+            string FilteredCategory = null;
+            if (categoryId != -1)
             {
-                var products = _db.ProductAbstract
-                    .Include(x => x.Category)
-                    .Include(x => x.Brand)
-                    .Include(x => x.ProductImage)
-                    .Include(x => x.ProductFeature)
-                    .Where(x =>
-                        x.Name.Contains(name) || x.LatinName.ToLower().Contains(name.ToLower()) ||
-                        x.Category.Name.Contains(name) ||
-                        x.Brand.Name.Contains(name)
-                    )
-                    .OrderByDescending(x => x.RegDateTime);
-
-                var finalResult = PagedResult<ProductAbstract>.GetPaged(products, pageNumber, pageSize);
-                ViewData["pagenumber"] = pageNumber;
-                ViewData["pagesize"] = pageSize;
-                ViewData["totalRecords"] = products.Count();
-                ViewData["searchedName"] = name;
-
-
-                var result = finalResult.Results.ToList();
-
-                return View(result);
+                products = products.Where(e => e.CategoryId == categoryId);
+                FilteredCategory = dbCategory.GetAll().Where(e => e.Id == categoryId).FirstOrDefault().Name;
+                ViewData["FilteredCategory"] = FilteredCategory;
             }
-            else
+            //Sort
+            switch (sortBy)
             {
-                //********************* need to make STORED PROCEDURE *********************
-                //this is just for test
-                var products = _db.ProductAbstract
-                    .Include(x => x.ProductFeature)
-                    .Include(x => x.ProductImage)
-                    .Include(x => x.Category)
-                    .OrderByDescending(x => x.RegDateTime);
-
-                var finalResult = PagedResult<ProductAbstract>.GetPaged(products, pageNumber, pageSize);
-                ViewData["pagenumber"] = pageNumber;
-                ViewData["pagesize"] = pageSize;
-                ViewData["totalRecords"] = products.Count();
-                var result = finalResult.Results.ToList();
-
-                return View(result);
+                case 1: //newest
+                    products = products.OrderByDescending(x => x.RegDateTime);
+                    break;
+                case 2: //cheapest
+                    products = products.OrderBy(x => x.BasePrice);
+                    break;
+                case 3: //mostExpensive
+                    products = products.OrderByDescending(x => x.BasePrice);
+                    break;
+                case 4: //Name
+                    products = products.OrderByDescending(x => x.Name);
+                    break;
+                default:
+                    products = products.OrderByDescending(x => x.RegDateTime);
+                    break;
             }
+            //Pagging
+            var finalResult = PagedResult<ProductAbstract>.GetPaged(products, pageNumber, pageSize);
+            //Parameters
+            ViewData["pagenumber"] = pageNumber;
+            ViewData["pagesize"] = pageSize;
+            ViewData["totalRecords"] = products.Count();
+            ViewData["searchedName"] = name;
+            ViewData["FilteredCategoryId"] = categoryId;
+            ViewData["sortBy"] = sortBy;
+            ViewData["IsFilterExist"] = false;
+            ViewData["dbCategory"] = dbCategory.GetAll().Where(e => e.Status == true).ToList();
+            if (name != "" || FilteredCategory != null)
+            {
+                ViewData["IsFilterExist"] = true;
+            }
+            //Result
+            var result = finalResult.Results.ToList();
+            return View(result);
         }
-
         public IActionResult _PartialSearch(string name)
         {
             if (name != null)
@@ -99,8 +114,8 @@ namespace OnlineMarketPlace.Controllers
             }
             return null;
         }//end _PartialSearch
-
-
+        #endregion
+        #region Single Products
         [Route("Product/{id}/{productName}")]
         public IActionResult SingleProduct(int id)
         {
@@ -131,11 +146,13 @@ namespace OnlineMarketPlace.Controllers
                 }
                 return RedirectToAction("Search");
             }
-            catch (Exception )
+            catch (Exception)
             {
                 return RedirectToAction("Search");
             }
-            
+
         }//end SingleProduct
+        #endregion
+
     }
 }

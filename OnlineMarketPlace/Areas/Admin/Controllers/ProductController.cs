@@ -729,6 +729,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         if (status)
                         {
                             bool imgDel = FileManager.DeleteFile(contentRootPath, mainImage.ImagePath);
+                            bool thumbnailImgDel = FileManager.DeleteFile(contentRootPath, mainImage.ImageThumbnailPath);
+
                             ProductImage productImage = new ProductImage()
                             {
                                 ProductId = id,

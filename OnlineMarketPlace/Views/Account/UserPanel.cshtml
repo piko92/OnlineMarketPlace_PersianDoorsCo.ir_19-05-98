@@ -3,6 +3,7 @@
     ViewData["Title"] = "پنل کاربری";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var addresses = ViewData["addresses"] as List<Address>;
+    var userInvoice = ViewData["userInvoice"] as List<Invoice>;
 }
 @model UserPanelViewModel
 @inject UserManager<ApplicationUser> _userManager
@@ -14,13 +15,13 @@
     {
         dobString = @CustomizeCalendar.GregorianToPersian(currentUser.DateOfBirth ?? DateTime.Now);
     }
-    if (!string.IsNullOrEmpty(dobString))
-    {
-        var date = dobString.Split("/");
-        var year = date[0];
-        var month = date[1];
-        var day = date[2];
-    }
+    //if (!string.IsNullOrEmpty(dobString))
+    //{
+    //    var date = dobString.Split("/");
+    //    var year = date[0];
+    //    var month = date[1];
+    //    var day = date[2];
+    //}
 
 }
 <!-- Page Banner Section Start -->
@@ -148,46 +149,46 @@
                             <div class="tab-pane fade" id="orders" role="tabpanel">
                                 <div class="myaccount-content">
                                     <h3>سفارشات</h3>
+                                    @if (userInvoice.Count > 0)
+                                    {
+                                        <div class="myaccount-table table-responsive text-center">
+                                            <table class="table table-bordered">
+                                                <thead class="thead-light">
+                                                    <tr>
+                                                        <th>ردیف</th>
+                                                        <th>تعداد محصولات </th>
+                                                        <th>تاریخ</th>
+                                                        <th> وضعیت تایید </th>
+                                                        <th> وضعیت ارسال </th>
+                                                        <th>قیمت کل</th>
+                                                    </tr>
+                                                </thead>
 
-                                    <div class="myaccount-table table-responsive text-center">
-                                        <table class="table table-bordered">
-                                            <thead class="thead-light">
-                                                <tr>
-                                                    <th>ردیف</th>
-                                                    <th>شماره سفارش</th>
-                                                    <th>محصول</th>
-                                                    <th>تاریخ</th>
-                                                    <th>وضعیت</th>
-                                                    <th>تعداد</th>
-                                                    <th>قیمت کل</th>
-                                                    <th>#</th>
-                                                </tr>
-                                            </thead>
+                                                <tbody>
+                                                    @{int i = 1;}
+                                                    @foreach (var item in userInvoice)
+                                                    {
+                                                        <tr>
+                                                            <td class="farsi-num">@i</td>
+                                                            <td>@item.InvoiceProduct.Count</td>
+                                                            <td class="farsi-num">@CustomizeCalendar.GregorianToPersian(item.RegDateTime.Value)</td>
+                                                            <td>@(item.Approved ? "تایید شده" : "در دست بررسی")</td>
+                                                            <td>@(item.Sent ? "ارسال شده" : "ارسال نشده")</td>
+                                                            <td class="farsi-num ">@((int)item.CalculatedPrice) تومان</td>
+                                                        </tr>
+                                                        i++;
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center">
+                                            <h4>شما هیچ سفارش پرداخت شده ای ندارید</h4>
+                                        </div>
+                                    }
 
-                                            <tbody>
-                                                <tr>
-                                                    <td class="farsi-num">1</td>
-                                                    <td>DK-1546</td>
-                                                    <td>درب کاوه</td>
-                                                    <td class="farsi-num">Aug 22, 2018</td>
-                                                    <td>ارسال شده</td>
-                                                    <td>2</td>
-                                                    <td class="farsi-num local-price">2500000 تومان</td>
-                                                    <td><a href="cart.html" class="btn">مشاهده</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="farsi-num">2</td>
-                                                    <td>DK-1534</td>
-                                                    <td>درب طوس</td>
-                                                    <td class="farsi-num">July 22, 2018</td>
-                                                    <td>در حال پردازش</td>
-                                                    <td>1</td>
-                                                    <td class="farsi-num local-price">1000000 تومان</td>
-                                                    <td><a href="cart.html" class="btn">مشاهده</a></td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
                             </div>
                             <!-- Single Tab Content End -->
@@ -410,7 +411,7 @@
 
     </div>
 </div>
-</div>
+
 <!--My Account section end-->
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
@@ -454,25 +455,25 @@
         $("#addAddress").click(function () {
             var addressContainer = $("#addressContainer");
             var newForm = `<div class="col-md-4 card" id="newAddress">
-                                                <form action="CreateAddress" controller="Account" method="post">
-                                                    <div class="card-body">
-                                                        <div class="form-group">
-                                                            <input name="Fullname" type="text" class="form-control" placeholder="نام و نام خانوادگی تحویل گیرنده" />
+                                                    <form action="CreateAddress" controller="Account" method="post">
+                                                        <div class="card-body">
+                                                            <div class="form-group">
+                                                                <input name="Fullname" type="text" class="form-control" placeholder="نام و نام خانوادگی تحویل گیرنده" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input name="MobilePhoneNumber" type="text" class="form-control" placeholder="شماره تلفن تماس" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input name="PostalCode" type="text" class="form-control" placeholder="کد پستی" />
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <textarea name="Address" placeholder="آدرس" class="form-control"></textarea>
+                                                            </div>
+                                                            <button class="btn d-inline-block edit-address-btn">ثبت آدرس</button>
+                                                            <button type="button" class="btn d-inline-block edit-address-btn" id="cancelAddress">صرف نظر</button>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <input name="MobilePhoneNumber" type="text" class="form-control" placeholder="شماره تلفن تماس" />
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input name="PostalCode" type="text" class="form-control" placeholder="کد پستی" />
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <textarea name="Address" placeholder="آدرس" class="form-control"></textarea>
-                                                        </div>
-                                                        <button class="btn d-inline-block edit-address-btn">ثبت آدرس</button>
-                                                        <button type="button" class="btn d-inline-block edit-address-btn" id="cancelAddress">صرف نظر</button>
-                                                    </div>
-                                                </form>
-                                            </div>`;
+                                                    </form>
+                                                </div>`;
             if (addressContainer.find("#newAddress").length < 1) {
                 addressContainer.append(newForm);
             }

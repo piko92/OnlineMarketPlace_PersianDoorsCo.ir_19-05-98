@@ -35,7 +35,7 @@
                         <div class="col-md-6">
                             <!--Product Details Content Start-->
                             <div class="product-details-content">
-                                <h2>@Model.Name</h2>
+                                <h1>@Model.Name</h1>
                                 <h6>@Model.LatinName</h6>
                                 <div class="single-product-reviews">
                                     <i class="fa fa-star active"></i>
@@ -43,32 +43,35 @@
                                     <i class="fa fa-star active"></i>
                                     <i class="fa fa-star active"></i>
                                     <i class="fa fa-star-o"></i>
-                                    <a class="review-link farsi-num" href="#">(تعداد نظرات کاربران: 26)</a>
+                                    @*<a class="review-link farsi-num" href="#">(تعداد نظرات کاربران: 26)</a>*@
                                 </div>
                                 <div class="single-product-price">
                                     <span class="price new-price local-price farsi-num">@($"{double.Parse(Model.BasePrice.ToString().Split(',')[0])} تومان")</span>
                                     @*<span class="regular-price">$77.00</span>*@
                                 </div>
                                 <div class="product-description">
-                                    @if (Model.ProductDescription != null)
+                                    @if (Model.ProductFeature.FirstOrDefault() != null)
                                     {
-                                        if (Model.ProductDescription.Where(x => x.ProductAbstractId == Model.Id).ToList().Count > 0)
+                                        if (Model.ProductFeature.FirstOrDefault().ProductCode !=null)
                                         {
-                                            <p>
-                                                @Model.ProductDescription.Where(x => x.Status == true).LastOrDefault().SummaryHtml
-                                            </p>
+                                            <div>
+                                                <h4 class="farsi-num mb-2">
+                                                کد کالا:
+                                                @Model.ProductFeature.FirstOrDefault().ProductCode
+                                                </h4>
+                                            </div>
                                         }
                                     }
                                 </div>
-                                <div class="single-product-quantity">
+                                <div class="single-product-quantity  mt-50 mb-25">
                                     <form class="add-quantity" action="#">
-                                        <div class="product-quantity">
+                                        @*<div class="product-quantity">
                                             <input value="1" type="number" title="تعداد">
-                                        </div>
+                                        </div>*@
                                         <div class="add-to-link">
                                             <a asp-controller="Invoice" asp-action="AddToCart"
                                                asp-route-productFeatureId="@Model.ProductFeature.Where(x => x.ProductAbstractId == Model.Id).FirstOrDefault().Id"
-                                               class="btn"><i class="fa fa-shopping-bag"></i>اضافه به سبد خرید</a>
+                                               class="btn"><i class="fa fa-shopping-bag ml-2" ></i>اضافه به سبد خرید</a>
                                         </div>
                                     </form>
                                 </div>
@@ -83,14 +86,11 @@
                                     </span>
                                 </div>
                                 <div class="single-product-sharing">
-                                    <h3>این محصول را به دوستانتان معرفی نمایید</h3>
+                                    <h3>این محصول را در شبکه های اجتماعی ما مشاهده کنید</h3>
                                     <ul>
-                                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-pinterest"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-instagram"></i></a></li>
-                                        <li><a href="#"><i class="fa fa-vimeo"></i></a></li>
+                                        <li><a href="https://www.instagram.com/persiandoorsouth"><i class="fa fa-instagram"></i></a></li>
+                                        <li><a href="https://www.facebook.com/persiandoorsco"><i class="fa fa-facebook"></i></a></li>
+                                        <li><a href="https://t.me/persiandoorsouthshz"><i class="fa fa-telegram"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
@@ -152,7 +152,7 @@
                         <div class="tab-pane fade active show" id="description">
                             <div class="single-product-description">
 
-                                @if (Model.ProductDescription.Where(x => x.ProductAbstractId == Model.Id).ToList().Count > 0)
+                                @if (Model.ProductFeature.Where(x => x.ProductAbstractId == Model.Id).FirstOrDefault().pro > 0)
                                 {
                                     <p>
                                         @Model.ProductDescription.Where(x => x.Status == true).LastOrDefault().DescriptionHtml

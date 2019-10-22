@@ -28,6 +28,7 @@ namespace OnlineMarketPlace.Controllers
         UserManager<ApplicationUser> _userManager;
         SignInManager<ApplicationUser> _signInManager;
         DbRepository<OnlineMarketContext, Address, int> _dbAddress;
+        DbRepository<OnlineMarketContext, Invoice, int> dbInvoice;
         private readonly IHostingEnvironment _hostingEnvironment; //returns the hosting environment data
         string contentRootPath;
         OnlineMarketContext _db;
@@ -37,13 +38,15 @@ namespace OnlineMarketPlace.Controllers
             SignInManager<ApplicationUser> signInManager,
             IHostingEnvironment hostingEnvironment,
             DbRepository<OnlineMarketContext, Address, int> dbAddress,
-            OnlineMarketContext db)
+             DbRepository<OnlineMarketContext, Invoice, int> _dbInvoice,
+        OnlineMarketContext db)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _db = db;
 
             _dbAddress = dbAddress;
+            dbInvoice = _dbInvoice;
             _hostingEnvironment = hostingEnvironment;
             contentRootPath = _hostingEnvironment.ContentRootPath;//returns the root path of the website
 
@@ -304,8 +307,9 @@ namespace OnlineMarketPlace.Controllers
         [Authorize]
         public async Task<IActionResult> UserPanel()
         {
-            var foundUser = await _userManager.FindByNameAsync(User.Identity.Name);
-            ViewData["addresses"] = _db.Address.Where(x => x.UserId == foundUser.Id).ToList();
+            var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            ViewData["addresses"] = _db.Address.Where(x => x.UserId == currentUser.Id).ToList();
+            ViewData["userInvoice"] = dbInvoice.GetInclude(e=>e.InvoiceProduct).Where(e=>e.CustomerId== currentUser.Id && e.IsPaid==true).ToList();
             return View();
         }
 

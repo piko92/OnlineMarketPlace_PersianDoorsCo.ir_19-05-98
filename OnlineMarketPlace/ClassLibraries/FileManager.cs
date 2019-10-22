@@ -148,8 +148,8 @@ namespace OnlineMarketPlace.ClassLibraries
                 IFormFile FormFile,
                 ImageFormat format,
                 bool nested = false, int entityId = 0,
-                int sizeW = 120,
-                int sizeH = 120
+                int sizeW = 270,
+                int sizeH = 270
             )
         {
             GC.Collect();
@@ -207,7 +207,7 @@ namespace OnlineMarketPlace.ClassLibraries
                             string folderPath,
                             ImageFormat format,
                             bool nested = false, int entityId = 0,
-                            int size = 120)
+                            int size = 270)
         {
             GC.Collect();
             GC.WaitForPendingFinalizers();

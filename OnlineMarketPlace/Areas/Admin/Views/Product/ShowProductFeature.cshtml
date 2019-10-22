@@ -53,7 +53,8 @@
                                     <td>
                                         @if (ProductAdditionalFeatures != null)
                                         {
-                                            foreach (var item2 in ProductAdditionalFeatures.Where(e => e.ProductFeatureId == item.ProductFeature.FirstOrDefault().Id).ToList())
+                                            foreach (var item2 in ProductAdditionalFeatures
+                                                .Where(e => e.ProductFeatureId == item.ProductFeature.FirstOrDefault().Id && e.Value!=null).ToList())
                                             {
                                                 <b class="btn-primary">@AdditionalFeatures.Where(e => e.Id == item2.AdditionalFeaturesId).FirstOrDefault().Name</b>
                                                 <b>: @item2.Value</b>

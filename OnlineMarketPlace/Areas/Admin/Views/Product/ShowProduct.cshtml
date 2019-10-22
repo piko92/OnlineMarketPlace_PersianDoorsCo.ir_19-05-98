@@ -57,9 +57,9 @@
                                     <td>@item.Category.Name</td>
                                     <td>@((int)item.BasePrice)</td>
                                     <td>
-                                        @if (item.ProductImage.FirstOrDefault() != null)
+                                        @if (item.ProductImage.Where(e=>e.IsMainImage==true).FirstOrDefault() != null)
                                         {
-                                            var imgPath = item.ProductImage.FirstOrDefault().ImageThumbnailPath;
+                                            var imgPath = item.ProductImage.Where(e => e.IsMainImage == true).FirstOrDefault().ImageThumbnailPath;
                                             if (imgPath != null)
                                             {
                                                 <img width="75" height="70" src="@(imgPath.Replace("wwwroot", "")) " />
