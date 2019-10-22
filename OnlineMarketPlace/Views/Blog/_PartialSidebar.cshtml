@@ -9,9 +9,10 @@
 <div dir="rtl">
     <div class="common-sidebar-widget">
         <h3 class="sidebar-title text-right">آخرین پست ها</h3>
+       
         @if (dbArticle != null)
         {
-            @for (int i = 0; i < dbArticle.Count; i++)
+            @for (int i = 0; i < Math.Min(dbArticle.Count,3); i++)
             {
                 <div class="sidebar-blog rtl-class">
                     <div class="content">

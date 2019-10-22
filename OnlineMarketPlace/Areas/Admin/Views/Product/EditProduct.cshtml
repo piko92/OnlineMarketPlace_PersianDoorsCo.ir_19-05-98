@@ -31,14 +31,14 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">کد کالا</label>
+                            <label title="مقداری منحصر به فرد انتخاب شود" class="col-sm-2 control-label">کد کالا <span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <input asp-for="Code" type="number" value=@ProductFeature.ProductCode class="form-control">
                                 <span asp-validation-for="Code"></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">برند<span class="red-color">*</span></label>
+                            <label class="col-sm-2 control-label">برند <span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <select class="form-control m-b" asp-for="BrandI">
                                     @if (brand.Count > 0)
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">دسته بندی<span class="red-color">*</span></label>
+                            <label class="col-sm-2 control-label">دسته بندی <span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <select class="form-control m-b" asp-for="CategoryId">
                                     @if (category.Count > 0)
@@ -95,7 +95,7 @@
 
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">تصویر اصلی</label>
+                            <label class="col-sm-2 control-label">تصویر اصلی<span class="red-color">*</span></label>
                             <div class="col-sm-10">
                                 <div class="custom-file">
                                     @if (ProductAbstract.ProductImage != null)

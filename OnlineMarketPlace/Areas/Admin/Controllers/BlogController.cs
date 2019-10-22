@@ -182,8 +182,51 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         //Comment-Start
         public IActionResult ShowComment()
         {
-            var dbViewModel = dbUserArticleReview.GetInclude(e => e.Article);
+            var dbViewModel = dbUserArticleReview.GetInclude(e => e.Article).OrderByDescending(e=>e.RegDateTime).ToList();
             return View(dbViewModel);
+        }
+        public IActionResult DeleteComment(int id)
+        {
+            string nvm;
+            var entity = dbUserArticleReview.FindById(id);
+            if (entity!=null)
+            {
+                try
+                {
+                    dbUserArticleReview.DeleteById(id);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                    return Json(nvm);
+                }
+                catch (Exception)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                    return Json(nvm);
+                }
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+            return Json(nvm);
+        }
+        public IActionResult ApproveComment(int id)
+        {
+            string nvm;
+            var entity = dbUserArticleReview.FindById(id);
+            if (entity != null)
+            {
+                try
+                {
+                    entity.Approved = true;
+                    dbUserArticleReview.Update(entity);
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                    return Json(nvm);
+                }
+                catch (Exception)
+                {
+                    nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                    return Json(nvm);
+                }
+            }
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+            return Json(nvm);
         }
         //Comment-End
         #endregion

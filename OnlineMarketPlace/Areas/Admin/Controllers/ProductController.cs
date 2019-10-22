@@ -573,7 +573,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     CategoryId = model.CategoryId,
                     Status = model.Status,
                     UserId = currentUser.Id,
-                    BasePrice = model.BasePrice
+                    BasePrice = model.BasePrice,
+                    RegDateTime=DateTime.Now
                 };
                 int id = dbProductAbstract.Insert(productAbstract);
 
@@ -583,6 +584,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     ProductCode = model.Code,
                     Status = model.Status,
                     UserId = currentUser.Id,
+                    RegDateTime=DateTime.Now,
+                    Count=10
                 };
                 dbProductFeature.Insert(productFeature);
 

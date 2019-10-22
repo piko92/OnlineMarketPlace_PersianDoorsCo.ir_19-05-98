@@ -3283,7 +3283,7 @@
 			lengths  = d2 ? menu[0] : menu,
 			language = d2 ? menu[1] : menu;
 	
-		var select = $('<select/>', {
+        var select = $(' <select/>', {
 			'name':          tableId+'_length',
 			'aria-controls': tableId,
 			'class':         classes.sLengthSelect
@@ -3299,7 +3299,7 @@
 		}
 	
 		div.children().append(
-			settings.oLanguage.sLengthMenu.replace( '_MENU_', select[0].outerHTML )
+            settings.oLanguage.sLengthMenu.replace('_MENU_', select[0].outerHTML  )
 		);
 	
 		// Can't use `select` variable as user might provide their own and the

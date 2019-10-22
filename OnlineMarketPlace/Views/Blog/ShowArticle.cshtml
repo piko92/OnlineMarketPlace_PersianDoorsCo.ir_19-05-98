@@ -21,7 +21,7 @@
                         </div>
                     </div>*@
                 <!-- Single Sidebar End  -->
-                @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle);
+                @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle)
                 <!-- Single Sidebar End  -->
             </div>
             <div class="col-lg-9 order-lg-1 order-1" ">
@@ -31,7 +31,7 @@
                             <div class="blog-media">
                                 <div class="image">
                                     @if (
-                           Model.MainImage != null)
+Model.MainImage != null)
                                     {
                                         <img width="500" height="400" src="@($"data:image/jpeg;base64,{Convert.ToBase64String(Model.MainImage)}")" />
                                     }
@@ -64,13 +64,14 @@
                     </div>
                     <div class="col-12 mt-60 mt-sm-30 mt-xs-20 ">
                         <!-- Start Comment -->
-                        @if (Model.UserArticleReview != null)
+                        @{var Comments = Model.UserArticleReview.Where(e => e.Approved == true).ToList(); }
+                        @if (Comments != null)
                         {
                             <div class="comments-wrapper">
                                 <div class="inner">
                                     <h3 class="text-right">نظرات</h3>
                                     <div class="commnent-list-wrap mt-25">
-                                        @foreach (var item in Model.UserArticleReview)
+                                        @foreach (var item in Comments)
                                         {
                                             <!-- Start Single Comment -->
                                             <div class="comment rtl-class">
@@ -81,7 +82,7 @@
                                                     </div>
                                                     <div class="comment-footer mt-5 text-right">
                                                         <ul class="meta">
-                                                          
+
                                                             <li class="farsi-num" style="opacity:0.5">  تاریخ ثبت نظر: @CustomizeCalendar.GregorianToPersian(item.RegDateTime.Value)</li>
                                                         </ul>
                                                     </div>

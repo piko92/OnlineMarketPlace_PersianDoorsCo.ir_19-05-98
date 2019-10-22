@@ -1,8 +1,148 @@
 ﻿
 @{
-    ViewData["Title"] = "ShowComment";
+    ViewData["Title"] = " لیست نظرات بخش مقالات";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>ShowComment</h1>
+@model List<UserArticleReview>
+<div class="row">
+    <div class="col-md-12">
+        <!-- Start .panel -->
+        <div class="panel panel-card ">
+            <div class="panel-heading">
+                <h4 class="panel-title">  لیست نظرات بخش مقالات </h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <table id="basic-datatables" class="table table-bordered" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>نام مقاله</th>
+                            <th>نام کاربر</th>
+                            <th>ایمیل</th>
+                            <th>متن نظر</th>
+                            <th>تاریخ ثبت</th>
+                            <th>وضعیت تایید</th>
+                            <th>تایید</th>
+                            <th>حذف</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>#</th>
+                            <th>نام مقاله</th>
+                            <th>نام کاربر</th>
+                            <th>ایمیل</th>
+                            <th>متن نظر</th>
+                            <th>تاریخ ثبت</th>
+                            <th>وضعیت تایید</th>
+                            <th>تایید</th>
+                            <th>حذف</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if (Model.FirstOrDefault() != null)
+                        {
+                            int Counter = 1;
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@Counter</td>
+                                    <td style="max-width:100px">@item.Article.Title</td>
+                                    <td>@item.FakeUserName</td>
+                                    <td>@item.AnonymousUserEmail</td>
+                                    <td style="max-width:200px">@item.Comment</td>
+                                    <td class="farsi-num"> @CustomizeCalendar.GregorianToPersian(item.RegDateTime.Value)</td>
+                                    <td id="approvedText">@(item.Approved == true ? "تایید شده" : "تایید نشده")</td>
+                                    <td>
+                                        <a class="btn btn-success btn-block" id="btnApproved" dataId="@item.Id">تایید نظر </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-block" id="btnDelete" dataId="@item.Id">حذف</a>
+                                    </td>
+                                </tr>
+                                Counter++;
+                            }
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    $('.panel-body').on('click', "#btnDelete", function () {
+        var dataId = $(this).attr("dataId");
+        var thisElement = $(this);
+        swal({
+            title: "آیا از حذف این آیتم اطمینان دارید؟",
+            text: "پس از تایید، بازیابی این آیتم امکان پذیر نمی باشد.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "بله، حذف شود",
+            cancelButtonText: "خیر، منصرف شدم",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.post("/Admin/Blog/DeleteComment", { Id: dataId }, function (value) {
+                    var result = JSON.parse(value)
+                    if (result['Status'] == true) {
+                        swal("حذف گردید!", result['Text'], "success");
+                        thisElement.parent().parent().fadeOut();
+                    } else {
+                        swal("حذف ناموفق", result['Text'], "warning");
+                    }
+                }, 'json')
+
+            } else {
+                swal("انصراف از حذف", "این آیتم همچنان در لیست شما باقی می ماند :)", "error");
+            }
+        });
+    })
+    $('.panel-body').on('click', "#btnApproved", function () {
+        var dataId = $(this).attr("dataId");
+        var thisElement = $(this);
+        swal({
+            title: "آیا از تایید این نظر اطمینان دارید؟",
+            text: "پس از تایید، نظر در سایت اصلی نمایش داده می شود.",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "بله، تایید شود",
+            cancelButtonText: "خیر، منصرف شدم",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                $.post("/Admin/Blog/ApproveComment", { Id: dataId }, function (value) {
+                    var result = JSON.parse(value)
+                    if (result['Status'] == true) {
+                        swal("تایید گردید. صفحه را مجدد بارگذاری کنید!", result['Text'], "success");
+                        setTimeout(
+                            function () {
+                                location.reload();
+                            }, 2000);
+
+                    } else {
+                        swal("عملیات ناموفق", result['Text'], "warning");
+                    }
+                }, 'json')
+
+            } else {
+                swal("انصراف  ", "این آیتم همچنان تایید نشده باقی می ماند :)", "error");
+            }
+        });
+    })
+</script>
+
+
 

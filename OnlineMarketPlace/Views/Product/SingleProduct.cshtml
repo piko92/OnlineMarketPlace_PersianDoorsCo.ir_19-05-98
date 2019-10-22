@@ -3,6 +3,8 @@
     ViewData["Title"] = "Product";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var relatedProducts = ViewData["relatedProducts"] as List<ProductAbstract>;
+    var ProductAdditionalFeatures = ViewData["ProductAdditionalFeatures"] as List<ProductAdditionalFeatures>;
+
 }
 @model ProductAbstract
 <!-- Page Banner Section Start -->
@@ -52,12 +54,12 @@
                                 <div class="product-description">
                                     @if (Model.ProductFeature.FirstOrDefault() != null)
                                     {
-                                        if (Model.ProductFeature.FirstOrDefault().ProductCode !=null)
+                                        if (Model.ProductFeature.FirstOrDefault().ProductCode != null)
                                         {
                                             <div>
                                                 <h4 class="farsi-num mb-2">
-                                                کد کالا:
-                                                @Model.ProductFeature.FirstOrDefault().ProductCode
+                                                    کد کالا:
+                                                    @Model.ProductFeature.FirstOrDefault().ProductCode
                                                 </h4>
                                             </div>
                                         }
@@ -66,12 +68,12 @@
                                 <div class="single-product-quantity  mt-50 mb-25">
                                     <form class="add-quantity" action="#">
                                         @*<div class="product-quantity">
-                                            <input value="1" type="number" title="تعداد">
-                                        </div>*@
+                                                <input value="1" type="number" title="تعداد">
+                                            </div>*@
                                         <div class="add-to-link">
                                             <a asp-controller="Invoice" asp-action="AddToCart"
                                                asp-route-productFeatureId="@Model.ProductFeature.Where(x => x.ProductAbstractId == Model.Id).FirstOrDefault().Id"
-                                               class="btn"><i class="fa fa-shopping-bag ml-2" ></i>اضافه به سبد خرید</a>
+                                               class="btn"><i class="fa fa-shopping-bag ml-2"></i>اضافه به سبد خرید</a>
                                         </div>
                                     </form>
                                 </div>
@@ -138,92 +140,37 @@
             <div class="col-md-12">
                 <div class="product-review-tab section">
                     <!--Review And Description Tab Menu Start-->
-                    <ul class="nav dec-and-review-menu">
+                    <ul class="nav dec-and-review-menu ml-3 mr-3">
                         <li>
-                            <a class="active" data-toggle="tab" href="#description">توضیحات</a>
-                        </li>
-                        <li>
-                            <a data-toggle="tab" href="#reviews">نظرات</a>
+                            <a class="active " data-toggle="tab" href="#description">مشخصات کالا</a>
                         </li>
                     </ul>
                     <!--Review And Description Tab Menu End-->
                     <!--Review And Description Tab Content Start-->
-                    <div class="tab-content product-review-content-tab" id="myTabContent-4">
+                    <div class="tab-content product-review-content-tab rtl-class " id="myTabContent-4">
                         <div class="tab-pane fade active show" id="description">
                             <div class="single-product-description">
 
-                                @*@if (Model.ProductFeature.Where(x => x.ProductAbstractId == Model.Id).FirstOrDefault().pro > 0)
+                                @if (ProductAdditionalFeatures != null)
                                 {
-                                    <p>
-                                        @Model.ProductDescription.Where(x => x.Status == true).LastOrDefault().DescriptionHtml
-                                    </p>
-                                }*@
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="reviews">
-                            <div class="review-page-comment">
-                                <h2>1 review for Sit voluptatem</h2>
-                                <ul>
-                                    <li>
-                                        <div class="product-comment">
-                                            <img src="~/images/logoB.png" alt="">
-                                            <div class="product-comment-content">
-                                                <div class="product-reviews">
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star"></i>
-                                                    <i class="fa fa-star-o"></i>
+                                    <ul class="col-lg-12 pr-3">
+                                        @foreach (var item in ProductAdditionalFeatures)
+                                        {
+                                            <li class="row center-block justify-content-center mt-3 ">
+                                                <div class="ProductFeature col-sm-3 ml-3">
+                                                    @item.AdditionalFeatures.Name
                                                 </div>
-                                                <p class="meta">
-                                                    <strong>admin</strong> - <span>November 22, 2018</span>
-                                                    <div class="description">
-                                                <p>Good Product</p>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="review-form-wrapper">
-                                <div class="review-form">
-                                    <span class="comment-reply-title">Add a review </span>
-                                    <form action="#">
-                                        <p class="comment-notes">
-                                            <span id="email-notes">Your email address will not be published.</span>
-                                            Required fields are marked
-                                            <span class="required">*</span>
-                                        </p>
-                                        <div class="comment-form-rating">
-                                            <label>Your rating</label>
-                                            <div class="rating">
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                                <i class="fa fa-star-o"></i>
-                                            </div>
-                                        </div>
-                                        <div class="input-element">
-                                            <div class="comment-form-comment">
-                                                <label>Comment</label>
-                                                <textarea name="message" cols="40" rows="8"></textarea>
-                                            </div>
-                                            <div class="review-comment-form-author">
-                                                <label>Name </label>
-                                                <input required="required" type="text">
-                                            </div>
-                                            <div class="review-comment-form-email">
-                                                <label>Email </label>
-                                                <input required="required" type="text">
-                                            </div>
-                                            <div class="comment-submit">
-                                                <button type="submit" class="form-button">Submit</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
+                                                <div class="ProductFeature col-sm-8 ">
+                                                    @item.Value
+                                                </div>
+
+                                            </li>
+                                        }
+                                    </ul>
+                                }
                             </div>
                         </div>
+
                     </div>
                 </div>
                 <!--Review And Description Tab Content End-->
