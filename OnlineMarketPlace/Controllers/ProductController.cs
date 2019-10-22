@@ -13,7 +13,6 @@ using OnlineMarketPlace.Repository;
 
 namespace OnlineMarketPlace.Controllers
 {
-    //صرفا جهت تست و نمایش قالب ایجاد گردیده
     public class ProductController : Controller
     {
         #region Inject
@@ -37,6 +36,7 @@ namespace OnlineMarketPlace.Controllers
         }
         //Inject DataBase--End
         #endregion
+        #region Search Products
         public IActionResult Search(string name, int categoryId = -1, int sortBy = 1, int pageNumber = 1, int pageSize = 12)
         {
             //Filter Name
@@ -54,7 +54,6 @@ namespace OnlineMarketPlace.Controllers
 
             //Filter Category
             string FilteredCategory = null;
-            //products = products.Where(e => e.CategoryId == categoryId).OrderByDescending(x => x.RegDateTime);
             if (categoryId != -1)
             {
                 products = products.Where(e => e.CategoryId == categoryId);
@@ -86,7 +85,6 @@ namespace OnlineMarketPlace.Controllers
             ViewData["pagenumber"] = pageNumber;
             ViewData["pagesize"] = pageSize;
             ViewData["totalRecords"] = products.Count();
-            var a = name.GetType();
             ViewData["searchedName"] = name;
             ViewData["FilteredCategoryId"] = categoryId;
             ViewData["sortBy"] = sortBy;
@@ -98,10 +96,8 @@ namespace OnlineMarketPlace.Controllers
             }
             //Result
             var result = finalResult.Results.ToList();
-
             return View(result);
         }
-
         public IActionResult _PartialSearch(string name)
         {
             if (name != null)
@@ -118,8 +114,8 @@ namespace OnlineMarketPlace.Controllers
             }
             return null;
         }//end _PartialSearch
-
-
+        #endregion
+        #region Single Products
         [Route("Product/{id}/{productName}")]
         public IActionResult SingleProduct(int id)
         {
@@ -156,5 +152,7 @@ namespace OnlineMarketPlace.Controllers
             }
 
         }//end SingleProduct
+        #endregion
+
     }
 }
