@@ -353,12 +353,15 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             var userModifier = await _userManager.FindByNameAsync(User.Identity.Name);
             try
             {
+                
+
                 if (user == null)
                 {
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Record_Not_Exist, contentRootPath);
                     return RedirectToAction("UserList", new { notification = nvm });
                 }
 
+                
                 //check if other users want to change 'Admin' deny their access to do that
                 var userModifierRoleId = _db.UserRoles.Where(x => x.UserId == userModifier.Id).FirstOrDefault().RoleId;
                 var userModifierRoleName = _db.Roles.Where(x => x.Id == userModifierRoleId).FirstOrDefault().Name;
@@ -369,6 +372,14 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 {
                     nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Access_denied, contentRootPath);
                     return RedirectToAction("UserList", new { notification = nvm });
+                }
+
+                if (model.CurrentPassword != null && model.NewPassword != null && model.ConfirmNewPassword != null)
+                {
+                    if (userModifier == user || userModifierRoleName == "Admin")
+                    {
+                        var statusPasswordChange = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+                    }
                 }
 
                 //Get Backup From The User Into 'UserModified' Table
@@ -488,7 +499,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
                         transaction.Commit(); //Save the new records in 'User' table and 'UserImage' table
 
-                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
                         return RedirectToAction("UserList", new { notification = nvm });
                     }
                 }

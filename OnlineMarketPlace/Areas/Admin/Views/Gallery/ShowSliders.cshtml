@@ -68,10 +68,10 @@
                                     </td>
                                     <td>@(item.Status == true ? "فعال" : "غیرفعال")</td>
                                     <td>
-                                        <a asp-action="EditPhoto" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
+                                        <a asp-action="EditSlider" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-info btn-block">ویرایش</a>
                                     </td>
                                     <td>
-                                        <a asp-action="DeletePhoto" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
+                                        <a asp-action="DeleteSlider" asp-controller="Gallery" asp-area="Admin" asp-route-Id="@item.Id" class="btn btn-danger btn-block">حذف</a>
                                     </td>
                                 </tr>
                                 Counter++;

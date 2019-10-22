@@ -133,83 +133,83 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         #endregion
         #region Photo
-        public IActionResult ShowPhoto()
-        {
-            var dbViewModel = dbPhotoGallery.GetInclude(e => e.User);
-            return View(dbViewModel);
-        }
-        public IActionResult InsertPhoto()
-        {
-            ViewData["Subject"] = dbSubject.GetAll();
-            return View();
-        }
-        public IActionResult InsertPhotoConfirm(PhotoGalleryViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                byte[] b = new byte[model.Image.Length];
-                model.Image.OpenReadStream().Read(b, 0, (int)model.Image.Length);
-                PhotoGallery photoGallery = new PhotoGallery()
-                {
-                    Name = model.Name,
-                    LatinName = model.LatinName,
-                    Status = model.Status,
-                    Image=b,
-                };
-                dbPhotoGallery.Insert(photoGallery);
-                TempData["InsertConfirm"] = "با موفقیت ثبت شد";
-                return RedirectToAction("ShowPhoto");
-            }
-            return RedirectToAction("InsertPhoto");
-        }
-        public IActionResult DeletePhoto(int Id)
-        {
-            var status = dbPhotoGallery.DeleteById(Id);
-            if (status)
-            {
+        //public IActionResult ShowPhoto()
+        //{
+        //    var dbViewModel = dbPhotoGallery.GetInclude(e => e.User);
+        //    return View(dbViewModel);
+        //}
+        //public IActionResult InsertPhoto()
+        //{
+        //    ViewData["Subject"] = dbSubject.GetAll();
+        //    return View();
+        //}
+        //public IActionResult InsertPhotoConfirm(PhotoGalleryViewModel model)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        byte[] b = new byte[model.Image.Length];
+        //        model.Image.OpenReadStream().Read(b, 0, (int)model.Image.Length);
+        //        PhotoGallery photoGallery = new PhotoGallery()
+        //        {
+        //            Name = model.Name,
+        //            LatinName = model.LatinName,
+        //            Status = model.Status,
+        //            Image=b,
+        //        };
+        //        dbPhotoGallery.Insert(photoGallery);
+        //        TempData["InsertConfirm"] = "با موفقیت ثبت شد";
+        //        return RedirectToAction("ShowPhoto");
+        //    }
+        //    return RedirectToAction("InsertPhoto");
+        //}
+        //public IActionResult DeletePhoto(int Id)
+        //{
+        //    var status = dbPhotoGallery.DeleteById(Id);
+        //    if (status)
+        //    {
 
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
 
-            }
-            return RedirectToAction("ShowPhoto");
-        }
-        public IActionResult EditPhoto(int Id)
-        {
-            ViewData["PhotoGallery"] = dbPhotoGallery.FindById(Id);
-            ViewData["Subject"] = dbSubject.GetAll();
+        //    }
+        //    return RedirectToAction("ShowPhoto");
+        //}
+        //public IActionResult EditPhoto(int Id)
+        //{
+        //    ViewData["PhotoGallery"] = dbPhotoGallery.FindById(Id);
+        //    ViewData["Subject"] = dbSubject.GetAll();
 
-            return View();
-        }
-        public IActionResult EditPhotoConfirm(PhotoGalleryViewModel model)
-        {
-            var entity = dbPhotoGallery.FindById(model.Id);
-            byte[] b = null;
-            if (model.Image==null)
-            {
-                ModelState.Remove("Image");
-                b = entity.Image;
-            }
-            else
-            {
-                b = new byte[model.Image.Length];
-                model.Image.OpenReadStream().Read(b, 0, (int)model.Image.Length);
-            }
-            if (ModelState.IsValid)
-            {
-                entity.Name = model.Name;
-                entity.LatinName = model.LatinName;
-                entity.Status = model.Status;
-                entity.SubjectId = model.SubjectId;
-                entity.Image = b;
+        //    return View();
+        //}
+        //public IActionResult EditPhotoConfirm(PhotoGalleryViewModel model)
+        //{
+        //    var entity = dbPhotoGallery.FindById(model.Id);
+        //    byte[] b = null;
+        //    if (model.Image==null)
+        //    {
+        //        ModelState.Remove("Image");
+        //        b = entity.Image;
+        //    }
+        //    else
+        //    {
+        //        b = new byte[model.Image.Length];
+        //        model.Image.OpenReadStream().Read(b, 0, (int)model.Image.Length);
+        //    }
+        //    if (ModelState.IsValid)
+        //    {
+        //        entity.Name = model.Name;
+        //        entity.LatinName = model.LatinName;
+        //        entity.Status = model.Status;
+        //        entity.SubjectId = model.SubjectId;
+        //        entity.Image = b;
 
-                dbPhotoGallery.Update(entity);
-                TempData["InsertConfirm"] = "با موفقیت ثبت شد";
-                return RedirectToAction("ShowPhoto");
-            }
-            return RedirectToAction("InsertPhoto");
-        }
+        //        dbPhotoGallery.Update(entity);
+        //        TempData["InsertConfirm"] = "با موفقیت ثبت شد";
+        //        return RedirectToAction("ShowPhoto");
+        //    }
+        //    return RedirectToAction("InsertPhoto");
+        //}
         #endregion
         #region Slider
         public ViewResult InsertSliderImage(string notification)
@@ -322,6 +322,141 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }//end InsertSliderImageConfirm
 
+        public IActionResult DeleteSlider(int Id)
+        {
+            try
+            {
+                var status = dbTopSlider.DeleteById(Id);
+                if (status)
+                {
+                    var nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Remove, contentRootPath);
+                    return RedirectToAction("ShowSliders", new { notification = nvm });
+                }
+                else
+                {
+                    var nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Remove, contentRootPath);
+                    return RedirectToAction("ShowSliders", new { notification = nvm });
+                }
+            }
+            catch(Exception ex)
+            {
+                var nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("ShowSliders", new { notification = nvm });
+            }
+        }
+        public ViewResult EditSlider(int Id, string notification)
+        {
+            ViewData["screen"] = dbScreen.GetAll();
+            ViewData["category"] = dbCategory.GetAll();
+            ViewData["brand"] = dbBrand.GetAll();
+            ViewData["SelectedSlider"] = dbTopSlider.FindById(Id);
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+
+        public async Task<IActionResult> EditSliderConfirm(TopSliderViewModel model)
+        {
+            string nvm;
+            try
+            {
+                if (model != null)
+                {
+                    var currentUser = await _userManager.FindByNameAsync(User.Identity.Name);
+                    var _topSlider = dbTopSlider.FindById(model.Id);
+                    if (_topSlider != null)
+                    {
+                        _topSlider.Title = model.Title;
+                        _topSlider.Summery = model.Summery;
+                        _topSlider.Description = model.Description;
+                        _topSlider.AltName = model.AltName;
+                        _topSlider.Link = model.Link;
+                        _topSlider.ScreenResulationId = model.ScreenResulationId > 0 ? model.ScreenResulationId : null;
+                        _topSlider.Status = model.Status;
+                        _topSlider.Active = model.Active;
+                        _topSlider.Priotity = model.Priotity;
+                        _topSlider.SetForFuture = model.SetForFuture;
+                        _topSlider.HasButton = model.HasButton;
+                        _topSlider.UserId = currentUser.Id;
+
+                        if (model.ConnectedCategoryId > 0)
+                        {
+                            _topSlider.ConnectedCategoryId = model.ConnectedCategoryId;
+                        }
+                        if (model.ConnectedBrandId > 0)
+                        {
+                            _topSlider.ConnectedBrandId = model.ConnectedBrandId;
+                        }
+                        if (model.ConnectedProductId > 0)
+                        {
+                            _topSlider.ConnectedProductId = model.ConnectedProductId;
+                        }
+                        if (model.ShowDateTime.ToString().Length > 1 && model.SetForFuture == true)
+                        {
+                            _topSlider.ShowDateTime = CustomizeCalendar.PersianToGregorian(model.ShowDateTime ?? DateTime.Now);
+                        }
+                        if (model.ExpireDateTime.ToString().Length > 1 && model.SetForFuture == true)
+                        {
+                            _topSlider.ExpireDateTime = CustomizeCalendar.PersianToGregorian(model.ExpireDateTime ?? DateTime.Now);
+                        }
+                        if (model.HasButton && model.ButtonContent != null)
+                        {
+                            _topSlider.ButtonContent = model.ButtonContent;
+                            _topSlider.ButtonLink = model.ButtonLink;
+                        }
+
+                        
+
+                        string folderPath = _configuration.GetSection("DefaultPaths").GetSection("SliderImage").Value;
+                        string uploads = Path.Combine(contentRootPath, folderPath);
+                        bool exists = System.IO.Directory.Exists(uploads);
+                        if (!exists)
+                        {
+                            System.IO.Directory.CreateDirectory(uploads);
+                        }
+                        var files = HttpContext.Request.Form.Files;
+                        if (files.Count > 0)
+                        {
+                            FileManager.DeleteFile(contentRootPath, _topSlider.ImagePath);
+                        }
+                        foreach (var Image in files)
+                        {
+                            if (Image != null && Image.Length > 0)
+                            {
+                                var file = Image;
+
+                                if (file.Length > 0)
+                                {
+
+                                    var fileName = Guid.NewGuid().ToString().Replace("-", "") + Path.GetExtension(file.FileName);
+                                    using (var fileStream = new FileStream(Path.Combine(uploads, fileName), FileMode.Create))
+                                    {
+                                        await file.CopyToAsync(fileStream);
+                                        _topSlider.ImagePath = folderPath + fileName;
+                                    }
+                                }
+                            }
+                        }
+
+                        dbTopSlider.Update(_topSlider); //edit record successfully
+
+                        nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                        return RedirectToAction("ShowSliders", new { notification = nvm });
+                    }
+                }
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Update, contentRootPath);
+                return RedirectToAction("ShowSliders", new { notification = nvm });
+            }
+            catch(Exception ex)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("ShowSliders", new { notification = nvm });
+            }
+        } 
+
         public ViewResult InsertScreenResolution(string notification)
         {
             ViewData["Screen"] = dbScreen.GetAll();
@@ -355,9 +490,14 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
         }//end InsertScreenResolutionConfirm
 
-        public IActionResult ShowSliders()
+        public IActionResult ShowSliders(string notification)
         {
             var model = dbTopSlider.GetInclude(x => x.User).ToList();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View(model);
+            }
             return View(model);
         }
         #endregion

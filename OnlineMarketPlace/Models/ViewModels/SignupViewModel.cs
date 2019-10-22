@@ -35,5 +35,12 @@ namespace OnlineMarketPlace.Models.ViewModels
         public bool Status { get; set; }
         public string DefinedByUserId { get; set; }
         public string RoleName { get; set; }
+
+
+        public string CurrentPassword { get; set; }
+        public string NewPassword { get; set; }
+
+        [Compare("NewPassword", ErrorMessage = "بایستی مقدار این فیلد با کلمه عبور جدید یکسان باشد")]
+        public string ConfirmNewPassword { get; set; }
     }
 }

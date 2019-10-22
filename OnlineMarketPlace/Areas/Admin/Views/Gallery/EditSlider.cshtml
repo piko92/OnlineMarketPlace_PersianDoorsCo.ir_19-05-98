@@ -1,10 +1,11 @@
 ﻿
 @{
-    ViewData["Title"] = "افزودت عکس اسلایدر";
+    ViewData["Title"] = "ویرایش عکس اسلایدر";
     Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
     var screen = ViewData["screen"] as List<ScreenResulation>;
     var category = ViewData["category"] as List<Category>;
     var brand = ViewData["brand"] as List<Brand>;
+    var selectedSlider = ViewData["SelectedSlider"] as TopSlider;
 }
 
 @model TopSliderViewModel
@@ -17,40 +18,41 @@
             <div class="panel-body">
                 <!-- Start .Form -->
                 <div class="panel-body">
-                    <form asp-area="Admin" asp-controller="Gallery" asp-action="InsertSliderImageConfirm"
+                    <form asp-area="Admin" asp-controller="Gallery" asp-action="EditSliderConfirm"
                           id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden />
                         <div class="form-group">
                             <label class="col-sm-2 control-label">عنوان  <span class="red-color">*</span></label>
                             <div class="col-sm-10">
-                                <input asp-for="Title" type="text" class="form-control">
+                                <input asp-for="Title" type="text" class="form-control" value="@selectedSlider.Title">
                                 <span asp-validation-for="Title"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">خلاصه توضیحات </label>
                             <div class="col-sm-10">
-                                <input asp-for="Summery" type="text" class="form-control">
+                                <input asp-for="Summery" type="text" class="form-control" value="@selectedSlider.Summery">
                                 <span asp-validation-for="Summery"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"> توضیحات </label>
                             <div class="col-sm-10">
-                                <textarea rows="3" asp-for="Description" type="text" class="form-control"></textarea>
+                                <textarea rows="3" asp-for="Description" type="text" class="form-control" value="@selectedSlider.Description"></textarea>
                                 <span asp-validation-for="Description"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">متن Alt Tag </label>
                             <div class="col-sm-10">
-                                <input asp-for="AltName" type="text" class="form-control">
+                                <input asp-for="AltName" type="text" class="form-control" value="@selectedSlider.AltName">
                                 <span asp-validation-for="AltName"></span>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"> لینک </label>
                             <div class="col-sm-10">
-                                <input asp-for="Link" type="text" class="form-control">
+                                <input asp-for="Link" type="text" class="form-control" value="@selectedSlider.Link">
                                 <span asp-validation-for="Link"></span>
                             </div>
                         </div>
@@ -64,7 +66,14 @@
                                         <option value="-1">-- انتخاب اندازه --</option>
                                         @foreach (var item in screen)
                                         {
-                                            <option value="@item.Id">@item.Name</option>
+                                            if (item.Id == selectedSlider.ScreenResulationId)
+                                            {
+                                                <option value="@item.Id" selected>@item.Name</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -75,7 +84,7 @@
                             <label class="col-sm-2 control-label">تصویر <span class="red-color">*</span></label>
                             <div class="col-sm-3">
                                 <div class="custom-file">
-                                    <input asp-for="Image" type="file" class="custom-file-input" id="img1" required>
+                                    <input asp-for="Image" type="file" class="custom-file-input" id="img1">
                                 </div>
                                 <span asp-validation-for="Image"></span>
                             </div>
@@ -84,29 +93,33 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label">وضعیت </label>
+                            <label class="col-sm-2 control-label">وضعیت فعال </label>
                             <div class="col-sm-10">
                                 <div class="radio inline-element sp-rl-padding-10">
-                                    <input asp-for="Status" value="true" type="radio" id="Option_1" checked>
-                                    <label for="Option_1">فعال</label>
+                                    @if (selectedSlider.Status == true)
+                                    {
+                                        <input asp-for="Status" value="true" type="checkbox" checked>
+                                    }
+                                    else
+                                    {
+                                        <input asp-for="Status" value="true" type="checkbox"  >
+                                    }
+                                    
                                 </div>
-                                <div class="radio inline-element sp-rl-padding-10">
-                                    <input asp-for="Status" value="false" type="radio" id="Option_2">
-                                    <label for="Option_2">غیر فعال</label>
-                                </div>
+                                
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">وضعیت نمایش </label>
                             <div class="col-sm-10">
-                                <div class="radio inline-element sp-rl-padding-10">
-                                    <input asp-for="Active" value="true" type="radio" id="Option_active_1" checked>
-                                    <label for="Option_active_1">فعال</label>
-                                </div>
-                                <div class="radio inline-element sp-rl-padding-10">
-                                    <input asp-for="Active" value="false" type="radio" id="Option_active_2">
-                                    <label for="Option_active_2">غیر فعال</label>
-                                </div>
+                                @if (selectedSlider.Status == true)
+                                {
+                                    <input asp-for="Active" value="true" type="checkbox" checked>
+                                }
+                                else
+                                {
+                                    <input asp-for="Active" value="true" type="checkbox">
+                                }
                             </div>
                         </div>
                         <hr />
@@ -120,7 +133,10 @@
                                         <option value="-1">-- انتخاب دسته --</option>
                                         @foreach (var item in category)
                                         {
-                                            <option value="@item.Id">@item.Name</option>
+                                            if (item.Id == selectedSlider.ConnectedCategoryId)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -134,7 +150,10 @@
                                         <option value="-1">-- انتخاب برند --</option>
                                         @foreach (var item in brand)
                                         {
-                                            <option value="@item.Id">@item.Name</option>
+                                            if (item.Id == selectedSlider.ConnectedBrandId)
+                                            {
+                                                <option value="@item.Id">@item.Name</option>
+                                            }
                                         }
                                     }
                                 </select>
@@ -142,7 +161,7 @@
                             </div>
                             <div class="col-sm-3">
                                 <label>محصول: </label>
-                                <input asp-for="ConnectedProductId" type="text" class="form-control" placeholder="کد محصول">
+                                <input asp-for="ConnectedProductId" type="text" class="form-control" placeholder="کد محصول" value="@selectedSlider.ConnectedProductId">
                                 <span asp-validation-for="ConnectedProductId"></span>
                             </div>
                         </div>
@@ -152,11 +171,11 @@
                             <div class="col-sm-3">
                                 <label for="setFuture">نمایش در آینده </label>
                                 <div>
-                                    <input id="setFuture" asp-for="SetForFuture" type="checkbox" value="true" class="custom-checkbox">
+                                    <input id="setFuture" asp-for="SetForFuture" type="checkbox" value="@(selectedSlider.SetForFuture == true ? "true" : "false")" class="custom-checkbox">
                                     <span asp-validation-for="SetForFuture"></span>
                                 </div>
                             </div>
-                            <div class="col-sm-3">
+                            @*<div class="col-sm-3">
                                 <label>تاریخ نمایش </label>
                                 <input disabled asp-for="ShowDateTime" type="text" id="pdpBig" class="form-control" autocomplete="off">
                                 <span asp-validation-for="ShowDateTime"></span>
@@ -165,12 +184,12 @@
                                 <label>تاریخ انقضاء </label>
                                 <input disabled asp-for="ExpireDateTime" type="text" id="pdpBig2" class="form-control" autocomplete="off">
                                 <span asp-validation-for="ExpireDateTime"></span>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"> اولویت </label>
                             <div class="col-sm-2">
-                                <input asp-for="Priotity" type="number" class="form-control">
+                                <input asp-for="Priotity" type="number" class="form-control" value="@selectedSlider.Priotity">
                                 <span asp-validation-for="Priotity"></span>
                             </div>
                         </div>
@@ -180,26 +199,26 @@
                             <div class="col-sm-3">
                                 <label for="hasKey">کلید دارد </label>
                                 <div>
-                                    <input id="hasKey" asp-for="HasButton" type="checkbox" value="true" class="custom-checkbox">
+                                    <input id="hasKey" asp-for="HasButton" type="checkbox" value="@(selectedSlider.HasButton == true ? "true" : "false")" class="custom-checkbox">
                                     <span asp-validation-for="HasButton"></span>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <label>متن کلید </label>
-                                <input disabled asp-for="ButtonContent" type="text" id="btnContent" class="form-control" autocomplete="off">
+                                <input disabled asp-for="ButtonContent" value="@selectedSlider.ButtonContent" type="text" id="btnContent" class="form-control" autocomplete="off">
                                 <span asp-validation-for="ButtonContent"></span>
                             </div>
                             <div class="col-sm-3">
                                 <label>لینک کلید </label>
-                                <input disabled asp-for="ButtonLink" type="text" id="btnLink" class="form-control" autocomplete="off">
+                                <input disabled asp-for="ButtonLink" value="@selectedSlider.ButtonLink" type="text" id="btnLink" class="form-control" autocomplete="off">
                                 <span asp-validation-for="ButtonLink"></span>
                             </div>
                         </div>
 
                         <div class="hr-line-dashed"></div>
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button class="btn btn-white" type="button" id="btnCancel" >صرف نظر</button>
-                            <button class="btn btn-primary" type="submit">ثبت </button>
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit"> ثبت تغییرات </button>
                         </div>
                     </form>
                 </div>
