@@ -23,7 +23,7 @@
                 @await Html.PartialAsync("~/Views/Blog/_PartialSidebar.cshtml", dbArticle, new ViewDataDictionary(ViewData) { { "dbCategory", dbCategory } })
                 <!-- Single Sidebar End  -->
             </div>
-            <div class="col-lg-9 order-lg-1 order-1">
+            <div class="col-lg-9 order-lg-1 order-1  rtl-class">
                 <div class="row">
                     @foreach (var item in Model)
                     {
@@ -37,12 +37,12 @@
                                         }
                                     </a>
                                 </div>
-                                <div class="content">
-                                    <ul class="meta  ">
-                                        <li class="farsi-num">@CustomizeCalendar.GregorianToPersian(item.WrittenDateTime)</li>
+                                <div class="content text-left">
+                                    <div class="text-left ">
+                                        <label class="farsi-num text-left">@CustomizeCalendar.GregorianToPersian(item.WrittenDateTime)</label>
                                         @*<li><a href="#">25 پسندیدن</a></li>
                                             <li><a href="#">28 بازدید</a></li>*@
-                                    </ul>
+                                    </div>
                                     <h3 class="title  text-right">
                                         <a href="/Blog/@item.Id/@Tools.LinkCorrection(item.Title)">
                                             @item.Title
@@ -59,17 +59,17 @@
 
                 </div>
                 @*<div class="row mt-20 mt-xs-0">
-                    <div class="col">
-                        <ul class="page-pagination">
-                            <li class="active"><a href="#">01</a></li>
-                            <li><a href="#">02</a></li>
-                            <li><a href="#">03</a></li>
-                            <li><a href="#">04</a></li>
-                            <li><a href="#">05</a></li>
-                            <li><a href="#">Next</a></li>
-                        </ul>
-                    </div>
-                </div>*@
+                        <div class="col">
+                            <ul class="page-pagination">
+                                <li class="active"><a href="#">01</a></li>
+                                <li><a href="#">02</a></li>
+                                <li><a href="#">03</a></li>
+                                <li><a href="#">04</a></li>
+                                <li><a href="#">05</a></li>
+                                <li><a href="#">Next</a></li>
+                            </ul>
+                        </div>
+                    </div>*@
             </div>
         </div>
     </div>

@@ -21,7 +21,8 @@
                                 @dbArticle[i].Title
                             </a>
                         </h5>
-                        <h6 >تاریخ 1398/07/15</h6>
+                        <h6 class="farsi-num">@CustomizeCalendar.GregorianToPersian(dbArticle[i].WrittenDateTime)</h6>
+                       
                     </div>
                     <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
                         <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">

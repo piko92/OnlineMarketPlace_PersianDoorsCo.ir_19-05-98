@@ -21,20 +21,27 @@ namespace OnlineMarketPlace.Controllers
         readonly DbRepository<OnlineMarketContext, ProductFeature, int> dbProductFeature;
         readonly DbRepository<OnlineMarketContext, Invoice, int> dbInvoice;
         readonly DbRepository<OnlineMarketContext, InvoiceProduct, int> dbInvoiceProduct;
-
+        private IConfiguration configuration;
+        string contentRootPath;
+        IHostingEnvironment env = null;
 
         public InvoiceController
             (
                 UserManager<ApplicationUser> _userManager,
                 DbRepository<OnlineMarketContext, ProductFeature, int> _dbProductFeature,
                 DbRepository<OnlineMarketContext, Invoice, int> _dbInvoice,
-                DbRepository<OnlineMarketContext, InvoiceProduct, int> _dbInvoiceProduct
+                DbRepository<OnlineMarketContext, InvoiceProduct, int> _dbInvoiceProduct,
+                IHostingEnvironment env,
+                IConfiguration _configuration
             )
         {
             userManager = _userManager;
             dbProductFeature = _dbProductFeature;
             dbInvoice = _dbInvoice;
             dbInvoiceProduct = _dbInvoiceProduct;
+            this.env = env;
+            configuration = _configuration;
+            contentRootPath = env.ContentRootPath;
         }
         //Inject DataBase--End
         #endregion
@@ -140,14 +147,14 @@ namespace OnlineMarketPlace.Controllers
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice =  TotalInvoicePrice(id);
+            decimal totalPrice = TotalInvoicePrice(id);
             if (entity != null)
             {
                 entity.Count++;
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice =  TotalInvoicePrice(id);
+                    totalPrice = TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
@@ -161,7 +168,7 @@ namespace OnlineMarketPlace.Controllers
         {
             var entity = dbInvoiceProduct.FindById(InvoiceProductId);
             var id = entity.InvoiceId.GetValueOrDefault();
-            decimal totalPrice =  TotalInvoicePrice(id);
+            decimal totalPrice = TotalInvoicePrice(id);
             if (entity != null)
             {
                 if (entity.Count > 1)
@@ -171,7 +178,7 @@ namespace OnlineMarketPlace.Controllers
                 try
                 {
                     dbInvoiceProduct.Update(entity);
-                    totalPrice =  TotalInvoicePrice(id);
+                    totalPrice = TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
                 }
                 catch (Exception)
@@ -192,7 +199,7 @@ namespace OnlineMarketPlace.Controllers
                 {
                     dbInvoiceProduct.DeleteById(InvoiceProductId);
                     var id = entity.InvoiceId.GetValueOrDefault();
-                    decimal totalPrice =  TotalInvoicePrice(id);
+                    decimal totalPrice = TotalInvoicePrice(id);
                     return Json(new { status = true, totalprice = totalPrice });
 
                 }
@@ -210,20 +217,23 @@ namespace OnlineMarketPlace.Controllers
             var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
             var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
             var totalPrice = TotalInvoicePrice(invoiceUser.Id);
-            string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
-           // int totalPrice = 10000;
-            //var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
+            string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
+            //string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
+            var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
             //SandBox==Test ZarinPal
-            var payment = new ZarinpalSandbox.Payment(totalPrice);
-            string description = "توضیحات";
-            string backUrl = $"https://localhost:44305/Invoice/PaymentVerify/?Price={totalPrice}";
-            string CustomerEmail = "adsff@gmail.com";
-            string CustomerPhoneNumber = "09171112525";
+            // var payment = new ZarinpalSandbox.Payment(totalPrice);
+            string description = "پرداخت سبد پرشین درب جنوب";
+            var url = HttpContext.Request.Host.Host;
+            string contentRootPath = env.ContentRootPath;
+            string contentRootPath2 = env.WebRootPath;
+            string backUrl = $"{contentRootPath}/Invoice/PaymentVerify/?Price={totalPrice}";
+            string CustomerEmail = currentUser.Email ?? "info@pdoorsco.ir";
+            string CustomerPhoneNumber = currentUser.PhoneNumber ?? "09171112233";
             var result = await payment.PaymentRequest(description, backUrl, CustomerEmail, CustomerPhoneNumber);
             if (result.Status == 100)
             {
-                //return Redirect("https://zarinpal.com/pg/startpay/"+result.Authority);
-                return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Authority);
+                return Redirect("https://zarinpal.com/pg/startpay/" + result.Authority);
+                // return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Authority);
             }
             return Json("No");
         }
@@ -235,13 +245,24 @@ namespace OnlineMarketPlace.Controllers
                 )
             {
                 string autority = HttpContext.Request.Query["Authority"].ToString();
-                //string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
-                //var payment = new Zarinpal.Payment(YourMerchantId, 10000);
+                string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
+                var payment = new Zarinpal.Payment(YourMerchantId, Price);
                 //SandBox==Test ZarinPal
-                var payment = new ZarinpalSandbox.Payment(Price);
+                //var payment = new ZarinpalSandbox.Payment(Price);
                 var result = await payment.Verification(autority);
                 if (result.Status == 100)
                 {
+                    var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+                    var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+                    invoiceUser.IsPaid = true;
+                    try
+                    {
+                        dbInvoice.Update(invoiceUser);
+                    }
+                    catch (Exception)
+                    {
+                        throw;
+                    }
                     return View();
                 }
             }
