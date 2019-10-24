@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -212,61 +214,107 @@ namespace OnlineMarketPlace.Controllers
         }
         #endregion
         #region Payment
+        public async Task<IActionResult> PaymentInitializeTest()
+        {
+            string description = "پرداخت سبد خرید";
+            var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+            var totalPrice = TotalInvoicePrice(invoiceUser.Id);
+            string CustomerEmail = currentUser.Email ?? "info@pdoorsco.ir";
+            string CustomerPhoneNumber = currentUser.PhoneNumber ?? "09171112233";
+            string backUrl = $"http://persiandoorsco.ir/Invoice/PaymentVerify?Price={totalPrice}";
+            string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
+            var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
+            var result = await payment.PaymentRequest(description, backUrl, CustomerEmail, CustomerPhoneNumber);
+
+            return Json(description + "+++" + backUrl + "+++" + CustomerEmail + "+++" + CustomerPhoneNumber + "+++" + result.Status + "++" + result.Authority);
+        }
         public async Task<IActionResult> PaymentInitialize()
         {
             var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
             var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
             var totalPrice = TotalInvoicePrice(invoiceUser.Id);
             string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
-            //string YourMerchantId = "3f9f03f2-e799-11e9-8bb4-000c295eb8fc";
             var payment = new Zarinpal.Payment(YourMerchantId, totalPrice);
             //SandBox==Test ZarinPal
-            // var payment = new ZarinpalSandbox.Payment(totalPrice);
-            string description = "پرداخت سبد پرشین درب جنوب";
+            //  var payment = new ZarinpalSandbox.Payment(totalPrice);
+            string description = "پرداخت سبد خرید";
             var url = HttpContext.Request.Host.Host;
-            string contentRootPath = env.ContentRootPath;
-            string contentRootPath2 = env.WebRootPath;
-            string backUrl = $"{contentRootPath}/Invoice/PaymentVerify/?Price={totalPrice}";
+            // string backUrl = "https://localhost:44305/Invoice/PaymentVerify/?Price=" + totalPrice;
+            string backUrl = "http://persiandoorsco.ir/Invoice/PaymentVerify/?Price=" + totalPrice;
             string CustomerEmail = currentUser.Email ?? "info@pdoorsco.ir";
             string CustomerPhoneNumber = currentUser.PhoneNumber ?? "09171112233";
             var result = await payment.PaymentRequest(description, backUrl, CustomerEmail, CustomerPhoneNumber);
             if (result.Status == 100)
             {
-                return Redirect("https://zarinpal.com/pg/startpay/" + result.Authority);
+                invoiceUser.TrackingCode = result.Authority;
+                dbInvoice.Update(invoiceUser);
+                return Redirect("https://zarinpal.com/pg/StartPay/" + result.Authority);
                 // return Redirect("https://sandbox.zarinpal.com/pg/StartPay/" + result.Authority);
             }
             return Json("No");
         }
-        public async Task<IActionResult> PaymentVerify(int Price)
+        public async Task<IActionResult> PaymentVerify(int Price, string Authority, string Status)
         {
-            if (HttpContext.Request.Query["Status"] != "" &&
-                HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
-                HttpContext.Request.Query["Authority"] != ""
-                )
+            if (Authority != null && Status.ToLower() == "ok")
             {
-                string autority = HttpContext.Request.Query["Authority"].ToString();
                 string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
-                var payment = new Zarinpal.Payment(YourMerchantId, Price);
                 //SandBox==Test ZarinPal
                 //var payment = new ZarinpalSandbox.Payment(Price);
-                var result = await payment.Verification(autority);
-                if (result.Status == 100)
+                try
                 {
-                    var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
-                    var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
-                    invoiceUser.IsPaid = true;
-                    try
+                    var verification = await new Zarinpal.Payment(YourMerchantId, Price).Verification(Authority);
+                    //var verification = await payment.Verification(Authority);
+                    //Telnet Start
+                    if (verification.Status == 101)
+                    // if (verification.Status ==101)
                     {
-                        dbInvoice.Update(invoiceUser);
+                        var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+                        var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+                        if (invoiceUser.TrackingCode == Authority)
+                        {
+                            invoiceUser.IsPaid = true;
+                            dbInvoice.Update(invoiceUser);
+                            return View();
+                        }
+
                     }
-                    catch (Exception)
-                    {
-                        throw;
-                    }
-                    return View();
+                }
+                catch (Exception)
+                {
+                    throw;
                 }
             }
             return RedirectToAction("ShowPurchuseCart");
+
+            //if (HttpContext.Request.Query["Status"] != "" &&
+            //    HttpContext.Request.Query["Status"].ToString().ToLower() == "ok" &&
+            //    HttpContext.Request.Query["Authority"] != ""
+            //    )
+            //{
+            //    string autority = HttpContext.Request.Query["Authority"].ToString();
+            //    string YourMerchantId = "6e4d95e0-f254-11e9-897b-000c295eb8fc";
+            //    var payment = new Zarinpal.Payment(YourMerchantId, Price);
+            //    //SandBox==Test ZarinPal
+            //    // var payment = new ZarinpalSandbox.Payment(Price);
+            //    var result = await payment.Verification(autority);
+            //    if (result.Status == 100)
+            //    {
+            //        var currentUser = await userManager.FindByNameAsync(User.Identity.Name);
+            //        var invoiceUser = dbInvoice.GetAll().Where(e => e.CustomerId == currentUser.Id && e.IsPaid == false).FirstOrDefault();
+            //        invoiceUser.IsPaid = true;
+            //        try
+            //        {
+            //            dbInvoice.Update(invoiceUser);
+            //        }
+            //        catch (Exception)
+            //        {
+            //            throw;
+            //        }
+            //        return View();
+            //    }
+            //}
+            //return RedirectToAction("ShowPurchuseCart");
         }
         #endregion
     }

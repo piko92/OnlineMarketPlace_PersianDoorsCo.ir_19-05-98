@@ -163,7 +163,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                         SMSUsername = model.SMSUsername,
                         AdminEmail = model.AdminEmail,
                         EmailPort = model.EmailPort,
-                        EmailProtocol = model.EmailProtocol,
+                        AdminEmailPassword = model.AdminEmailPassword,
                         EmailServiceProvider = model.EmailServiceProvider,
                         BaseCurrencyId = model.BaseCurrencyId
 
