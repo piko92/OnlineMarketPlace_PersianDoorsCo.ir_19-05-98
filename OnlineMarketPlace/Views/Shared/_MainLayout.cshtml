@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 @{
-    var msg = ViewData["msg"];
+    var msg = TempData["msg"];
 }
 <html lang="fa">
 <head>
@@ -44,13 +44,13 @@
 
     </div>
     @*<div id="_snackbar" class="snackbar-container">
-        <div class="snackbar">
-            <label>
-                <span class="btn-clide">&times;</span>
-                این متن جهت تست اسنک بار میباشد.
-            </label>
-        </div>
-    </div>*@
+            <div class="snackbar">
+                <label>
+                    <span class="btn-clide">&times;</span>
+                    این متن جهت تست اسنک بار میباشد.
+                </label>
+            </div>
+        </div>*@
     <!-- Modal Area Strat -->
     <div class="modal fade quick-view-modal-container" id="quick-view-modal-container" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -61,10 +61,30 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!-- partial goes here -->
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <div id="myModal1" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    @*<h4 class="modal-title rtl-class">ویرایش آدرس</h4>*@
+                </div>
+                <div class="modal-body rtl-class">
+                    @if(msg != null)
+                    {
+                        <label class="rtl-class">@msg</label>
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">بستن</button>
+                </div>
+            </div>
         </div>
     </div>
     <!-- Modal Area End -->
@@ -79,16 +99,16 @@
     <script src="~/shared/main/assets/js/plugins/plugins.js"></script>
     <script src="~/shared/main/assets/js/main.js"></script>
     <script src="~/simplePagination.js-master/jquery.simplePagination.js"></script>
-    <script>
-        $(function () {
-            $(document).ready(function () {
-                setTimeout(() => {
-                    $(".snackbar-container").addClass("show")
-                }, 3000)
+    @if (msg != null)
+    {
+        <script>
+            $(function () {
+                $(document).ready(function () {
+                    $('#myModal1').modal('show');
+                })
             })
+        </script>
+    }
 
-        })
-
-    </script>
 </body>
 </html>

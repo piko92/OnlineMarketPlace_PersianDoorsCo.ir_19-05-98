@@ -21,8 +21,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         /// عملیات ثبت ناموفق
         /// </summary>
         public static string Failed_Insert { get; set; } = "Failed_Insert";
-
-
+        
         /// <summary>
         /// عملیات ویرایش موفق
         /// </summary>
@@ -32,8 +31,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         /// عملیات ویرایش ناموفق
         /// </summary>
         public static string Failed_Update { get; set; } = "Failed_Update";
-
-
+        
         /// <summary>
         /// عملیات حذف موفق
         /// </summary>
@@ -43,8 +41,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         /// عملیات حذف ناموفق
         /// </summary>
         public static string Failed_Remove { get; set; } = "Failed_Remove";
-
-
+        
         /// <summary>
         /// عملیات ورود موفق
         /// </summary>
@@ -54,8 +51,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
         /// عملیات ورود ناموفق
         /// </summary>
         public static string Failed_Login { get; set; } = "Failed_Login";
-
-
+        
         /// <summary>
         /// اطلاعات ورودی نادرست و یا ناقص
         /// </summary>
@@ -155,6 +151,7 @@ namespace OnlineMarketPlace.ClassLibraries.NotificationHandler
                 return notificationHandlers;
             }
         }
+
         /// <summary>
         /// <para>Convert string to 'NotificationViewModel' Model</para>
         /// تبدیل رشته حاوی جیسون به مدل

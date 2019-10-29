@@ -46,7 +46,7 @@ namespace OnlineMarketPlace.Controllers
         //Inject DataBase--End
         #endregion
         #region Index
-        public IActionResult Index() //Home Page
+        public IActionResult Index(string msg) //Home Page
         {
             //هشت محصول جدید
             ViewData["LatestProducts"] = _db.ProductAbstract
@@ -60,7 +60,11 @@ namespace OnlineMarketPlace.Controllers
                 .OrderByDescending(x => x.WrittenDateTime)
                 .Take(3).ToList();
 
-
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
             return View();
         }
         [HttpPost]
