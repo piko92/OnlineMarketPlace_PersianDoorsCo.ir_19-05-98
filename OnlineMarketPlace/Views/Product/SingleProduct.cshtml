@@ -150,17 +150,16 @@
                     <div class="tab-content product-review-content-tab rtl-class " id="myTabContent-4">
                         <div class="tab-pane fade active show" id="description">
                             <div class="single-product-description">
-
                                 @if (ProductAdditionalFeatures != null)
                                 {
                                     <ul class="col-lg-12 pr-3">
                                         @foreach (var item in ProductAdditionalFeatures)
                                         {
                                             <li class="row center-block justify-content-center mt-3 ">
-                                                <div class="ProductFeature col-sm-3 ml-3">
+                                                <div class="ProductFeature sp-col-md">
                                                     @item.AdditionalFeatures.Name
                                                 </div>
-                                                <div class="ProductFeature col-sm-8 ">
+                                                <div class="ProductFeature sp-col-md">
                                                     @item.Value
                                                 </div>
 
@@ -178,7 +177,6 @@
         </div>
     </div>
 </div>
-        </div>
 <!--Product Description Review Section Start-->
 <!--Product section start-->
 <div class="product-section section pt-100 pt-lg-80 pt-md-70 pt-sm-60 pt-xs-50 pb-55 pb-lg-35 pb-md-25 pb-sm-15 pb-xs-5">

@@ -40,12 +40,12 @@
                                             <a class="active show" data-toggle="tab" href="#grid"><i class="fa fa-th"></i></a>
                                         </li>
                                         @*<li>
-                                                <a data-toggle="tab" href="#list" class=""><i class="fa fa-th-list"></i></a>
-                                            </li>*@
+                    <a data-toggle="tab" href="#list" class=""><i class="fa fa-th-list"></i></a>
+                </li>*@
                                     </ul>
                                     @if (Model.Count > 0)
                                     {
-                                        <p>
+                                        <p class="farsi-num">
                                             نمایش محصولات -  @(pageSize * (pageNumber - 1) + 1) تا @Math.Min((pageNumber * pageSize), totalRecords)
                                             (@totalRecords کالا)
                                         </p>
@@ -65,6 +65,17 @@
                                     </div>
                                 </div>
                                 <!--Toolbar Short Area End-->
+
+                                <div class="common-sidebar-widget mobile-version">
+                                    <h3 class="sidebar-title">جست و جو در محصولات</h3>
+                                    <div class="sidebar-search">
+                                        <form asp-action="Search" asp-controller="Product">
+                                            <input name="name" type="text" placeholder="مثال: درب نیکا">
+                                            <input name="categoryId" hidden="hidden" value=@FilteredCategoryId>
+                                            <button><i class="fa fa-search"></i></button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                             <!-- Grid & List View End -->
                         </div>
@@ -112,7 +123,7 @@
 
                             <!-- Single Sidebar End  -->
                             <!-- Single Sidebar Start  -->
-                            <div class="common-sidebar-widget">
+                            <div class="common-sidebar-widget desktop-version">
                                 <h3 class="sidebar-title">جست و جو در محصولات</h3>
                                 <div class="sidebar-search">
                                     <form asp-action="Search" asp-controller="Product">
@@ -217,7 +228,7 @@
                                                                                            asp-route-productFeatureId="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Id"
                                                                                            title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                                                     </li>
-                                                                                    <li><a href="#quick-view-modal-container" data-toggle="modal" title="مشاهده سریع کالا"><i class="fa fa-eye"></i></a></li>
+                                                                                    <li><a href="" data-toggle="modal" title="مشاهده سریع کالا" id="btnQuick" data-Id="@item.Id"><i class="fa fa-eye"></i></a></li>
                                                                                     <li><a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                                                                 </ul>
                                                                             </div>
@@ -286,6 +297,24 @@
 <!-- Shop Section End -->
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
+    $(function () {
+        $("button#btnClose").click(function () {
+            $("#quick-view-modal-container").removeClass("show")
+        })
+        $("a#btnQuick").click(function () {
+            //alert("Hi")
+            console.log("TEST")
+            $("#quick-view-modal-container").addClass("show")
+            $.post("/Home/GetPartialProduct", { Id: $(this).data("id") }, function (value) {
+                console.log(value);
+                $(".modal-body").html(value);
+            });
+
+        })
+    })
+</script>
+
+<script>
     $(document).ready(function () {
         //Localize Prices
         $(".local-price").each(function () {
@@ -316,7 +345,7 @@
     });
 
     //sorting
-     
+
     var _searchedName = $(searchedNameValue).val();
     $(document).ready(function () {
         $(sortSelect).change(function () {

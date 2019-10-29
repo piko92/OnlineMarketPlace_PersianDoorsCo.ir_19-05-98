@@ -10,14 +10,14 @@ using OnlineMarketPlace.Areas.Identity.Data;
 namespace OnlineMarketPlace.Migrations
 {
     [DbContext(typeof(OnlineMarketContext))]
-    [Migration("20191019114643_generalpage02")]
-    partial class generalpage02
+    [Migration("20191027100814_mig-final")]
+    partial class migfinal
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
+                .HasAnnotation("ProductVersion", "2.2.2-servicing-10034")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -1181,6 +1181,8 @@ namespace OnlineMarketPlace.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<int?>("RelatedProductId");
+
+                    b.Property<int>("ShowOrder");
 
                     b.Property<bool>("Status")
                         .ValueGeneratedOnAdd()
