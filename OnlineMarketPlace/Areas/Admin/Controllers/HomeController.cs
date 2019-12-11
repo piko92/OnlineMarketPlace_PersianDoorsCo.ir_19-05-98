@@ -30,6 +30,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, Invoice, int> dbInvoice;
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
+        DbRepository<OnlineMarketContext, SiteGeneralInfo, int> dbSiteInfo;
         private readonly IHostingEnvironment hostingEnvironment;
         private IConfiguration configuration;
         string contentRootPath;
@@ -42,6 +43,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
                 DbRepository<OnlineMarketContext, Invoice, int> _dbInvoice,
                 DbRepository<OnlineMarketContext, GeneralPage, int> _dbGeneralPage,
+                DbRepository<OnlineMarketContext, SiteGeneralInfo, int> _dbSiteInfo,
                 IHostingEnvironment _hostingEnvironment,
                 IConfiguration _configuration
             )
@@ -53,6 +55,8 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbArticle = _dbArticle;
             dbInvoice = _dbInvoice;
             dbGeneralPage = _dbGeneralPage;
+            dbSiteInfo = _dbSiteInfo;
+
             hostingEnvironment = _hostingEnvironment;
             contentRootPath = hostingEnvironment.ContentRootPath;
             configuration = _configuration;
@@ -336,6 +340,49 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
            
         }
 
+        #endregion
+
+        #region Footer
+        public IActionResult Footer(string notification)
+        {
+            var lastFooterInfo = dbSiteInfo.GetAll().LastOrDefault();
+            ViewData["lastFooterInfo"] = lastFooterInfo;
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+
+        public IActionResult InsertFooterContent(FooterViewModel model)
+        {
+            string nvm;
+            if (ModelState.IsValid == false)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Wrong_Values, contentRootPath);
+                return RedirectToAction("Footer", new { notification = nvm });
+            }
+
+            try
+            {
+                SiteGeneralInfo footerInfo = new SiteGeneralInfo()
+                {
+                    Summary = model.IntroductionTitle,
+                    DescriptionForFooter = model.Introduction,
+                    PublicEmail = model.Email,
+                    AddressesList = model.Address1,
+                    PhoneNumbersList = model.Phone2 == null ? model.Phone1 : $"{model.Phone1},{model.Phone2}"
+                };
+                dbSiteInfo.Insert(footerInfo);
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Insert, contentRootPath);
+                return RedirectToAction("Footer", new { notification = nvm });
+            }
+            return RedirectToAction("Footer");
+        }
         #endregion
     }
 }

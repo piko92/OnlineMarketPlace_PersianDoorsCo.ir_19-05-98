@@ -1,0 +1,88 @@
+﻿
+@{
+    ViewData["Title"] = "تنظیمات فوتر";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var lastFooterInfo = ViewData["lastFooterInfo"] as SiteGeneralInfo;
+    string[] phoneList = new string[2];
+    try
+    {
+        if (lastFooterInfo != null)
+        {
+            if (lastFooterInfo.PhoneNumbersList != null)
+            {
+                phoneList = lastFooterInfo.PhoneNumbersList.Split(",");
+            }
+        }
+    }
+    catch(Exception ex) { }
+}
+@model FooterViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> فوتر </h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Home" asp-action="InsertFooterContent"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان توضیحات</label>
+                            <div class="col-sm-10">
+                                <input asp-for="IntroductionTitle" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.Summary : "")"/>
+                                <span asp-validation-for="IntroductionTitle"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">توضیحات</label>
+                            <div class="col-sm-10">
+                                <input type="text" value="@(lastFooterInfo != null ? lastFooterInfo.DescriptionForFooter : "")" rows="4" asp-for="Introduction" maxlength="250" class="form-control" placeholder="حداکثر 250 کارکتر" />
+                                <span asp-validation-for="Introduction"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">آدرس اول</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Address1" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.AddressesList : "")"/>
+                                <span asp-validation-for="Address1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">شماره تلفن 1</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Phone1" type="tel" class="form-control" value="@(phoneList.Length > 0 ? phoneList[0] : "")">
+                                <span asp-validation-for="Phone1"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">شماره تلفن 2</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Phone2" type="tel" class="form-control" value="@(phoneList.Length > 1 ? phoneList[1] : "")">
+                                <span asp-validation-for="Phone2"></span>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+        </div>
+    </div>
+
+</div>
+
+
