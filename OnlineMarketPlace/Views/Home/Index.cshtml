@@ -83,8 +83,8 @@
                                                        asp-route-productFeatureId="@item.ProductFeature.Where(x => x.ProductAbstractId == item.Id).FirstOrDefault().Id"
                                                        title="اضافه به سبد خرید"><i class="fa fa-cart-plus"></i></a>
                                                 </li>
-                                                <li><a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
-                                                <li><a href="#" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
+                                                <li><a href="" data-toggle="modal" id="btnQuick" data-Id="@item.Id" title="مشاهده سریع"><i class="fa fa-eye"></i></a></li>
+                                                <li><a href="/Product/@item.Id/@Tools.LinkCorrection(item.Name)" title="افزودن به علاقه مندی ها"><i class="fa fa-heart-o"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -163,29 +163,20 @@
 
 @await Html.PartialAsync("~/Views/Home/_PartialBlogSection.cshtml", model: LatestArticle)
 
-<!-- Modal Area Strat -->
-<div class="modal fade quick-view-modal-container" id="quick-view-modal-container" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- partial goes here -->
-            </div>
-        </div>
 
-    </div>
-</div>
-<!-- Modal Area End -->
 
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
     $(function () {
+        $("button#btnClose").click(function () {
+            $("#quick-view-modal-container").removeClass("show")
+        })
         $("a#btnQuick").click(function () {
+            //alert("Hi")
+            console.log("TEST")
+            $("#quick-view-modal-container").addClass("show")
             $.post("/Home/GetPartialProduct", { Id: $(this).data("id") }, function (value) {
+                console.log(value);
                 $(".modal-body").html(value);
             });
 

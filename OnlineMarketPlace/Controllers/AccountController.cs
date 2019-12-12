@@ -53,16 +53,25 @@ namespace OnlineMarketPlace.Controllers
         }//end AccountController(Constructor)
         #endregion
         #region Register
-        public IActionResult Register() => View();
+        public IActionResult Register(string msg)
+        {
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
+            return View();
+        }
         public async Task<IActionResult> RegisterConfirm(RegisterViewModel model)
         {
+            string message = null;
             if (ModelState.IsValid)
             {
                 var isNotDuplicate = await _userManager.FindByNameAsync(model.UserName);
                 if (isNotDuplicate != null)
                 {
-                    TempData["msg"] = "این نام کاربری تکراری میباشد، از نام کاربری دیگری استفاده نمایید";
-                    return RedirectToAction("Register");
+                    message = "این نام کاربری تکراری میباشد، از نام کاربری دیگری استفاده نمایید";
+                    return RedirectToAction("Register", new { msg = message });
                 }
                 ApplicationUser NewUser = new ApplicationUser()
                 {
@@ -71,6 +80,7 @@ namespace OnlineMarketPlace.Controllers
                 var status = await _userManager.CreateAsync(NewUser, model.Password);
                 if (status.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(NewUser, "Customer");
                     TokenGenerator tokenGenerator = new TokenGenerator(_userManager, _db);
                     var foundUser = await _userManager.FindByNameAsync(NewUser.UserName);
                     if (foundUser != null && (foundUser.PhoneNumberConfirmed == false || foundUser.EmailConfirmed == false))
@@ -83,7 +93,8 @@ namespace OnlineMarketPlace.Controllers
                     }
                 }
             }
-            return RedirectToAction("Register");
+            message = "طی مراحل ثبت نام خطایی رخ داده، لطفا دوباره تلاش نمایید";
+            return RedirectToAction("Register", new { msg = message });
         } 
         #endregion
         #region ConfirmIdentity
@@ -96,12 +107,13 @@ namespace OnlineMarketPlace.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmIdentity(VerifyViewModel model)
         {
+            string message = null;
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    TempData["msg"] = "تکمیل همه موارد ستاره دار الزامی میباشد";
-                    return RedirectToAction("Register");
+                    message = "تکمیل همه موارد ستاره دار الزامی میباشد";
+                    return RedirectToAction("Register", new { msg = message });
                 }
                 if (model != null)
                 {
@@ -112,36 +124,44 @@ namespace OnlineMarketPlace.Controllers
                         int result = await tokenGenerator.ApproveVerificationToken(newUser, model.Token);
                         if (result == 1)
                         {
-                            await _userManager.AddToRoleAsync(newUser, "Customer");
-                            TempData["msg"] = "ثبت نام شما با موفقیت انجام پذیرفت";
-                            return RedirectToAction("Index", "Home");
+                            message = "ثبت نام شما با موفقیت انجام پذیرفت";
+                            return RedirectToAction("Index", "Home", new { msg = message });
                         }
                         else if (result == 0)
                         {
-                            TempData["msg"] = "کد وارد شده صحیح نمیباشد، جهت تایید در صفحه ثبت نام، گزینه ارسال مجدد کد تایید را انتخاب نمایید ";
-                            return RedirectToAction("Register");
+                            message = "کد وارد شده صحیح نمیباشد، جهت تایید در صفحه ثبت نام، گزینه ارسال مجدد کد تایید را انتخاب نمایید ";
+                            return RedirectToAction("Register", new { msg = message });
                         }
                         else if (result == -2)
                         {
-                            TempData["msg"] = "اعتبار کد تایید وارد شده به پایان رسیده، از گزینه ارسال مجدد کد تایید استفاده نمایید";
-                            return RedirectToAction("Register");
+                            message = "اعتبار کد تایید وارد شده به پایان رسیده، از گزینه ارسال مجدد کد تایید استفاده نمایید";
+                            return RedirectToAction("Register", new { msg = message });
                         }
                     }
                 }
-                TempData["msg"] = "در مراجل ثبت نام شما مشکلی رخ داده است";
-                return RedirectToAction("Register");
+                message = "در مراجل ثبت نام شما مشکلی رخ داده است";
+                return RedirectToAction("Register", new { msg = message });
             }
             catch(Exception ex)
             {
-                TempData["msg"] = "در مراجل ثبت نام شما مشکلی رخ داده است.";
-                return RedirectToAction("Register");
+                message = "در مراجل ثبت نام شما مشکلی رخ داده است.";
+                return RedirectToAction("Register", new { msg = message });
             }
         }
 
-        public ViewResult ReSendVerification() => View();
+        public ViewResult ReSendVerification(string msg)
+        {
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
+            return View();
+        }
 
         public async Task<IActionResult> ReSendVerificationConfirm(string Username)
         {
+            string message = null;
             if (Username != null)
             {
                 var isUser = await _userManager.FindByNameAsync(Username);
@@ -155,39 +175,45 @@ namespace OnlineMarketPlace.Controllers
                         {
                             return RedirectToAction("CheckIdentity", new { newUsername = isUser.UserName });
                         }
-                        TempData["msg"] = "خطایی در ارسال کد تایید رخ داده دوباره تلاش نمایید";
-                        return RedirectToAction("ReSendVerification");
+                        message = "خطایی در ارسال کد تایید رخ داده دوباره تلاش نمایید";
+                        return RedirectToAction("ReSendVerification", new { msg = message });
                     }
                     else
                     {
-                        TempData["msg"] = "این نام کاربری تایید گردیده است، شما میتوانید به حساب کاربری خود ورود نمایید";
-                        return RedirectToAction("Login");
+                        message = "این نام کاربری تایید گردیده است، شما میتوانید به حساب کاربری خود ورود نمایید";
+                        return RedirectToAction("Login", new { msg = message });
                     }
                 }
                 else
                 {
-                    TempData["msg"] = "این نام کاربری ثبت نگردیده، ابتدا ثبت نام نمایید";
-                    return RedirectToAction("ReSendVerification");
+                    message = "این نام کاربری ثبت نگردیده، ابتدا ثبت نام نمایید";
+                    return RedirectToAction("ReSendVerification", new { msg = message });
                 }
             }
             else
             {
-                TempData["msg"] = "هیچ نام کاربری وارد نگردیده است";
-                return RedirectToAction("ReSendVerification");
+                message = "هیچ نام کاربری وارد نگردیده است";
+                return RedirectToAction("ReSendVerification", new { msg = message });
             }
         }
 
-        public ViewResult PasswordRecovery()
+        public ViewResult PasswordRecovery(string msg)
         {
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
             return View();
         }
 
         public async Task<IActionResult> PasswordRecoveryConfirm(string username)
         {
+            string message = null;
             if (username == null)
             {
-                TempData["msg"] = "ورود نام کاربری الزامی میباشد";
-                return RedirectToAction("PasswordRecovery");
+                message = "ورود نام کاربری الزامی میباشد";
+                return RedirectToAction("PasswordRecovery", new { msg = message });
             }
             else
             {
@@ -214,10 +240,11 @@ namespace OnlineMarketPlace.Controllers
 
         public async Task<IActionResult> ResetPasswordCheckTokenConfirm(ResetPasswordViewModel model)
         {
+            string message = null;
             if (!ModelState.IsValid)
             {
-                TempData["msg"] = "تکمیل همه فیلد ها الزامی میباشد";
-                return RedirectToAction("PasswordRecovery");
+                message = "تکمیل همه فیلد ها الزامی میباشد";
+                return RedirectToAction("PasswordRecovery", new { msg = message });
             }
             if (model != null)
             {
@@ -231,8 +258,8 @@ namespace OnlineMarketPlace.Controllers
                         var result = await tokenGenerator.VerifyResetPassword(claimedUser, model.Token, model.Password);
                         if (result == 1)
                         {
-                            TempData["msg"] = "کلمه عبور شما با موفقیت تغییر یافت، اکنون میتوانید به حساب کاربری خود وارد گردید";
-                            return RedirectToAction("Login");
+                            message = "کلمه عبور شما با موفقیت تغییر یافت، اکنون میتوانید به حساب کاربری خود وارد گردید";
+                            return RedirectToAction("Login", new { msg = message });
                         }
                         else if(result == -1)
                         {
@@ -243,56 +270,75 @@ namespace OnlineMarketPlace.Controllers
                     }
                 }
             }
-            TempData["msg"] = "در مراحل عملیات درخواستی خطایی رخ داده دوباره امتحان کنید";
-            return RedirectToAction("PasswordRecovery");
+            message = "در مراحل عملیات درخواستی خطایی رخ داده دوباره امتحان کنید";
+            return RedirectToAction("PasswordRecovery", new { msg = message });
         }
         #endregion
         #region Login
-        public IActionResult Login() => View();
+        public IActionResult Login(string msg)
+        {
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
+            return View();
+        }
 
         public async Task<IActionResult> LoginConfirm(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            string message = null;
+            try
             {
-                return RedirectToAction("Login");
-            }
-            var foundUser = await _userManager.FindByNameAsync(model.UserName);
-
-            if (foundUser != null)
-            {
-                var isUserName_Number = double.TryParse(foundUser.UserName, out double r) ? r : 0;
-
-                if (isUserName_Number > 0) //PhoneNumber is UserName
+                if (!ModelState.IsValid)
                 {
-                    if (foundUser.PhoneNumberConfirmed == false)
+                    message = "تکمیل تمامی فیلدهای ستاره دار الزامیست";
+                    return RedirectToAction("Login", new { msg = message });
+                }
+                var foundUser = await _userManager.FindByNameAsync(model.UserName);
+
+                if (foundUser != null)
+                {
+                    var isUserName_Number = double.TryParse(foundUser.UserName, out double r) ? r : 0;
+
+                    if (isUserName_Number > 0) //PhoneNumber is UserName
                     {
-                        TempData["msg"] = "شماره همراه شما تایید نگردیده است";
-                        return RedirectToAction("Login");
+                        if (foundUser.PhoneNumberConfirmed == false)
+                        {
+                            message = "شماره همراه شما تایید نگردیده است";
+                            return RedirectToAction("Login", new { msg = message });
+                        }
+                        var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
+                        if (status.Succeeded)
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+
                     }
-                    var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
-                    if (status.Succeeded)
+                    else                       //Email is UserName
                     {
-                        return RedirectToAction("Index", "Home");
+                        if (foundUser.EmailConfirmed == false)
+                        {
+                            message = "ایمیل شما تایید نگردیده است";
+                            return RedirectToAction("Login", new { msg = message });
+                        }
+                        var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
+                        if (status.Succeeded)
+                        {
+                            message = "شما با موفقیت وارد حساب کاربری خود شدید";
+                            return RedirectToAction("Index", "Home", new { msg = message });
+                        }
                     }
 
                 }
-                else                       //Email is UserName
-                {
-                    if (foundUser.EmailConfirmed == false)
-                    {
-                        TempData["msg"] = "ایمیل شما تایید نگردیده است";
-                        return RedirectToAction("Login");
-                    }
-                    var status = await _signInManager.PasswordSignInAsync(foundUser, model.Password, model.RememberMe, false);
-                    if (status.Succeeded)
-                    {
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-
+                message = "در مراحل ورود خطایی رخ داده، لطفا دوباره تلاش نمایید";
+                return RedirectToAction("Login", new { msg = message });
             }
-
-            return RedirectToAction("Login");
+            catch(Exception ex)
+            {
+                message = "در مراحل ورود خطایی رخ داده، لطفا دوباره تلاش نمایید";
+                return RedirectToAction("Login", new { msg = message });
+            }
         }
         #endregion
         #region LogOut
@@ -445,5 +491,7 @@ namespace OnlineMarketPlace.Controllers
             return Json(new { status = false });
         }
         #endregion
+
+        
     }//end AccountController
 }

@@ -1,11 +1,12 @@
 ﻿using OnlineMarketPlace.Areas.Identity.Data;
+using OnlineMarketPlace.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineMarket.Models
 {
-    public partial class SiteGeneralInfo
+    public partial class SiteGeneralInfo : IEntity<int>
     {
         public int Id { get; set; }
         public string ShopTitle { get; set; }

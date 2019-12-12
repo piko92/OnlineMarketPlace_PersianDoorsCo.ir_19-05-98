@@ -324,7 +324,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         public IActionResult SendSmsConfirm(string smsText, string phoneNumber)
         {
-            string ApiKey = "5cd46e02e05510f5545a6e02";
+            string ApiKey = "bb7ad448e474177ad90ee1ab";
             string SecurityCode = "PersianDoorsCo!@#12345";
             string lineNumber = "30004747474480";
             //var setting = dbSetting.GetAll().FirstOrDefault();

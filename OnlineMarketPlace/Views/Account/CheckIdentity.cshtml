@@ -16,7 +16,7 @@
                         </div>
                         <hr />
                         <form asp-controller="Account" asp-action="ConfirmIdentity" method="post">
-                            <input value="@(newUser != null ? newUser : null)" asp-for="UserName" hidden/>
+                            <input value="@(newUser != null ? newUser : null)" asp-for="UserName" hidden />
                             <div class="form-fild">
                                 <p><label> </label></p>
                                 <input asp-for="Token" value="" type="text" placeholder="ثبت کد تایید 6 رقمی">
@@ -25,12 +25,15 @@
                                 <button type="submit" class="btn btn-block ">ثبت</button>
                             </div>
                             <hr />
-                            <div class="lost-password">
-                                <a href="#">پسورد خود را فراموش کرده اید؟</a>
+                            <div>
+                                <a asp-controller="Account" asp-action="Login" class="red-color">ورود به حساب کاربری</a>
+                            </div>
+                            <div>
+                                <a asp-controller="Account" asp-action="Register" class="red-color">ثبت نام نکرده اید؟</a>
                             </div>
                             @*<div class="">
-                                <a asp-controller="Account" asp-action="ConfirmIdentity">ثبت نام نکرده اید؟</a>
-                            </div>*@
+            <a asp-controller="Account" asp-action="ConfirmIdentity">ثبت نام نکرده اید؟</a>
+        </div>*@
                         </form>
                     </div>
                 </div>

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace OnlineMarketPlace.Migrations
 {
-    public partial class Repeat_All : Migration
+    public partial class migfinal : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -1665,8 +1665,13 @@ namespace OnlineMarketPlace.Migrations
                     Tags = table.Column<string>(nullable: true),
                     Links = table.Column<string>(nullable: true),
                     Status = table.Column<bool>(nullable: false, defaultValue: true),
+                    ShowOrder = table.Column<int>(nullable: false),
                     MainImage = table.Column<byte[]>(nullable: true),
                     MainImagePath = table.Column<string>(nullable: true),
+                    MovieFile = table.Column<byte[]>(nullable: true),
+                    MoviePath = table.Column<string>(nullable: true),
+                    DocumentFile = table.Column<byte[]>(nullable: true),
+                    DocumentPath = table.Column<string>(nullable: true),
                     RelatedProductId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
