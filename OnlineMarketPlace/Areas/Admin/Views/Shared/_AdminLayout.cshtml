@@ -139,19 +139,21 @@
                             </div>
                         </li>
                         <li class="">
-                            <a href="#"><i class="fa fa-th-large"></i> <span class="nav-label">پنل اصلی </span><span class="fa arrow"></span></a>
+                            <a style="background-color:ghostwhite" href="#"><i class="fa fa-th-large"></i> <span class="nav-label">پنل اصلی </span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">پنل اصلی </a></li>
                             </ul>
                         </li>
                         <!--محصولات-شروع-->
                         <li>
-                            <a href="#"><i class="fa fa-edit"></i> <span class="nav-label"> جزییات محصولات </span><span class="fa arrow"></span></a>
+                            <a style="background-color:mintcream" href="#"><i class="fa fa-edit"></i> <span class="nav-label"> جزییات محصولات </span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowCategory">دسته بندی ها</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertCategory">افزودن دسته بندی</a></li>
+                                <li style="border-bottom: 1px solid whitesmoke;width:80%;  margin: auto;"></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowBrand">برند ها</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertBrand">افزودن برند</a></li>
+                                <li style="border-bottom: 1px solid whitesmoke;width:80%;  margin: auto;"></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowFeature">ویژگی ها</a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertFeature">افزودن ویژگی</a></li>
 
@@ -159,7 +161,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-archive"></i> <span class="nav-label"> محصولات </span><span class="fa arrow"></span></a>
+                            <a style="background-color:ghostwhite" href="#"><i class="fa fa-archive"></i> <span class="nav-label"> محصولات </span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="ShowProduct">لیست محصولات </a></li>
                                 <li><a asp-area="Admin" asp-controller="Product" asp-action="InsertProduct">افزودن محصول </a></li>
@@ -171,7 +173,7 @@
                         <!--محصولات-پایان-->
                         <!-- تنظیمات کاربری -->
                         <li>
-                            <a href="#"><i class="fa fa-users"></i> <span class="nav-label">کاربران</span><span class="fa arrow"></span></a>
+                            <a style="background-color:mintcream" href="#"><i class="fa fa-users"></i> <span class="nav-label">کاربران</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse" aria-expanded="false" style="height: 0px;">
                                 <li><a asp-action="Signup" asp-controller="Account" asp-area="Admin">ثبت کاربر جدید</a></li>
                                 <li><a asp-action="UserList" asp-controller="Account" asp-area="Admin">لیست کاربران</a></li>
@@ -179,7 +181,7 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">وبلاگ</span><span class="fa arrow"></span></a>
+                            <a style="background-color:ghostwhite" href="#"><i class="fa fa-pencil"></i> <span class="nav-label">وبلاگ</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">پست جدید</a></li>
                                 <li><a asp-area="Admin" asp-controller="Blog" asp-action="ShowPost">مدیریت پست ها </a></li>
@@ -188,14 +190,14 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">سفارشات</span><span class="fa arrow"></span></a>
+                            <a style="background-color:mintcream" href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">سفارشات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Invoice" asp-action="ShowPaidPurchuseCart">سفارشات پرداخت شده</a></li>
                                 <li><a asp-area="Admin" asp-controller="Invoice" asp-action="ShowNotPaidPurchuseCart">سفارشات پرداخت نشده</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">گالری</span><span class="fa arrow"></span></a>
+                            <a style="background-color:ghostwhite"  href="#"><i class="fa fa-picture-o"></i> <span class="nav-label">گالری</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 @*<li><a asp-area="Admin" asp-controller="Gallery" asp-action="InsertSubject">اضافه کردن موضوع</a></li>
                                 <li><a asp-area="Admin" asp-controller="Gallery" asp-action="ShowSubject">لیست موضوعات</a></li>
@@ -207,25 +209,28 @@
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-envelope"></i> <span class="nav-label">پیام ها</span><span class="fa arrow"></span></a>
+                            <a style="background-color:mintcream" href="#"><i class="fa fa-envelope"></i> <span class="nav-label">پیام ها</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="SendEmail">ارسال ایمیل</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="SendSms">ارسال پیامک</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="ShowComment">ارتباط با ما</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="#"><i class="fa fa-cube"></i> <span class="nav-label">تبلیغات</span><span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level collapse">
-                                <li><a asp-area="Admin" asp-controller="Home" asp-action="About">متن درباره ما</a></li>
-                                <li><a asp-area="Admin" asp-controller="Home" asp-action="ShowGeneralPage">لیست صفحات  </a></li>
-                                <li><a asp-area="Admin" asp-controller="Home" asp-action="InsertGeneralPage">افزودن صفحات</a></li>
-                                <li><a asp-area="Admin" asp-controller="Blog" asp-action="InsertPost">متن صفحه اول</a></li>
+                        <li >
+                            <a style="background-color:ghostwhite" href="#"><i class="fa fa-cube"></i> <span class="nav-label">تبلیغات</span><span class="fa arrow"></span></a>
+                            <ul  class="nav nav-second-level collapse ">
+                                @*<li><a asp-area="Admin" asp-controller="Home" asp-action="InsertBanner">افزودن بنر</a></li>*@
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="ShowBanner">لیست بنرها</a></li>
+                                <li style="border-bottom: 1px solid whitesmoke;width:80%;  margin: auto;"></li>
                                 <li><a asp-area="Admin" asp-controller="Home" asp-action="Footer">متن فوتر</a></li>
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="About">متن درباره ما</a></li>
+                                <li style="border-bottom: 1px solid whitesmoke;width:80%;  margin: auto;"></li>
+                                <li ><a  asp-area="Admin" asp-controller="Home" asp-action="ShowGeneralPage">لیست صفحات  </a></li>
+                                <li><a asp-area="Admin" asp-controller="Home" asp-action="InsertGeneralPage">افزودن صفحات</a></li>
                             </ul>
                         </li>
                         <li>
-                            <a href="#"><i class="fa fa-cog"></i> <span class="nav-label">تنظیمات</span><span class="fa arrow"></span></a>
+                            <a style="background-color:mintcream" href="#"><i class="fa fa-cog"></i> <span class="nav-label">تنظیمات</span><span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level collapse">
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="Setting">تنظیمات ادمین</a></li>
                                 <li><a asp-area="Admin" asp-controller="Tools" asp-action="FillTables">تنظیمات جداول جانبی</a></li>

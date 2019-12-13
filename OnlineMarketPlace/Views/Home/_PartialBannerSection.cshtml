@@ -2,70 +2,165 @@
 @{
     Layout = null;
 }
+@model List<Banner>
 <!-- Banner section start -->
 <div class="banner-section section pt-30">
     <div class="container">
         <div class="row">
-            <div class="col-lg-5 col-md-12 col-sm-12">
-                <!-- Single Banner Start -->
-                <div class="single-banner-item mb-30">
-                    <div class="banner-image">
-                        <a asp-controller="product" asp-action="search">
-                            <img src="~/temp_images/banner/1.jpg" alt="">
-                        </a>
+            @if (Model.Count == 4)
+            {
+                <div class="col-lg-5 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a href="@Model[0].Link">
+                                @if (Model[0].Image != null)
+                                {
+                                    <img width="470" height="350" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model[0].Image)}")>
+                                }
+                                else
+                                {
+                                    <img src="~/temp_images/banner/1.jpg" alt="">
+                                }
+                            </a>
+                        </div>
+                        <div class="banner-content tr-right">
+                            <h3 class="title">@Model[0].Title </h3>
+                            <a href="@Model[0].ButtonLink">@Model[0].ButtonContent</a>
+                        </div>
                     </div>
-                    <div class="banner-content tr-right">
-                        <h3 class="title">درب های با طراحی <br>خلاقانه </h3>
-                        <a asp-controller="product" asp-action="search">بیشتر</a>
-                    </div>
+                    <!-- Single Banner End -->
                 </div>
-                <!-- Single Banner End -->
-            </div>
-            <div class="col-lg-7 col-md-12 col-sm-12">
-                <!-- Single Banner Start -->
-                <div class="single-banner-item mb-30">
-                    <div class="banner-image">
-                        <a asp-controller="product" asp-action="search">
-                            <img src="~/temp_images/banner/5.jpg" alt="">
-                        </a>
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a href="@Model[1].Link">
+                                @if (Model[1].Image != null)
+                                {
+                                    <img width="650" height="350" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model[1].Image)}")>
+                                }
+                                else
+                                {
+                                    <img src="~/temp_images/banner/5.jpg" alt="">
+                                }
+                            </a>
+                        </div>
+                        <div class="banner-content tr-right">
+                            <h3 class="title">@Model[1].Title </h3>
+                            <a href="@Model[1].ButtonLink">@Model[1].ButtonContent</a>
+                        </div>
                     </div>
-                    <div class="banner-content tr-right">
-                        <h3 class="title"> بهترین<br>  درب های ضد سرقت </h3>
-                        <a asp-controller="product" asp-action="search">خرید کنید</a>
-                    </div>
+                    <!-- Single Banner End -->
                 </div>
-                <!-- Single Banner End -->
-            </div>
-            <div class="col-lg-7 col-md-12 col-sm-12">
-                <!-- Single Banner Start -->
-                <div class="single-banner-item mb-30">
-                    <div class="banner-image">
-                        <a asp-controller="product" asp-action="search">
-                            <img src="~/temp_images/banner/6.jpg" alt="">
-                        </a>
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a href="@Model[2].Link">
+                                @if (Model[2].Image != null)
+                                {
+                                    <img width="650" height="350" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model[2].Image)}")>
+                                }
+                                else
+                                {
+                                    <img src="~/temp_images/banner/6.jpg" alt="">
+                                }
+                            </a>
+                        </div>
+                        <div class="banner-content tl-left color-white">
+                            <h3 class="title">@Model[2].Title </h3>
+                            <a href="@Model[2].ButtonLink">@Model[2].ButtonContent</a>
+                        </div>
                     </div>
-                    <div class="banner-content tl-left color-white">
-                        <h3 class="title">به روز ترین <br>  درب های ساختمانی</h3>
-                        <a asp-controller="product" asp-action="search">بیشتر</a>
-                    </div>
+                    <!-- Single Banner End -->
                 </div>
-                <!-- Single Banner End -->
-            </div>
-            <div class="col-lg-5 col-md-12 col-sm-12">
-                <!-- Single Banner Start -->
-                <div class="single-banner-item mb-30">
-                    <div class="banner-image">
-                        <a asp-controller="product" asp-action="search">
-                            <img src="~/temp_images/banner/8.jpg" alt="">
-                        </a>
+                <div class="col-lg-5 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a href="@Model[3].Link">
+                                @if (Model[3].Image != null)
+                                {
+                                    <img width="470" height="350" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(Model[3].Image)}")>
+                                }
+                                else
+                                {
+                                    <img src="~/temp_images/banner/8.jpg" alt="">
+                                }
+                            </a>
+                        </div>
+                        <div class="banner-content tl-left">
+                            <h3 class="title">@Model[3].Title </h3>
+                            <a href=@Model[3].ButtonLink>@Model[3].ButtonContent</a>
+                        </div>
                     </div>
-                    <div class="banner-content tl-left">
-                        <h3 class="title"> تنوع<br> در انواع طرح ها</h3>
-                        <a asp-controller="product" asp-action="search">جزییات</a>
-                    </div>
+                    <!-- Single Banner End -->
                 </div>
-                <!-- Single Banner End -->
-            </div>
+            }
+            else
+            {
+                <div class="col-lg-5 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a asp-controller="product" asp-action="search">
+                                <img src="~/temp_images/banner/1.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="banner-content tr-right">
+                            <h3 class="title">درب های با طراحی <br>خلاقانه </h3>
+                            <a asp-controller="product" asp-action="search">بیشتر</a>
+                        </div>
+                    </div>
+                    <!-- Single Banner End -->
+                </div>
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a asp-controller="product" asp-action="search">
+                                <img src="~/temp_images/banner/5.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="banner-content tr-right">
+                            <h3 class="title"> بهترین<br>  درب های ضد سرقت </h3>
+                            <a asp-controller="product" asp-action="search">خرید کنید</a>
+                        </div>
+                    </div>
+                    <!-- Single Banner End -->
+                </div>
+                <div class="col-lg-7 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a asp-controller="product" asp-action="search">
+                                <img src="~/temp_images/banner/6.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="banner-content tl-left color-white">
+                            <h3 class="title">به روز ترین <br>  درب های ساختمانی</h3>
+                            <a asp-controller="product" asp-action="search">بیشتر</a>
+                        </div>
+                    </div>
+                    <!-- Single Banner End -->
+                </div>
+                <div class="col-lg-5 col-md-12 col-sm-12">
+                    <!-- Single Banner Start -->
+                    <div class="single-banner-item mb-30">
+                        <div class="banner-image">
+                            <a asp-controller="product" asp-action="search">
+                                <img src="~/temp_images/banner/8.jpg" alt="">
+                            </a>
+                        </div>
+                        <div class="banner-content tl-left">
+                            <h3 class="title"> تنوع<br> در انواع طرح ها</h3>
+                            <a asp-controller="product" asp-action="search">جزییات</a>
+                        </div>
+                    </div>
+                    <!-- Single Banner End -->
+                </div>
+            }
         </div>
     </div>
 </div>
