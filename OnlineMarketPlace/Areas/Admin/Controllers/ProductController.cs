@@ -574,6 +574,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     Status = model.Status,
                     UserId = currentUser.Id,
                     BasePrice = model.BasePrice,
+                    ContentAvailable=model.ContentAvailable,
                     RegDateTime=DateTime.Now
                 };
                 int id = dbProductAbstract.Insert(productAbstract);
@@ -711,6 +712,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                     entityProductAbstract.Status = model.Status;
                     entityProductAbstract.UserId = currentUser.Id;
                     entityProductAbstract.BasePrice = model.BasePrice;
+                    entityProductAbstract.ContentAvailable = model.ContentAvailable;
                 }
                 var entityProductFeature = dbProductFeature.GetAll().Where(e => e.ProductAbstractId == id).FirstOrDefault();
                 if (entityProductFeature != null)

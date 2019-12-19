@@ -24,6 +24,7 @@ namespace OnlineMarketPlace.Areas.Identity
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<OnlineMarketContext>()
                     .AddDefaultTokenProviders();
+                
             });
         }
     }

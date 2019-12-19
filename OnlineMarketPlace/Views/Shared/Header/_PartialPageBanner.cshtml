@@ -5,7 +5,10 @@
 }
 <!-- Page Banner Section Start -->
 @model PageBannerViewModel
-<div class="page-banner-section section bg-image" data-bg="/temp_images/banner/top_banner-12.jpg">
+@inject OnlineMarketContext bb
+@if (bb.Bank.Count()>0)
+{
+<div class="page-banner-section section bg-image" data-bg=@($"data:image/jpeg;base64,{Convert.ToBase64String(bb.Bank.FirstOrDefault().Image)}")>
     <div class="container">
         <div class="row">
             <div class="col">
@@ -22,4 +25,26 @@
         </div>
     </div>
 </div>
+}
+else
+{
+<div class="page-banner-section section bg-image" data-bg="/temp_images/banner/top_banner-18.jpg">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+
+                <div class="page-banner text-right">
+                    <h2>@Model.Title</h2>
+                    <ul class="page-breadcrumb rtl-class">
+                        <li><a asp-action="Index" asp-controller="Home">صفحه اصلی</a></li>
+                        <li>@Model.PageName</li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+}
+
 <!-- Page Banner Section End -->

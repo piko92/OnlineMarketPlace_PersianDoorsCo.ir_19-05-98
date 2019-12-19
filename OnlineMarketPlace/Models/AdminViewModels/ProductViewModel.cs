@@ -38,5 +38,6 @@ namespace OnlineMarketPlace.Models.AdminViewModels
         public decimal? BasePrice { get; set; }
         [Required(ErrorMessage = "پر کردن این فیلد الزامیست")]
         public int Code { get; set; }
+        public bool ContentAvailable { get; set; }
     }
 }

@@ -9,23 +9,23 @@
 <div dir="rtl">
     <div class="common-sidebar-widget">
         <h3 class="sidebar-title text-right">آخرین پست ها</h3>
-       
+
         @if (dbArticle != null)
         {
-            @for (int i = 0; i < Math.Min(dbArticle.Count,3); i++)
+            @for (int i = 0; i < Math.Min(dbArticle.Count, 3); i++)
             {
                 <div class="sidebar-blog rtl-class">
                     <div class="content">
                         <h5>
-                            <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id">
+                            <a href="/Blog/@dbArticle[i].Id/@Tools.LinkCorrection(@dbArticle[i].Title)">
                                 @dbArticle[i].Title
                             </a>
                         </h5>
                         <h6 class="farsi-num">@CustomizeCalendar.GregorianToPersian(dbArticle[i].WrittenDateTime)</h6>
-                       
+
                     </div>
-                    <a asp-controller="Blog" asp-action="ShowArticle" asp-route-Id="@dbArticle[i].Id" class="image">
-                        <img src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
+                    <a href="/Blog/@dbArticle[i].Id/@Tools.LinkCorrection(@dbArticle[i].Title)" class="image">
+                        <img width="60" height="40" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(dbArticle[i].MainImage)}") alt="">
                     </a>
                 </div>
 
@@ -51,7 +51,11 @@
         <ul class="sidebar-list">
             @foreach (var item in dbCategory)
             {
-                <li><a href="#"><i class="ion-plus"></i>@item.Name <span class="count"></span></a></li>
+                <li>
+                    <a asp-controller="Product" asp-action="Search" asp-route-categoryId=@item.Id >
+                        <i class="ion-plus"></i>@item.Name<span class="count"></span>
+                    </a>
+                </li>
             }
         </ul>
     </div>

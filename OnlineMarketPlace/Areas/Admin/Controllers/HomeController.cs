@@ -32,6 +32,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
         DbRepository<OnlineMarketContext, SiteGeneralInfo, int> dbSiteInfo;
         DbRepository<OnlineMarketContext, Banner, int> dbBanner;
+        DbRepository<OnlineMarketContext, Bank, int> dbBank;
         private readonly IHostingEnvironment hostingEnvironment;
         private IConfiguration configuration;
         string contentRootPath;
@@ -46,6 +47,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 DbRepository<OnlineMarketContext, GeneralPage, int> _dbGeneralPage,
                 DbRepository<OnlineMarketContext, SiteGeneralInfo, int> _dbSiteInfo,
                 DbRepository<OnlineMarketContext, Banner, int> _dbBanner,
+                DbRepository<OnlineMarketContext, Bank, int> _dbBank,
                 IHostingEnvironment _hostingEnvironment,
                 IConfiguration _configuration
             )
@@ -59,6 +61,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             dbGeneralPage = _dbGeneralPage;
             dbSiteInfo = _dbSiteInfo;
             dbBanner = _dbBanner;
+            dbBank = _dbBank;
 
             hostingEnvironment = _hostingEnvironment;
             contentRootPath = hostingEnvironment.ContentRootPath;
@@ -345,7 +348,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
 
         #endregion
 
-        #region About
+        #region BannerMainPage
 
         public IActionResult InsertBanner(string notification)
         {
@@ -366,7 +369,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
             //با توجه به قالب سایت حداکثر ۴ بنر امکان ثبت دارند
             var entity = dbBanner.GetAll();
-            if (entity.Count>=4)
+            if (entity.Count >= 4)
             {
                 nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.DuplicatedValue, contentRootPath);
                 return RedirectToAction("ShowBanner", new { notification = nvm });
@@ -423,7 +426,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
                 return RedirectToAction("ShowBanner", new { notification = nvm });
             }
             var currentBanner = dbBanner.FindById(model.Id);
-            if (currentBanner!=null)
+            if (currentBanner != null)
             {
                 currentBanner.Title = model.Title;
                 currentBanner.Link = model.Link;
@@ -450,7 +453,7 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             }
 
         }
-        
+
         #endregion
 
         #region Footer
@@ -495,5 +498,58 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
             return RedirectToAction("Footer");
         }
         #endregion
+
+        #region TopBanner
+        public IActionResult InsertTopBanner(string notification)
+        {
+            //از کلاس بانک استفاده شده است !!!!
+            ViewData["topBanner"] = dbBank.GetAll().LastOrDefault();
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
+            return View();
+        }
+
+        public IActionResult EditTopBannerConfirm(int Id, IFormFile Image)
+        {
+            string nvm;
+            byte[] b = null;
+            if (Image != null)
+            {
+                b = new byte[Image.Length];
+                Image.OpenReadStream().Read(b, 0, (int)Image.Length);
+
+            }
+            //از کلاس بانک استفاده شده است !!!!
+            if (Id >= 0)
+            {
+                var topBanner = dbBank.FindById(Id);
+                //update
+                topBanner.Image = b;
+                dbBank.Update(topBanner);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Update, contentRootPath);
+                return RedirectToAction("InsertTopBanner", new { notification = nvm });
+            }
+            Bank bank = new Bank()
+            {
+                Image = b
+            };
+            try
+            {
+                dbBank.Insert(bank);
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Success_Insert, contentRootPath);
+                return RedirectToAction("InsertTopBanner", new { notification = nvm });
+            }
+            catch (Exception)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+                return RedirectToAction("InsertTopBanner", new { notification = nvm });
+            }
+         
+        }
+        #endregion
+
     }
 }

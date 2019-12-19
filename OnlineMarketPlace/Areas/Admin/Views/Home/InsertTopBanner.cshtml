@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش  بنر صفحات";
+    var topBanner = ViewData["topBanner"] as Bank;
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش  بنر  بالای صفحات </h4>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Home" asp-action="EditTopBannerConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+
+                        <input name="Id" hidden="hidden" value=@(topBanner == null ? -1 : topBanner.Id )>
+
+
+                        @if (topBanner != null)
+                        {
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">تصویر  </label>
+                                <div class="col-sm-10">
+                                    <img id="img1" width="600" height="200" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(topBanner.Image)}")>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغییر تصویر  </label>
+                            <div class="col-sm-10">
+                                <div class="custom-file">
+                                    <input id="imgInsert" name="Image" type="file" class="custom-file-input">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+<script>
+    $(imgInsert).change(function (e) {
+        var reader = new FileReader();
+        //console.log(this.files);
+        reader.readAsDataURL(this.files[0]);
+        reader.onloadend = function (e) {
+            $(img1).attr('src', e.target.result)
+        }
+    });
+</script>
