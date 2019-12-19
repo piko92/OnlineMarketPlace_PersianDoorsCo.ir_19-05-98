@@ -47,7 +47,8 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                 {
                     var setting = _db.Setting.FirstOrDefault();
                     string token = await GenerateForPhoneNumber(_User);
-                    string message = $"کد تایید شما: {token}";
+                    //string message = $"کد تایید شما: {token}";
+                    string message =token;
                     var lastTokens = _db.Tokens.Where(x => x.UserId == _User.Id).ToList();
                     if (lastTokens.Count > 0)
                     {
@@ -71,7 +72,7 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                         //string message = smsText;
                         //شماره مقصد
                         string mobileNumber = _User.UserName;
-                        var result = SmsIrService.SendSms(setting.SMSApiAddress, setting.SMSPassword, setting.SMSApiNumber, message, mobileNumber);
+                        var result = SmsIrService.SendVerificationCode(setting.SMSApiAddress, setting.SMSUsername, message, mobileNumber);
 
                         //SMSService.SMSService SMS = new SMSService.SMSService(_db); 
                         //SMS.SendSMS(new List<string> { _User.UserName }, message);
@@ -191,12 +192,13 @@ namespace OnlineMarketPlace.ClassLibraries.Authentication
                 var token = await GeneratePhoneNumberTokenAsync(_User);
                 if (token != null)
                 {
-                    string message = $"کد بازیابی کلمه عبور: {token}";
+                   // string message = $"کد بازیابی کلمه عبور: {token}";
+                    string message =token;
 
                     if (isUserName_Number > 0)
                     {
                         string mobileNumber = _User.UserName;
-                        var result = SmsIrService.SendSms(setting.SMSApiAddress, setting.SMSPassword, setting.SMSApiNumber, message, mobileNumber);
+                        var result = SmsIrService.SendVerificationCode(setting.SMSApiAddress, setting.SMSUsername, message, mobileNumber);
                     }
                     else
                     {
