@@ -1,0 +1,102 @@
+﻿
+@{
+    ViewData["Title"] = "ویرایش بنر تبلیغات ";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    var banner = ViewData["CurrecntBanner"] as Banner;
+}
+@model BannerViewModel
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-card margin-b-30">
+            <div class="panel-heading">
+                <h4 class="panel-title"> ویرایش بنر تبلیغات </h4>
+                <div class="panel-actions">
+                    <a href="#" class="panel-action panel-action-toggle" data-panel-toggle></a>
+                    <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss></a>
+                </div>
+            </div>
+            <div class="panel-body">
+                <!-- Start .Form -->
+                <div class="panel-body">
+                    <form asp-area="admin" asp-controller="Home" asp-action="EditBannerConfirm"
+                          id="form1" method="post" class="form-horizontal" enctype="multipart/form-data">
+                        <input asp-for="Id" hidden="hidden" value="@banner.Id">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان<span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                <input asp-for="Title" type="text" class="form-control" value="@banner.Title">
+                                <span asp-validation-for="Title"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">لینک </label>
+                            <div class="col-sm-10">
+                                <input asp-for="Link" type="text" class="form-control" value="@banner.Link">
+                                <span asp-validation-for="Link"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">عنوان دکمه </label>
+                            <div class="col-sm-10">
+                                <input asp-for="ButtonContent" type="text" class="form-control" value="@banner.ButtonContent">
+                                <span asp-validation-for="ButtonContent"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">لینک دکمه</label>
+                            <div class="col-sm-10">
+                                <input asp-for="ButtonLink" type="text" class="form-control" value="@banner.ButtonLink">
+                                <span asp-validation-for="ButtonLink"></span>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">تغییر تصویر <span class="red-color">*</span></label>
+                            <div class="col-sm-10">
+                                @if (banner.Image != null)
+                                {
+                                    <img id="img1" width="400" height="200" alt="" src=@($"data:image/jpeg;base64,{Convert.ToBase64String(banner.Image)}")>
+                                }
+                                else
+                                {
+                                    <img id="img1" src="~/images/box.png" class="img-thumbnail" width="150" />
+                                }
+
+                                <br />
+                                <br />
+                                <div class="custom-file">
+                                    <input id="imgInsert" asp-for="Image" type="file" class="custom-file-input">
+                                    <span asp-validation-for="Image"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hr-line-dashed"></div>
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
+                            <button class="btn btn-primary" type="submit">ثبت </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <script src="~/lib/jquery/dist/jquery.js"></script>
+            <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+            <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+            <script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+        </div>
+    </div>
+
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+<script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+<script src="~/persian_datepicker/js/persianDatepicker.min.js"></script>
+<script>
+    $(imgInsert).change(function (e) {
+        var reader = new FileReader();
+        //console.log(this.files);
+        reader.readAsDataURL(this.files[0]);
+        reader.onloadend = function (e) {
+            $(img1).attr('src', e.target.result)
+        }
+    });
+</script>

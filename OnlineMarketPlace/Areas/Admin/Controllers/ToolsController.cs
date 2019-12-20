@@ -318,25 +318,39 @@ namespace OnlineMarketPlace.Areas.Admin.Controllers
         }
         #endregion
         #region SmsIr
-        public IActionResult SendSms(string smsText, string phoneNumber)
+        public IActionResult SendSms(string smsText, string phoneNumber,string notification)
         {
+            if (notification != null)
+            {
+                ViewData["nvm"] = NotificationHandler.DeserializeMessage(notification);
+                return View();
+            }
             return View();
         }
         public IActionResult SendSmsConfirm(string smsText, string phoneNumber)
         {
-            string ApiKey = "bb7ad448e474177ad90ee1ab";
-            string SecurityCode = "PersianDoorsCo!@#12345";
-            string lineNumber = "30004747474480";
-            //var setting = dbSetting.GetAll().FirstOrDefault();
-            //string ApiKey = setting.SMSApiAddress;
-            //string SecurityCode = setting.SMSUsername;
-            //string lineNumber = setting.SMSApiNumber;
+            string nvm;
+            //string ApiKey = "bb7ad448e474177ad90ee1ab";
+            //string SecurityCode = "PersianDoorsCo!@#12345";
+            //string lineNumber = "30004747474480";
+            var setting = dbSetting.GetAll().FirstOrDefault();
+            string ApiKey = setting.SMSApiAddress;
+            string SecurityCode = setting.SMSUsername;
+            string lineNumber = setting.SMSApiNumber;
             //متن پیامک
             string message = smsText;
             //شماره مقصد
             string mobileNumber = phoneNumber;
+
             var result = SmsIrService.SendSms(ApiKey, SecurityCode, lineNumber, message, mobileNumber);
-            return Json(result);
+            if (result)
+            {
+                nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler. Success_Insert, contentRootPath);
+                return RedirectToAction("SendSms", new { notification = nvm }); 
+            }
+
+            nvm = NotificationHandler.SerializeMessage<string>(NotificationHandler.Failed_Operation, contentRootPath);
+            return RedirectToAction("SendSms", new { notification = nvm });
         }
         #endregion
     }

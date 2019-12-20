@@ -539,9 +539,10 @@ navbar-default .navbar-toggle {
     
     .mega-dropdown-menu{
       width: auto !important;  
-    } 
-    navbar-default .navbar-collapse, navbar-default .navbar-form{
+    }
+    navbar-default .navbar-collapse, navbar-default .navbar-form {
         border-color: rgba(255,255,255,0.4);
+        color: red;
     }
     .yamm-category {
        font-size: 15px;

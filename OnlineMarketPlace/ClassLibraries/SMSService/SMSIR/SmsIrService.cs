@@ -35,5 +35,20 @@ namespace OnlineMarketPlace.ClassLibraries.SMSService.SMSIR
             }
             return false;
         }
+        public static bool SendVerificationCode(string ApiKey, string SecurityCode, string verificationCode, string mobileNumber)
+        {
+            var restVerificationCode = new RestVerificationCode()
+            {
+                Code = verificationCode,
+                MobileNumber = mobileNumber,
+            };
+            string token = TokenSmsIr(ApiKey, SecurityCode);
+            var restVerificationCodeRespone = new VerificationCode().Send(token, restVerificationCode);
+            if (restVerificationCodeRespone.IsSuccessful)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

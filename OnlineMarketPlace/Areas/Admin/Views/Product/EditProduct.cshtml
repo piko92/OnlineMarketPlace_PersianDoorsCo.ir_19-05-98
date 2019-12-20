@@ -92,7 +92,13 @@
                                 <span asp-validation-for="BasePrice"></span>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label for="chkMenu" class="col-sm-2 control-label">قیمت بر حسب متر</label>
+                            <div class="col-sm-4">
+                                <input asp-for="ContentAvailable" checked="@ProductAbstract.ContentAvailable" value="true" type="checkbox" class="checkbox-custom" id="chkMenu">
+                                <span asp-validation-for="ContentAvailable"></span>
+                            </div>
+                        </div>
                         <div class="hr-line-dashed"></div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label">تصویر اصلی<span class="red-color">*</span></label>

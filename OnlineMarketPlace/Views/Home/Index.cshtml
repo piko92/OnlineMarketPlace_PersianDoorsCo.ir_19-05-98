@@ -5,12 +5,13 @@
     TempData["firstpage"] = true;
     var latestProducts = ViewData["LatestProducts"] as List<ProductAbstract>;
     var LatestArticle = ViewData["LatestArticle"] as List<Article>;
+    var banner = ViewData["banner"] as List<Banner>;
 }
 @* ------------ Slider ------------- *@
 @await Html.PartialAsync("~/Views/Shared/Header/_PartialSlider.cshtml")
 
 @* ------------ BannerSection ------------- *@
-@await Html.PartialAsync("~/Views/Home/_PartialBannerSection.cshtml")
+@await Html.PartialAsync("~/Views/Home/_PartialBannerSection.cshtml",model:banner)
 
 
 <!--Product section start-->

@@ -24,6 +24,7 @@ namespace OnlineMarketPlace.Controllers
         PhoneNumberTokenProvider<ApplicationUser> _phoneNumberToken;
         DbRepository<OnlineMarketContext, Article, int> dbArticle;
         DbRepository<OnlineMarketContext, GeneralPage, int> dbGeneralPage;
+        DbRepository<OnlineMarketContext, Banner, int> dbBanner;
         OnlineMarketContext _db;
 
 
@@ -33,6 +34,7 @@ namespace OnlineMarketPlace.Controllers
                 DbRepository<OnlineMarketContext, ContactUs, int> _dbContactUs,
                 DbRepository<OnlineMarketContext, Article, int> _dbArticle,
                 DbRepository<OnlineMarketContext, GeneralPage, int> _dbGeneralPage,
+                DbRepository<OnlineMarketContext, Banner, int> _dbBanner,
                 OnlineMarketContext db
             )
         {
@@ -40,6 +42,7 @@ namespace OnlineMarketPlace.Controllers
             dbContactUs = _dbContactUs;
             dbArticle = _dbArticle;
             dbGeneralPage = _dbGeneralPage;
+            dbBanner = _dbBanner;
             _db = db;
 
         }
@@ -59,7 +62,9 @@ namespace OnlineMarketPlace.Controllers
                 .Where(e => e.Status == true)
                 .OrderByDescending(x => x.WrittenDateTime)
                 .Take(3).ToList();
-
+            //چهار بنر تبلیغاتی
+            ViewData["banner"] = dbBanner.GetAll()
+                .Take(4).ToList();
             if (msg != null)
             {
                 TempData["msg"] = msg;

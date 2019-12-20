@@ -25,23 +25,13 @@
 
 }
 <!-- Page Banner Section Start -->
-<div class="page-banner-section section bg-image rtl-class" data-bg="/shared/main/assets/images/bg/breadcrumb.jpg">
-    <div class="container">
-        <div class="row">
-            <div class="col">
+@await Html.PartialAsync("~/Views/Shared/Header/_PartialPageBanner.cshtml",
+    new PageBannerViewModel {
+        Title = "پنل کاربری",
+        PageName = "پنل کاربری",
 
-                <div class="page-banner rtl-class">
-                    <h2>پنل کاربری</h2>
-                    <ul class="page-breadcrumb">
-                        <li><a asp-action="Index" asp-controller="Home">صفحه نخست</a></li>
-                        <li>پنل کاربری</li>
-                    </ul>
-                </div>
+    })
 
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Page Banner Section End -->
 <!--My Account section start-->
 <div class="my-account-section rtl-class section pt-90 pt-lg-70 pt-md-60 pt-sm-50 pt-xs-45  pb-100 pb-lg-80 pb-md-70 pb-sm-60 pb-xs-50">

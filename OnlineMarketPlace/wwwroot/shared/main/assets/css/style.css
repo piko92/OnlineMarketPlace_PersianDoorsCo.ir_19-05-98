@@ -698,7 +698,7 @@ input:-ms-input-placeholder, textarea:-ms-input-placeholder {
 }
 
 .page-breadcrumb li::after {
-    content: "/";
+    content: "|";
     margin: 0 6px;
     color: #151515;
 }

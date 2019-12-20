@@ -80,6 +80,11 @@ namespace OnlineMarketPlace
 
                 };
             });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.SlidingExpiration = true;
+                options.ExpireTimeSpan = TimeSpan.FromDays(2);
+            });
             //services.Configure<FormOptions>(options => options.MultipartBodyLengthLimit = 10000000); // or other given limit
         }
 
