@@ -207,6 +207,10 @@ a.red-color{
         padding-right:10px !important;
     }
 }
+.btn-low-priority{
+    background-color:#fff;
+    color:#00a2b9;
+}
 @media only screen and (max-width:250px) {
     .sp-col-md:first-child {
         width: 100% !important;

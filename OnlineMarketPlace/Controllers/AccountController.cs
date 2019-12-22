@@ -210,31 +210,65 @@ namespace OnlineMarketPlace.Controllers
         public async Task<IActionResult> PasswordRecoveryConfirm(string username)
         {
             string message = null;
-            if (username == null)
+            try
             {
-                message = "ورود نام کاربری الزامی میباشد";
+                if (username == null)
+                {
+                    message = "ورود نام کاربری الزامی میباشد";
+                    return RedirectToAction("PasswordRecovery", new { msg = message });
+                }
+                else
+                {
+                    var claimedUser = await _userManager.FindByNameAsync(username);
+                    if (claimedUser != null)
+                    {
+                        TokenGenerator tokenGenerator = new TokenGenerator(_userManager, _db);
+                        var result = await tokenGenerator.ResetPassword(claimedUser);
+                        if (result == 1)
+                        {
+                            var encryptedUserName = CustomizedCryptography.Encrypt(claimedUser.UserName);
+                            return RedirectToAction("ResetPasswordCheckToken", new { username = encryptedUserName });
+                        }
+                    }
+                    else
+                    {
+                        message = "نام کاربری وارد شده صحیح نمیباشد.";
+                        return RedirectToAction("PasswordRecovery", new { msg = message });
+                    }
+                }
+                message = "در عملیات درخواستی خطایی رخ داده، دوباره سعی نمایید.";
                 return RedirectToAction("PasswordRecovery", new { msg = message });
             }
-            else
+            catch(Exception ex)
             {
-                var claimedUser = await _userManager.FindByNameAsync(username);
-                if (claimedUser != null)
+                message = "در عملیات درخواستی خطایی رخ داده، دوباره سعی نمایید.";
+                return RedirectToAction("PasswordRecovery", new { msg = message });
+            }
+        }
+        public async Task<IActionResult> ResendPasswordRecoveryToken(string username)
+        {
+            var decryptedUsername = CustomizedCryptography.Decrypt(username);
+            var claimedUser = await _userManager.FindByNameAsync(decryptedUsername);
+            if (claimedUser != null)
+            {
+                TokenGenerator tokenGenerator = new TokenGenerator(_userManager, _db);
+                var result = await tokenGenerator.ResetPassword(claimedUser);
+                if (result == 1)
                 {
-                    TokenGenerator tokenGenerator = new TokenGenerator(_userManager, _db);
-                    var result = await tokenGenerator.ResetPassword(claimedUser);
-                    if (result == 1)
-                    {
-                        var encryptedUserName = CustomizedCryptography.Encrypt(claimedUser.UserName);
-                        return RedirectToAction("ResetPasswordCheckToken", new { username = encryptedUserName });
-                    }
+                    var encryptedUserName = CustomizedCryptography.Encrypt(claimedUser.UserName);
+                    return RedirectToAction("ResetPasswordCheckToken", new { username = encryptedUserName });
                 }
             }
             return View();
         }
-
-        public ViewResult ResetPasswordCheckToken(string username)
+        public ViewResult ResetPasswordCheckToken(string username, string msg)
         {
             ViewData["username"] = username;
+            if (msg != null)
+            {
+                TempData["msg"] = msg;
+                return View();
+            }
             return View();
         }
 
@@ -263,9 +297,9 @@ namespace OnlineMarketPlace.Controllers
                         }
                         else if(result == -1)
                         {
-                            TempData["msg"] = "کد وارد شده صحیح نمیباشد";
+                            message = "کد وارد شده صحیح نمیباشد";
                             var encryptedUserName = CustomizedCryptography.Encrypt(claimedUser.UserName);
-                            return RedirectToAction("ResetPasswordCheckToken", new { username = encryptedUserName });
+                            return RedirectToAction("ResetPasswordCheckToken", new { username = encryptedUserName, msg = message });
                         }
                     }
                 }
