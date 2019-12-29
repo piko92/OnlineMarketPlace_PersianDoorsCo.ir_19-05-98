@@ -35,7 +35,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">عنوان توضیحات</label>
                             <div class="col-sm-10">
-                                <input asp-for="IntroductionTitle" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.Summary : "")"/>
+                                <input asp-for="IntroductionTitle" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.Summary : "")" />
                                 <span asp-validation-for="IntroductionTitle"></span>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">آدرس اول</label>
                             <div class="col-sm-10">
-                                <input asp-for="Address1" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.AddressesList : "")"/>
+                                <input asp-for="Address1" type="text" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.AddressesList : "")" />
                                 <span asp-validation-for="Address1"></span>
                             </div>
                         </div>
@@ -67,7 +67,13 @@
                                 <span asp-validation-for="Phone2"></span>
                             </div>
                         </div>
-
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">پست الکترونیک</label>
+                            <div class="col-sm-10">
+                                <input asp-for="Email" type="tel" class="form-control" value="@(lastFooterInfo != null ? lastFooterInfo.PublicEmail : "")">
+                                <span asp-validation-for="Email"></span>
+                            </div>
+                        </div>
                         <div class="hr-line-dashed"></div>
                         <div class="col-sm-4 col-sm-offset-2">
                             <button class="btn btn-white" type="button" id="btnCancel">صرف نظر</button>
